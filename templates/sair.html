@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Encerrar Aplicativo - Controle Patrimonial</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .goodbye-card {
+            border: none;
+            border-radius: 1rem;
+            box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.175);
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.95);
+        }
+        .countdown {
+            font-size: 3rem;
+            font-weight: bold;
+            color: #6c757d;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-6 col-lg-5">
+                <div class="card goodbye-card">
+                    <div class="card-body text-center p-5">
+                        <!-- Ícone de Saída -->
+                        <div class="mb-4">
+                            <i class="bi bi-door-open display-1 text-primary"></i>
+                        </div>
+                        
+                        <!-- Mensagem Principal -->
+                        <h2 class="card-title mb-3">Aplicativo Finalizado</h2>
+                        <p class="card-text text-muted mb-4">
+                            Obrigado por utilizar o Sistema de Controle Patrimonial.
+                            A janela será fechada automaticamente em <span id="countdown" class="countdown">5</span> segundos.
+                        </p>
+                        
+                        <!-- Estatísticas Rápidas -->
+                        <div class="alert alert-info mb-4">
+                            <div class="row">
+                                <div class="col-6">
+                                    <small class="text-muted">Bens Cadastrados</small>
+                                    <div class="h5 mb-0">{{ total_count|default(0)|number_format }}</div>
+                                </div>
+                                <div class="col-6">
+                                    <small class="text-muted">Sessão Ativa</small>
+                                    <div class="h5 mb-0">{{ session_time|default('0min') }}</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Botões de Ação -->
+                        <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
+                            <button onclick="fecharAgora()" class="btn btn-primary">
+                                <i class="bi bi-x-circle me-1"></i>Fechar Agora
+                            </button>
+                            <a href="{{ url_for('index') }}" class="btn btn-outline-secondary">
+                                <i class="bi bi-arrow-return-left me-1"></i>Voltar
+                            </a>
+                        </div>
+                        
+                        <!-- Mensagem de Segurança -->
+                        <div class="mt-4">
+                            <small class="text-muted">
+                                <i class="bi bi-shield-check me-1"></i>
+                                Todos os dados foram devidamente salvos e protegidos.
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    // Contagem regressiva para fechar automaticamente
+    let tempoRestante = 5;
+    const countdownElement = document.getElementById('countdown');
+    let countdownInterval;
+    
+    function iniciarCountdown() {
+        countdownElement.textContent = tempoRestante;
+        
+        countdownInterval = setInterval(() => {
+            tempoRestante--;
+            countdownElement.textContent = tempoRestante;
+            
+            if (tempoRestante <= 0) {
+                clearInterval(countdownInterval);
+                tentarFecharJanela();
+            }
+        }, 1000);
+    }
+    
+    function tentarFecharJanela() {
+        // Método 1: Para janelas abertas via JavaScript
+        try {
+            if (window.opener && !window.opener.closed) {
+                // Fechar janela aberta por outra
+                window.close();
+                return;
+            }
+        } catch (e) {}
+        
+        // Método 2: Para popups e janelas específicas
+        try {
+            // Tenta fechar diretamente
+            window.close();
+            
+            // Fallback: se não fechar em 1 segundo, mostra instruções
+            setTimeout(() => {
+                if (!window.closed) {
+                    mostrarInstrucoesFechamento();
+                }
+            }, 1000);
+            
+        } catch (e) {
+            mostrarInstrucoesFechamento();
+        }
+    }
+    
+    function mostrarInstrucoesFechamento() {
+        // Altera o conteúdo para mostrar instruções
+        document.querySelector('.card-body').innerHTML = `
+            <div class="mb-4">
+                <i class="bi bi-info-circle display-1 text-info"></i>
+            </div>
+            <h3 class="mb-3">Como fechar a janela</h3>
+            <div class="alert alert-warning mb-4">
+                <p class="mb-2">ⓘ Por questões de segurança, o navegador não permite fechamento automático.</p>
+                <p class="mb-0">Use um dos métodos abaixo:</p>
+            </div>
+            
+            <div class="row text-start mb-4">
+                <div class="col-md-6">
+                    <div class="d-flex align-items-center mb-3">
+                        <span class="badge bg-primary me-2">1</span>
+                        <span>Ctrl + W (Windows/Linux)</span>
+                    </div>
+                    <div class="d-flex align-items-center mb-3">
+                        <span class="badge bg-primary me-2">2</span>
+                        <span>Cmd + W (Mac)</span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="d-flex align-items-center mb-3">
+                        <span class="badge bg-primary me-2">3</span>
+                        <span>Botão Fechar (X) do navegador</span>
+                    </div>
+                    <div class="d-flex align-items-center">
+                        <span class="badge bg-primary me-2">4</span>
+                        <span>Alt + F4 (Windows)</span>
+                    </div>
+                </div>
+            </div>
+            
+            <button onclick="window.location.href='{{ url_for('index') }}'" class="btn btn-primary">
+                <i class="bi bi-arrow-return-left me-1"></i>Voltar ao Sistema
+            </button>
+        `;
+    }
+    
+    function fecharAgora() {
+        clearInterval(countdownInterval);
+        tentarFecharJanela();
+    }
+    
+    // Iniciar a contagem regressiva após 1 segundo
+    setTimeout(iniciarCountdown, 1000);
+    
+    // Fechar com a tecla ESC
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            fecharAgora();
+        }
+    });
+    
+    // Tentar fechar se a janela perde o foco (usuário clicou em outra coisa)
+    window.addEventListener('blur', function() {
+        setTimeout(tentarFecharJanela, 500);
+    });
+</script>
+</body>
+</html>

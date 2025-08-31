@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{{ titulo }} - Controle Patrimonial</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        .pagination .page-link {
+            border-radius: 0.375rem;
+            margin: 0 0.125rem;
+        }
+        .pagination .active .page-link {
+            font-weight: 600;
+        }
+        .table-hover tbody tr {
+            transition: all 0.2s ease;
+        }
+        .table-hover tbody tr:hover {
+            transform: translateX(4px);
+            background-color: rgba(13, 110, 253, 0.05) !important;
+        }
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+    </style>
+</head>
+<body class="bg-light">
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay" style="display: none;">
+        <div class="text-center">
+            <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;"></div>
+            <p class="mt-3 text-muted">Carregando...</p>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header class="bg-primary text-white shadow-sm">
+        <div class="container py-3">
+            <div class="row align-items-center">
+                <div class="col-md-8">
+                    <h1 class="h4 mb-0 fw-bold">
+                        <i class="bi bi-building-gear me-2"></i>{{ titulo }}
+                    </h1>
+                    <small class="opacity-75">Total: {{ paginacao.total_registros|number_format }} registro{{ paginacao.total_registros|pluralize('', 's') }}</small>
+                </div>
+                <div class="col-md-4 text-md-end">
+                    <div class="bg-white bg-opacity-25 rounded-pill px-3 py-1">
+                        <small>
+                            <i class="bi bi-list-check me-1"></i>
+                            Página {{ paginacao.pagina_atual }} de {{ paginacao.total_paginas }}
+                        </small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="container py-4">
+        <!-- Container de Botões -->
+        <div class="d-flex flex-wrap gap-2 mb-4">
+            <!-- Botão de Exportação -->
+            {% if tipo == "localizados" %}
+                <a href="{{ url_for('exportar', tipo='localizados') }}" class="btn btn-success">
+                    <i class="bi bi-download me-1"></i>Exportar Tudo
+                </a>
+            {% elif tipo == "nao-localizados" %}
+                <a href="{{ url_for('exportar', tipo='nao-localizados') }}" class="btn btn-warning">
+                    <i class="bi bi-download me-1"></i>Exportar Tudo
+                </a>
+            {% endif %}
+
+            <!-- Botão Voltar -->
+            <a href="{{ url_for('index') }}" class="btn btn-outline-primary">
+                <i class="bi bi-arrow-left me-1"></i>Voltar para Início
+            </a>
+
+            <!-- Seletor de Itens por Página -->
+            <div class="dropdown">
+                <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                    <i class="bi bi-list-columns me-1"></i>{{ paginacao.por_pagina }} por página
+                </button>
+                <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" href="{{ url_for('visualizar', tipo=tipo, pagina=1, por_pagina=50) }}">50 itens</a></li>
+                    <li><a class="dropdown-item" href="{{ url_for('visualizar', tipo=tipo, pagina=1, por_pagina=100) }}">100 itens</a></li>
+                    <li><a class="dropdown-item" href="{{ url_for('visualizar', tipo=tipo, pagina=1, por_pagina=200) }}">200 itens</a></li>
+                    <li><a class="dropdown-item" href="{{ url_for('visualizar', tipo=tipo, pagina=1, por_pagina=500) }}">500 itens</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Informações de Paginação -->
+        <div class="alert alert-info d-flex justify-content-between align-items-center">
+            <div>
+                <i class="bi bi-info-circle me-1"></i>
+                Mostrando <strong>{{ paginacao.dados|length|number_format }}</strong> de 
+                <strong>{{ paginacao.total_registros|number_format }}</strong> registro{{ paginacao.total_registros|pluralize('', 's') }}
+            </div>
+            <div class="text-muted small">
+                Página {{ paginacao.pagina_atual }} de {{ paginacao.total_paginas }}
+            </div>
+        </div>
+
+        <!-- Tabela de Dados -->
+        {% if paginacao.dados %}
+            <div class="card border-0 shadow-sm">
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-hover table-striped mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th><i class="bi bi-tag me-1"></i>Número do Bem</th>
+                                    <th><i class="bi bi-card-text me-1"></i>Nome do Bem</th>
+                                    <th><i class="bi bi-geo-alt me-1"></i>Localização</th>
+                                    <th><i class="bi bi-info-circle me-1"></i>Situação</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for bem in paginacao.dados %}
+                                    <tr>
+                                        <td class="fw-semibold">{{ bem.numero }}</td>
+                                        <td>{{ bem.nome }}</td>
+                                        <td>
+                                            {% if bem.localizacao %}
+                                                <span class="text-success">
+                                                    <i class="bi bi-geo-alt-fill me-1"></i>{{ bem.localizacao }}
+                                                </span>
+                                            {% else %}
+                                                <span class="text-muted">
+                                                    <i class="bi bi-geo-alt me-1"></i>Não informada
+                                                </span>
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            {% if bem.situacao and 'OK' in bem.situacao %}
+                                                <span class="badge bg-success">Localizado</span>
+                                            {% else %}
+                                                <span class="badge bg-warning text-dark">Pendente</span>
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Paginação -->
+            {% if paginacao.total_paginas > 1 %}
+            <nav aria-label="Navegação de páginas" class="mt-4">
+                <ul class="pagination justify-content-center">
+                    <!-- Primeira Página -->
+                    <li class="page-item {% if paginacao.pagina_atual == 1 %}disabled{% endif %}">
+                        <a class="page-link" href="{{ url_for('visualizar', tipo=tipo, pagina=1, por_pagina=paginacao.por_pagina) }}" onclick="showLoading()">
+                            <i class="bi bi-chevron-double-left"></i>
+                        </a>
+                    </li>
+
+                    <!-- Página Anterior -->
+                    <li class="page-item {% if paginacao.pagina_atual == 1 %}disabled{% endif %}">
+                        <a class="page-link" href="{{ url_for('visualizar', tipo=tipo, pagina=paginacao.pagina_atual-1, por_pagina=paginacao.por_pagina) }}" onclick="showLoading()">
+                            <i class="bi bi-chevron-left"></i>
+                        </a>
+                    </li>
+
+                    <!-- Páginas Numeradas -->
+                    {% set inicio = [1, paginacao.pagina_atual-2]|max %}
+                    {% set fim = [paginacao.total_paginas, paginacao.pagina_atual+2]|min %}
+                    
+                    {% if inicio > 1 %}
+                        <li class="page-item disabled">
+                            <span class="page-link">...</span>
+                        </li>
+                    {% endif %}
+                    
+                    {% for num in range(inicio, fim + 1) %}
+                        <li class="page-item {% if num == paginacao.pagina_atual %}active{% endif %}">
+                            <a class="page-link" href="{{ url_for('visualizar', tipo=tipo, pagina=num, por_pagina=paginacao.por_pagina) }}" onclick="showLoading()">
+                                {{ num }}
+                            </a>
+                        </li>
+                    {% endfor %}
+                    
+                    {% if fim < paginacao.total_paginas %}
+                        <li class="page-item disabled">
+                            <span class="page-link">...</span>
+                        </li>
+                    {% endif %}
+
+                    <!-- Próxima Página -->
+                    <li class="page-item {% if paginacao.pagina_atual == paginacao.total_paginas %}disabled{% endif %}">
+                        <a class="page-link" href="{{ url_for('visualizar', tipo=tipo, pagina=paginacao.pagina_atual+1, por_pagina=paginacao.por_pagina) }}" onclick="showLoading()">
+                            <i class="bi bi-chevron-right"></i>
+                        </a>
+                    </li>
+
+                    <!-- Última Página -->
+                    <li class="page-item {% if paginacao.pagina_atual == paginacao.total_paginas %}disabled{% endif %}">
+                        <a class="page-link" href="{{ url_for('visualizar', tipo=tipo, pagina=paginacao.total_paginas, por_pagina=paginacao.por_pagina) }}" onclick="showLoading()">
+                            <i class="bi bi-chevron-double-right"></i>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+            {% endif %}
+
+        {% else %}
+            <!-- Estado Vazio -->
+            <div class="text-center py-5">
+                <div class="mb-4">
+                    <i class="bi bi-inbox display-1 text-muted"></i>
+                </div>
+                <h3 class="h4 text-muted mb-3">Nenhum registro encontrado</h3>
+                <p class="text-muted mb-4">Não há {{ titulo|lower }} no momento.</p>
+                <a href="{{ url_for('index') }}" class="btn btn-primary">
+                    <i class="bi bi-arrow-left me-1"></i>Voltar para Início
+                </a>
+            </div>
+        {% endif %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white py-3 mt-5">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <p class="mb-0 small">
+                        <i class="bi bi-c-circle me-1"></i> 2023 Sistema de Controle Patrimonial
+                    </p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <small class="opacity-75">
+                        {{ paginacao.dados|length|number_format }} de {{ paginacao.total_registros|number_format }} itens • 
+                        Página {{ paginacao.pagina_atual }}/{{ paginacao.total_paginas }}
+                    </small>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Função para mostrar loading
+        function showLoading() {
+            document.getElementById('loadingOverlay').style.display = 'flex';
+        }
+
+        // Esconder loading quando a página carregar
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('loadingOverlay').style.display = 'none';
+        });
+
+        // Mostrar loading durante downloads
+        document.querySelectorAll('a[href*="exportar"]').forEach(link => {
+            link.addEventListener('click', function() {
+                document.getElementById('loadingOverlay').style.display = 'flex';
+            });
+        });
+
+        // Atalhos de teclado para paginação
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'ArrowLeft') {
+                const prevLink = document.querySelector('.page-item:not(.disabled) .page-link[href*="pagina="]:has(.bi-chevron-left)');
+                if (prevLink) {
+                    showLoading();
+                    window.location.href = prevLink.href;
+                }
+            } else if (e.key === 'ArrowRight') {
+                const nextLink = document.querySelector('.page-item:not(.disabled) .page-link[href*="pagina="]:has(.bi-chevron-right)');
+                if (nextLink) {
+                    showLoading();
+                    window.location.href = nextLink.href;
+                }
+            }
+        });
+
+        // Formatação de números (fallback caso JavaScript queira fazer algo)
+        function formatNumber(num) {
+            return new Intl.NumberFormat('pt-BR').format(num);
+        }
+    </script>
+</body>
+</html>

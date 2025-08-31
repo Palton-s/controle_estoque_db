@@ -1,0 +1,297 @@
+2025-08-21 22:06:05,083 - utils.logger - INFO - Iniciando aplicação Flask
+2025-08-21 22:06:05,148 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-08-21 22:06:05,148 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-08-21 22:06:05,150 - werkzeug - INFO -  * Restarting with stat
+2025-08-21 22:06:05,335 - utils.logger - INFO - Iniciando aplicação Flask
+2025-08-21 22:06:05,345 - werkzeug - WARNING -  * Debugger is active!
+2025-08-21 22:06:05,350 - werkzeug - INFO -  * Debugger PIN: 425-947-988
+2025-08-21 22:06:12,618 - utils.logger - INFO - Geradas listas: 16 localizados, 185 não localizados
+2025-08-21 22:06:12,618 - utils.logger - INFO - Dados carregados: 16 localizados, 185 não localizados
+2025-08-21 22:06:12,632 - werkzeug - INFO - 127.0.0.1 - - [21/Aug/2025 22:06:12] "GET / HTTP/1.1" 200 -
+2025-08-21 22:06:12,842 - werkzeug - INFO - 127.0.0.1 - - [21/Aug/2025 22:06:12] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-08-21 22:06:51,513 - utils.logger - INFO - Geradas listas: 16 localizados, 185 não localizados
+2025-08-21 22:06:51,538 - werkzeug - INFO - 127.0.0.1 - - [21/Aug/2025 22:06:51] "GET /visualizar/localizados HTTP/1.1" 200 -
+2025-08-21 22:06:51,569 - werkzeug - INFO - 127.0.0.1 - - [21/Aug/2025 22:06:51] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-08-21 22:07:01,521 - utils.logger - INFO - Localização do bem 367248: Sala da Direção
+2025-08-21 22:07:01,521 - utils.logger - INFO - Verificação do bem 367248: Encontrado
+2025-08-21 22:07:01,744 - utils.logger - INFO - Geradas listas: 16 localizados, 185 não localizados
+2025-08-21 22:07:01,744 - utils.logger - INFO - Dados carregados: 16 localizados, 185 não localizados
+2025-08-21 22:07:01,745 - werkzeug - INFO - 127.0.0.1 - - [21/Aug/2025 22:07:01] "POST / HTTP/1.1" 200 -
+2025-08-21 22:07:01,766 - werkzeug - INFO - 127.0.0.1 - - [21/Aug/2025 22:07:01] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-08-21 22:08:24,471 - utils.logger - INFO - Localização do bem 367248: Sala da Direção
+2025-08-21 22:08:24,471 - utils.logger - INFO - Verificação do bem 367248: Encontrado
+2025-08-21 22:08:24,581 - utils.logger - INFO - Geradas listas: 16 localizados, 185 não localizados
+2025-08-21 22:08:24,581 - utils.logger - INFO - Dados carregados: 16 localizados, 185 não localizados
+2025-08-21 22:08:24,582 - werkzeug - INFO - 127.0.0.1 - - [21/Aug/2025 22:08:24] "POST / HTTP/1.1" 200 -
+2025-08-21 22:08:24,600 - werkzeug - INFO - 127.0.0.1 - - [21/Aug/2025 22:08:24] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-08-21 22:08:44,207 - utils.logger - INFO - Localização do bem 1: Não definida
+2025-08-21 22:08:44,207 - utils.logger - INFO - Verificação do bem 1: Não encontrado
+2025-08-21 22:08:44,208 - utils.logger - WARNING - Bem 1 não encontrado no banco
+2025-08-21 22:08:44,209 - utils.logger - INFO - Geradas listas: 16 localizados, 185 não localizados
+2025-08-21 22:08:44,209 - utils.logger - INFO - Dados carregados: 16 localizados, 185 não localizados
+2025-08-21 22:08:44,210 - werkzeug - INFO - 127.0.0.1 - - [21/Aug/2025 22:08:44] "POST / HTTP/1.1" 200 -
+2025-08-21 22:08:44,228 - werkzeug - INFO - 127.0.0.1 - - [21/Aug/2025 22:08:44] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-08-21 22:08:52,596 - utils.logger - INFO - Localização do bem 1: Não definida
+2025-08-21 22:08:52,596 - utils.logger - INFO - Verificação do bem 1: Não encontrado
+2025-08-21 22:08:52,597 - utils.logger - WARNING - Bem 1 não encontrado no banco
+2025-08-21 22:08:52,598 - utils.logger - INFO - Geradas listas: 16 localizados, 185 não localizados
+2025-08-21 22:08:52,598 - utils.logger - INFO - Dados carregados: 16 localizados, 185 não localizados
+2025-08-21 22:08:52,599 - werkzeug - INFO - 127.0.0.1 - - [21/Aug/2025 22:08:52] "POST / HTTP/1.1" 200 -
+2025-08-21 22:08:52,612 - werkzeug - INFO - 127.0.0.1 - - [21/Aug/2025 22:08:52] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-08-21 22:09:21,408 - utils.logger - INFO - Localização do bem 1: Não definida
+2025-08-21 22:09:21,409 - utils.logger - INFO - Verificação do bem 1: Não encontrado
+2025-08-21 22:09:21,409 - utils.logger - WARNING - Bem 1 não encontrado no banco
+2025-08-21 22:09:21,410 - utils.logger - INFO - Geradas listas: 16 localizados, 185 não localizados
+2025-08-21 22:09:21,410 - utils.logger - INFO - Dados carregados: 16 localizados, 185 não localizados
+2025-08-21 22:09:21,411 - werkzeug - INFO - 127.0.0.1 - - [21/Aug/2025 22:09:21] "POST / HTTP/1.1" 200 -
+2025-08-21 22:09:21,434 - werkzeug - INFO - 127.0.0.1 - - [21/Aug/2025 22:09:21] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-08-21 22:26:58,094 - werkzeug - INFO -  * Detected change in 'D:\\controle_estoque_db\\utils\\excel_importer.py', reloading
+2025-08-21 22:26:58,129 - werkzeug - INFO -  * Restarting with stat
+2025-08-21 22:26:58,726 - utils.logger - INFO - Iniciando aplicação Flask
+2025-08-21 22:26:58,756 - werkzeug - WARNING -  * Debugger is active!
+2025-08-21 22:26:58,759 - werkzeug - INFO -  * Debugger PIN: 425-947-988
+2025-08-21 22:28:14,169 - werkzeug - INFO -  * Detected change in 'D:\\controle_estoque_db\\app.py', reloading
+2025-08-21 22:28:14,202 - werkzeug - INFO -  * Restarting with stat
+2025-08-21 22:28:16,106 - utils.logger - INFO - Iniciando aplicação Flask
+2025-08-21 22:28:16,113 - werkzeug - WARNING -  * Debugger is active!
+2025-08-21 22:28:16,117 - werkzeug - INFO -  * Debugger PIN: 425-947-988
+2025-08-21 22:29:07,680 - werkzeug - INFO -  * Detected change in 'D:\\controle_estoque_db\\app.py', reloading
+2025-08-21 22:29:07,747 - werkzeug - INFO -  * Restarting with stat
+2025-08-21 22:29:08,335 - utils.logger - INFO - Iniciando aplicação Flask
+2025-08-21 22:29:08,344 - werkzeug - WARNING -  * Debugger is active!
+2025-08-21 22:29:08,347 - werkzeug - INFO -  * Debugger PIN: 425-947-988
+2025-08-21 22:29:11,398 - werkzeug - INFO -  * Detected change in 'D:\\controle_estoque_db\\app.py', reloading
+2025-08-21 22:29:11,478 - werkzeug - INFO -  * Restarting with stat
+2025-08-21 22:29:12,035 - utils.logger - INFO - Iniciando aplicação Flask
+2025-08-21 22:29:12,044 - werkzeug - WARNING -  * Debugger is active!
+2025-08-21 22:29:12,046 - werkzeug - INFO -  * Debugger PIN: 425-947-988
+2025-08-21 22:29:17,129 - werkzeug - INFO -  * Detected change in 'D:\\controle_estoque_db\\app.py', reloading
+2025-08-21 22:29:17,198 - werkzeug - INFO -  * Restarting with stat
+2025-08-21 22:29:17,753 - utils.logger - INFO - Iniciando aplicação Flask
+2025-08-21 22:29:17,762 - werkzeug - WARNING -  * Debugger is active!
+2025-08-21 22:29:17,765 - werkzeug - INFO -  * Debugger PIN: 425-947-988
+2025-08-21 22:29:22,841 - werkzeug - INFO -  * Detected change in 'D:\\controle_estoque_db\\app.py', reloading
+2025-08-21 22:29:22,918 - werkzeug - INFO -  * Restarting with stat
+2025-08-21 22:29:23,488 - utils.logger - INFO - Iniciando aplicação Flask
+2025-08-21 22:29:23,498 - werkzeug - WARNING -  * Debugger is active!
+2025-08-21 22:29:23,501 - werkzeug - INFO -  * Debugger PIN: 425-947-988
+2025-08-21 22:29:30,604 - werkzeug - INFO -  * Detected change in 'D:\\controle_estoque_db\\app.py', reloading
+2025-08-21 22:29:30,685 - werkzeug - INFO -  * Restarting with stat
+2025-08-21 22:29:31,240 - utils.logger - INFO - Iniciando aplicação Flask
+2025-08-21 22:29:31,250 - werkzeug - WARNING -  * Debugger is active!
+2025-08-21 22:29:31,253 - werkzeug - INFO -  * Debugger PIN: 425-947-988
+2025-08-21 22:29:37,344 - werkzeug - INFO -  * Detected change in 'D:\\controle_estoque_db\\app.py', reloading
+2025-08-21 22:29:37,416 - werkzeug - INFO -  * Restarting with stat
+2025-08-21 22:29:37,963 - utils.logger - INFO - Iniciando aplicação Flask
+2025-08-21 22:29:37,972 - werkzeug - WARNING -  * Debugger is active!
+2025-08-21 22:29:37,975 - werkzeug - INFO -  * Debugger PIN: 425-947-988
+2025-08-21 22:37:29,347 - utils.logger - INFO - Geradas listas: 16 localizados, 185 não localizados
+2025-08-21 22:37:29,347 - utils.logger - INFO - Dados carregados: 16 localizados, 185 não localizados
+2025-08-21 22:37:29,397 - werkzeug - INFO - 127.0.0.1 - - [21/Aug/2025 22:37:29] "GET / HTTP/1.1" 200 -
+2025-08-21 22:37:29,424 - werkzeug - INFO - 127.0.0.1 - - [21/Aug/2025 22:37:29] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-08-21 22:37:53,880 - utils.logger - INFO - Iniciando aplicação Flask
+2025-08-21 22:37:53,899 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-08-21 22:37:53,900 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-08-21 22:37:53,900 - werkzeug - INFO -  * Restarting with stat
+2025-08-21 22:37:54,426 - utils.logger - INFO - Iniciando aplicação Flask
+2025-08-21 22:37:54,434 - werkzeug - WARNING -  * Debugger is active!
+2025-08-21 22:37:54,437 - werkzeug - INFO -  * Debugger PIN: 425-947-988
+2025-08-21 22:37:57,706 - utils.logger - INFO - Geradas listas: 16 localizados, 185 não localizados
+2025-08-21 22:37:57,706 - utils.logger - INFO - Dados carregados: 16 localizados, 185 não localizados
+2025-08-21 22:37:57,718 - werkzeug - INFO - 127.0.0.1 - - [21/Aug/2025 22:37:57] "GET / HTTP/1.1" 200 -
+2025-08-21 22:37:57,852 - werkzeug - INFO - 127.0.0.1 - - [21/Aug/2025 22:37:57] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-08-21 22:39:33,995 - utils.logger - INFO - Backup criado: relatorios/backup_controle_20250821_223933.db
+2025-08-21 22:39:33,995 - utils.logger - INFO - Iniciando importação do arquivo: temp\controle_patrimonial.xlsx
+2025-08-21 22:39:34,049 - utils.logger - ERROR - Erro na importação: Coluna obrigatória não encontrada: Nome
+2025-08-21 22:39:34,050 - utils.logger - INFO - Geradas listas: 16 localizados, 185 não localizados
+2025-08-21 22:39:34,050 - utils.logger - INFO - Dados carregados: 16 localizados, 185 não localizados
+2025-08-21 22:39:34,051 - werkzeug - INFO - 127.0.0.1 - - [21/Aug/2025 22:39:34] "POST /importar-excel HTTP/1.1" 200 -
+2025-08-21 22:39:34,072 - werkzeug - INFO - 127.0.0.1 - - [21/Aug/2025 22:39:34] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-08-21 22:58:55,460 - utils.logger - INFO - Iniciando aplicação Flask
+2025-08-21 22:58:55,480 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-08-21 22:58:55,480 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-08-21 22:58:55,481 - werkzeug - INFO -  * Restarting with stat
+2025-08-21 22:58:55,995 - utils.logger - INFO - Iniciando aplicação Flask
+2025-08-21 22:58:56,002 - werkzeug - WARNING -  * Debugger is active!
+2025-08-21 22:58:56,005 - werkzeug - INFO -  * Debugger PIN: 425-947-988
+2025-08-21 22:58:59,413 - utils.logger - INFO - Geradas listas: 16 localizados, 185 não localizados
+2025-08-21 22:58:59,413 - utils.logger - INFO - Dados carregados: 16 localizados, 185 não localizados
+2025-08-21 22:58:59,427 - werkzeug - INFO - 127.0.0.1 - - [21/Aug/2025 22:58:59] "GET / HTTP/1.1" 200 -
+2025-08-21 22:58:59,445 - werkzeug - INFO - 127.0.0.1 - - [21/Aug/2025 22:58:59] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-08-21 22:59:07,982 - utils.logger - INFO - Geradas listas: 16 localizados, 185 não localizados
+2025-08-21 22:59:07,982 - utils.logger - INFO - Dados carregados: 16 localizados, 185 não localizados
+2025-08-21 22:59:07,983 - werkzeug - INFO - 127.0.0.1 - - [21/Aug/2025 22:59:07] "GET / HTTP/1.1" 200 -
+2025-08-21 22:59:08,007 - werkzeug - INFO - 127.0.0.1 - - [21/Aug/2025 22:59:08] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-08-21 22:59:18,461 - utils.logger - INFO - Geradas listas: 16 localizados, 185 não localizados
+2025-08-21 22:59:18,461 - utils.logger - INFO - Dados carregados: 16 localizados, 185 não localizados
+2025-08-21 22:59:18,462 - werkzeug - INFO - 127.0.0.1 - - [21/Aug/2025 22:59:18] "POST /importar-excel HTTP/1.1" 200 -
+2025-08-21 22:59:18,479 - werkzeug - INFO - 127.0.0.1 - - [21/Aug/2025 22:59:18] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-08-21 23:00:29,310 - utils.logger - INFO - Backup criado: relatorios/backup_controle_20250821_230029.db
+2025-08-21 23:00:29,311 - utils.logger - INFO - Iniciando importação do arquivo: temp\controle_patrimonial.xlsx
+2025-08-21 23:00:29,342 - utils.logger - INFO - Colunas detectadas: {'numero': 'NUMERO DO BEM', 'nome': 'NOME ', 'localizacao': 'LOCALIZAÇÃO', 'situacao': 'SITUAÇÃO'}
+2025-08-21 23:00:29,344 - utils.logger - INFO - Tabela limpa para nova importação
+2025-08-21 23:00:29,494 - utils.logger - INFO - Geradas listas: 9 localizados, 192 não localizados
+2025-08-21 23:00:29,495 - utils.logger - INFO - Dados carregados: 9 localizados, 192 não localizados
+2025-08-21 23:00:29,497 - werkzeug - INFO - 127.0.0.1 - - [21/Aug/2025 23:00:29] "POST /importar-excel HTTP/1.1" 200 -
+2025-08-21 23:00:29,520 - werkzeug - INFO - 127.0.0.1 - - [21/Aug/2025 23:00:29] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-08-21 23:00:40,615 - utils.logger - INFO - Geradas listas: 9 localizados, 192 não localizados
+2025-08-21 23:00:40,621 - werkzeug - INFO - 127.0.0.1 - - [21/Aug/2025 23:00:40] "GET /visualizar/nao-localizados HTTP/1.1" 200 -
+2025-08-21 23:00:40,642 - werkzeug - INFO - 127.0.0.1 - - [21/Aug/2025 23:00:40] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-08-21 23:00:47,928 - utils.logger - INFO - Geradas listas: 9 localizados, 192 não localizados
+2025-08-21 23:00:47,928 - utils.logger - INFO - Dados carregados: 9 localizados, 192 não localizados
+2025-08-21 23:00:47,929 - werkzeug - INFO - 127.0.0.1 - - [21/Aug/2025 23:00:47] "GET / HTTP/1.1" 200 -
+2025-08-21 23:00:47,953 - werkzeug - INFO - 127.0.0.1 - - [21/Aug/2025 23:00:47] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-08-21 23:00:53,235 - utils.logger - INFO - Localização do bem 469704: Sala da Direção
+2025-08-21 23:00:53,236 - utils.logger - INFO - Verificação do bem 469704: Encontrado
+2025-08-21 23:00:53,366 - utils.logger - INFO - Geradas listas: 10 localizados, 191 não localizados
+2025-08-21 23:00:53,366 - utils.logger - INFO - Dados carregados: 10 localizados, 191 não localizados
+2025-08-21 23:00:53,367 - werkzeug - INFO - 127.0.0.1 - - [21/Aug/2025 23:00:53] "POST / HTTP/1.1" 200 -
+2025-08-21 23:00:53,390 - werkzeug - INFO - 127.0.0.1 - - [21/Aug/2025 23:00:53] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-08-21 23:03:17,275 - utils.logger - INFO - Backup criado: relatorios/backup_controle_20250821_230317.db
+2025-08-21 23:03:17,275 - utils.logger - INFO - Iniciando importação do arquivo: temp\controle_patrimonial.xlsx
+2025-08-21 23:03:17,303 - utils.logger - INFO - Colunas detectadas: {'numero': 'NUMERO DO BEM', 'nome': 'NOME ', 'localizacao': 'LOCALIZAÇÃO', 'situacao': 'SITUAÇÃO'}
+2025-08-21 23:03:17,304 - utils.logger - INFO - Tabela limpa para nova importação
+2025-08-21 23:03:17,449 - utils.logger - INFO - Geradas listas: 0 localizados, 201 não localizados
+2025-08-21 23:03:17,451 - utils.logger - INFO - Dados carregados: 0 localizados, 201 não localizados
+2025-08-21 23:03:17,454 - werkzeug - INFO - 127.0.0.1 - - [21/Aug/2025 23:03:17] "POST /importar-excel HTTP/1.1" 200 -
+2025-08-21 23:03:17,475 - werkzeug - INFO - 127.0.0.1 - - [21/Aug/2025 23:03:17] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-08-21 23:03:28,205 - utils.logger - INFO - Geradas listas: 0 localizados, 201 não localizados
+2025-08-21 23:03:28,207 - werkzeug - INFO - 127.0.0.1 - - [21/Aug/2025 23:03:28] "GET /visualizar/nao-localizados HTTP/1.1" 200 -
+2025-08-21 23:03:28,232 - werkzeug - INFO - 127.0.0.1 - - [21/Aug/2025 23:03:28] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-08-21 23:03:33,894 - utils.logger - INFO - Geradas listas: 0 localizados, 201 não localizados
+2025-08-21 23:03:33,895 - utils.logger - INFO - Dados carregados: 0 localizados, 201 não localizados
+2025-08-21 23:03:33,896 - werkzeug - INFO - 127.0.0.1 - - [21/Aug/2025 23:03:33] "GET / HTTP/1.1" 200 -
+2025-08-21 23:03:33,914 - werkzeug - INFO - 127.0.0.1 - - [21/Aug/2025 23:03:33] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-08-21 23:03:41,087 - utils.logger - INFO - Localização do bem 367248: Sala da Direção
+2025-08-21 23:03:41,087 - utils.logger - INFO - Verificação do bem 367248: Encontrado
+2025-08-21 23:03:41,204 - utils.logger - INFO - Geradas listas: 1 localizados, 200 não localizados
+2025-08-21 23:03:41,204 - utils.logger - INFO - Dados carregados: 1 localizados, 200 não localizados
+2025-08-21 23:03:41,205 - werkzeug - INFO - 127.0.0.1 - - [21/Aug/2025 23:03:41] "POST / HTTP/1.1" 200 -
+2025-08-21 23:03:41,228 - werkzeug - INFO - 127.0.0.1 - - [21/Aug/2025 23:03:41] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-08-21 23:03:55,695 - utils.logger - INFO - Localização do bem 367248: Sala da Direção
+2025-08-21 23:03:55,696 - utils.logger - INFO - Verificação do bem 367248: Encontrado
+2025-08-21 23:03:55,825 - utils.logger - INFO - Geradas listas: 1 localizados, 200 não localizados
+2025-08-21 23:03:55,826 - utils.logger - INFO - Dados carregados: 1 localizados, 200 não localizados
+2025-08-21 23:03:55,828 - werkzeug - INFO - 127.0.0.1 - - [21/Aug/2025 23:03:55] "POST / HTTP/1.1" 200 -
+2025-08-21 23:03:55,861 - werkzeug - INFO - 127.0.0.1 - - [21/Aug/2025 23:03:55] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-08-21 23:05:06,613 - utils.logger - INFO - Localização do bem 404500: Sala da Direção
+2025-08-21 23:05:06,614 - utils.logger - INFO - Verificação do bem 404500: Encontrado
+2025-08-21 23:05:06,743 - utils.logger - INFO - Geradas listas: 2 localizados, 199 não localizados
+2025-08-21 23:05:06,743 - utils.logger - INFO - Dados carregados: 2 localizados, 199 não localizados
+2025-08-21 23:05:06,744 - werkzeug - INFO - 127.0.0.1 - - [21/Aug/2025 23:05:06] "POST / HTTP/1.1" 200 -
+2025-08-21 23:05:06,765 - werkzeug - INFO - 127.0.0.1 - - [21/Aug/2025 23:05:06] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-08-21 23:05:21,246 - utils.logger - INFO - Localização do bem 404612: Sala da Direção
+2025-08-21 23:05:21,247 - utils.logger - INFO - Verificação do bem 404612: Encontrado
+2025-08-21 23:05:21,374 - utils.logger - INFO - Geradas listas: 3 localizados, 198 não localizados
+2025-08-21 23:05:21,374 - utils.logger - INFO - Dados carregados: 3 localizados, 198 não localizados
+2025-08-21 23:05:21,375 - werkzeug - INFO - 127.0.0.1 - - [21/Aug/2025 23:05:21] "POST / HTTP/1.1" 200 -
+2025-08-21 23:05:21,394 - werkzeug - INFO - 127.0.0.1 - - [21/Aug/2025 23:05:21] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-08-21 23:05:31,280 - utils.logger - INFO - Localização do bem 414816: Sala da Direção
+2025-08-21 23:05:31,280 - utils.logger - INFO - Verificação do bem 414816: Encontrado
+2025-08-21 23:05:31,406 - utils.logger - INFO - Geradas listas: 4 localizados, 197 não localizados
+2025-08-21 23:05:31,406 - utils.logger - INFO - Dados carregados: 4 localizados, 197 não localizados
+2025-08-21 23:05:31,406 - werkzeug - INFO - 127.0.0.1 - - [21/Aug/2025 23:05:31] "POST / HTTP/1.1" 200 -
+2025-08-21 23:05:31,427 - werkzeug - INFO - 127.0.0.1 - - [21/Aug/2025 23:05:31] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-08-21 23:05:42,101 - utils.logger - INFO - Localização do bem 2022001020: Sala da Direção
+2025-08-21 23:05:42,102 - utils.logger - INFO - Verificação do bem 2022001020: Encontrado
+2025-08-21 23:05:42,229 - utils.logger - INFO - Geradas listas: 5 localizados, 196 não localizados
+2025-08-21 23:05:42,229 - utils.logger - INFO - Dados carregados: 5 localizados, 196 não localizados
+2025-08-21 23:05:42,230 - werkzeug - INFO - 127.0.0.1 - - [21/Aug/2025 23:05:42] "POST / HTTP/1.1" 200 -
+2025-08-21 23:05:42,249 - werkzeug - INFO - 127.0.0.1 - - [21/Aug/2025 23:05:42] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-08-21 23:05:48,053 - utils.logger - INFO - Localização do bem 1: Não definida
+2025-08-21 23:05:48,053 - utils.logger - INFO - Verificação do bem 1: Não encontrado
+2025-08-21 23:05:48,054 - utils.logger - WARNING - Bem 1 não encontrado no banco
+2025-08-21 23:05:48,054 - utils.logger - INFO - Geradas listas: 5 localizados, 196 não localizados
+2025-08-21 23:05:48,054 - utils.logger - INFO - Dados carregados: 5 localizados, 196 não localizados
+2025-08-21 23:05:48,055 - werkzeug - INFO - 127.0.0.1 - - [21/Aug/2025 23:05:48] "POST / HTTP/1.1" 200 -
+2025-08-21 23:05:48,070 - werkzeug - INFO - 127.0.0.1 - - [21/Aug/2025 23:05:48] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-08-21 23:06:12,966 - utils.logger - INFO - Geradas listas: 5 localizados, 196 não localizados
+2025-08-21 23:06:12,967 - werkzeug - INFO - 127.0.0.1 - - [21/Aug/2025 23:06:12] "GET /visualizar/localizados HTTP/1.1" 200 -
+2025-08-21 23:06:12,994 - werkzeug - INFO - 127.0.0.1 - - [21/Aug/2025 23:06:12] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-08-21 23:06:18,078 - utils.logger - INFO - Geradas listas: 5 localizados, 196 não localizados
+2025-08-21 23:06:18,078 - utils.logger - INFO - Dados carregados: 5 localizados, 196 não localizados
+2025-08-21 23:06:18,079 - werkzeug - INFO - 127.0.0.1 - - [21/Aug/2025 23:06:18] "GET / HTTP/1.1" 200 -
+2025-08-21 23:06:18,100 - werkzeug - INFO - 127.0.0.1 - - [21/Aug/2025 23:06:18] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-08-21 23:06:24,053 - utils.logger - INFO - Geradas listas: 5 localizados, 196 não localizados
+2025-08-21 23:06:24,055 - werkzeug - INFO - 127.0.0.1 - - [21/Aug/2025 23:06:24] "GET /visualizar/nao-localizados HTTP/1.1" 200 -
+2025-08-21 23:06:24,077 - werkzeug - INFO - 127.0.0.1 - - [21/Aug/2025 23:06:24] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-08-21 23:06:33,746 - utils.logger - INFO - Geradas listas: 5 localizados, 196 não localizados
+2025-08-21 23:06:33,770 - utils.logger - INFO - Relatório exportado: D:\controle_estoque_db\relatorios\bens_localizados_20250821-230633.xlsx
+2025-08-21 23:06:33,782 - werkzeug - INFO - 127.0.0.1 - - [21/Aug/2025 23:06:33] "GET /exportar/localizados HTTP/1.1" 200 -
+2025-08-21 23:06:55,781 - utils.logger - INFO - Geradas listas: 5 localizados, 196 não localizados
+2025-08-21 23:06:55,815 - utils.logger - INFO - Relatório exportado: D:\controle_estoque_db\relatorios\bens_nao_localizados_20250821-230655.xlsx
+2025-08-21 23:06:55,825 - werkzeug - INFO - 127.0.0.1 - - [21/Aug/2025 23:06:55] "GET /exportar/nao-localizados HTTP/1.1" 200 -
+2025-08-21 23:17:07,114 - werkzeug - INFO -  * Detected change in 'D:\\controle_estoque_db\\utils\\excel_importer.py', reloading
+2025-08-21 23:17:07,200 - werkzeug - INFO -  * Restarting with stat
+2025-08-21 23:18:03,126 - utils.logger - INFO - Iniciando aplicação Flask
+2025-08-21 23:18:03,145 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-08-21 23:18:03,145 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-08-21 23:18:03,146 - werkzeug - INFO -  * Restarting with stat
+2025-08-21 23:18:03,668 - utils.logger - INFO - Iniciando aplicação Flask
+2025-08-21 23:18:03,676 - werkzeug - WARNING -  * Debugger is active!
+2025-08-21 23:18:03,679 - werkzeug - INFO -  * Debugger PIN: 425-947-988
+2025-08-21 23:18:09,420 - utils.logger - INFO - Geradas listas: 5 localizados, 196 não localizados
+2025-08-21 23:18:09,421 - utils.logger - INFO - Dados carregados: 5 localizados, 196 não localizados
+2025-08-21 23:18:09,433 - werkzeug - INFO - 127.0.0.1 - - [21/Aug/2025 23:18:09] "GET / HTTP/1.1" 200 -
+2025-08-21 23:18:09,561 - werkzeug - INFO - 127.0.0.1 - - [21/Aug/2025 23:18:09] "GET /static/style.css HTTP/1.1" 200 -
+2025-08-21 23:18:32,908 - utils.logger - INFO - Colunas encontradas no Excel: ['nome', 'numero do bem', 'situação', 'localização']
+2025-08-21 23:18:32,909 - utils.logger - INFO - Coluna 'numero' detectada como: 'NUMERO DO BEM'
+2025-08-21 23:18:32,909 - utils.logger - INFO - Coluna 'nome' detectada como: 'NOME '
+2025-08-21 23:18:32,909 - utils.logger - INFO - Coluna 'localizacao' detectada como: 'LOCALIZAÇÃO'
+2025-08-21 23:18:32,909 - utils.logger - INFO - Coluna 'situacao' detectada como: 'SITUAÇÃO'
+2025-08-21 23:18:32,910 - utils.logger - INFO - Backup criado: relatorios/backup_controle_20250821_231832.db
+2025-08-21 23:18:32,910 - utils.logger - INFO - Iniciando importação do arquivo: temp\controle_patrimonial.xlsx
+2025-08-21 23:18:32,936 - utils.logger - INFO - Colunas encontradas no Excel: ['nome', 'numero do bem', 'situação', 'localização']
+2025-08-21 23:18:32,936 - utils.logger - INFO - Coluna 'numero' detectada como: 'NUMERO DO BEM'
+2025-08-21 23:18:32,936 - utils.logger - INFO - Coluna 'nome' detectada como: 'NOME '
+2025-08-21 23:18:32,937 - utils.logger - INFO - Coluna 'localizacao' detectada como: 'LOCALIZAÇÃO'
+2025-08-21 23:18:32,937 - utils.logger - INFO - Coluna 'situacao' detectada como: 'SITUAÇÃO'
+2025-08-21 23:18:32,937 - utils.logger - INFO - Mapeamento de colunas detectado: {'numero': 'NUMERO DO BEM', 'nome': 'NOME ', 'localizacao': 'LOCALIZAÇÃO', 'situacao': 'SITUAÇÃO'}
+2025-08-21 23:18:32,956 - utils.logger - INFO - Tabela limpa para nova importação
+2025-08-21 23:18:32,967 - utils.logger - INFO - Registros processados: 100
+2025-08-21 23:18:32,977 - utils.logger - INFO - Registros processados: 200
+2025-08-21 23:18:33,118 - utils.logger - INFO - Geradas listas: 0 localizados, 201 não localizados
+2025-08-21 23:18:33,118 - utils.logger - INFO - Dados carregados: 0 localizados, 201 não localizados
+2025-08-21 23:18:33,120 - werkzeug - INFO - 127.0.0.1 - - [21/Aug/2025 23:18:33] "POST /importar-excel HTTP/1.1" 200 -
+2025-08-21 23:18:33,147 - werkzeug - INFO - 127.0.0.1 - - [21/Aug/2025 23:18:33] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-08-21 23:18:54,248 - utils.logger - INFO - Localização do bem 414816: Sala da Direção
+2025-08-21 23:18:54,249 - utils.logger - INFO - Verificação do bem 414816: Encontrado
+2025-08-21 23:18:54,374 - utils.logger - INFO - Geradas listas: 1 localizados, 200 não localizados
+2025-08-21 23:18:54,375 - utils.logger - INFO - Dados carregados: 1 localizados, 200 não localizados
+2025-08-21 23:18:54,375 - werkzeug - INFO - 127.0.0.1 - - [21/Aug/2025 23:18:54] "POST / HTTP/1.1" 200 -
+2025-08-21 23:18:54,397 - werkzeug - INFO - 127.0.0.1 - - [21/Aug/2025 23:18:54] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-08-21 23:19:25,144 - utils.logger - INFO - Localização do bem 404612: Sala da Direção
+2025-08-21 23:19:25,144 - utils.logger - INFO - Verificação do bem 404612: Encontrado
+2025-08-21 23:19:25,274 - utils.logger - INFO - Geradas listas: 2 localizados, 199 não localizados
+2025-08-21 23:19:25,274 - utils.logger - INFO - Dados carregados: 2 localizados, 199 não localizados
+2025-08-21 23:19:25,275 - werkzeug - INFO - 127.0.0.1 - - [21/Aug/2025 23:19:25] "POST / HTTP/1.1" 200 -
+2025-08-21 23:19:25,296 - werkzeug - INFO - 127.0.0.1 - - [21/Aug/2025 23:19:25] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-08-21 23:19:31,788 - utils.logger - INFO - Geradas listas: 2 localizados, 199 não localizados
+2025-08-21 23:19:31,794 - werkzeug - INFO - 127.0.0.1 - - [21/Aug/2025 23:19:31] "GET /visualizar/localizados HTTP/1.1" 200 -
+2025-08-21 23:19:31,817 - werkzeug - INFO - 127.0.0.1 - - [21/Aug/2025 23:19:31] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-08-21 23:19:44,756 - utils.logger - INFO - Geradas listas: 2 localizados, 199 não localizados
+2025-08-21 23:19:44,758 - werkzeug - INFO - 127.0.0.1 - - [21/Aug/2025 23:19:44] "GET /visualizar/nao-localizados HTTP/1.1" 200 -
+2025-08-21 23:19:44,780 - werkzeug - INFO - 127.0.0.1 - - [21/Aug/2025 23:19:44] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-08-21 23:19:49,101 - utils.logger - INFO - Geradas listas: 2 localizados, 199 não localizados
+2025-08-21 23:19:49,127 - utils.logger - INFO - Relatório exportado: D:\controle_estoque_db\relatorios\bens_localizados_20250821-231949.xlsx
+2025-08-21 23:19:49,139 - werkzeug - INFO - 127.0.0.1 - - [21/Aug/2025 23:19:49] "GET /exportar/localizados HTTP/1.1" 200 -
+2025-08-21 23:20:10,742 - utils.logger - INFO - Geradas listas: 2 localizados, 199 não localizados
+2025-08-21 23:20:10,745 - werkzeug - INFO - 127.0.0.1 - - [21/Aug/2025 23:20:10] "GET /visualizar/nao-localizados HTTP/1.1" 200 -
+2025-08-21 23:20:10,762 - werkzeug - INFO - 127.0.0.1 - - [21/Aug/2025 23:20:10] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-08-21 23:20:22,721 - utils.logger - INFO - Geradas listas: 2 localizados, 199 não localizados
+2025-08-21 23:20:22,751 - utils.logger - INFO - Relatório exportado: D:\controle_estoque_db\relatorios\bens_nao_localizados_20250821-232022.xlsx
+2025-08-21 23:20:22,760 - werkzeug - INFO - 127.0.0.1 - - [21/Aug/2025 23:20:22] "GET /exportar/nao-localizados HTTP/1.1" 200 -
+2025-08-21 23:21:18,307 - utils.logger - INFO - Geradas listas: 2 localizados, 199 não localizados
+2025-08-21 23:21:18,307 - utils.logger - INFO - Dados carregados: 2 localizados, 199 não localizados
+2025-08-21 23:21:18,308 - werkzeug - INFO - 127.0.0.1 - - [21/Aug/2025 23:21:18] "GET / HTTP/1.1" 200 -
+2025-08-21 23:21:18,334 - werkzeug - INFO - 127.0.0.1 - - [21/Aug/2025 23:21:18] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-08-21 23:24:00,966 - utils.logger - INFO - Localização do bem 414816: Sala da Direção
+2025-08-21 23:24:00,967 - utils.logger - INFO - Verificação do bem 414816: Encontrado
+2025-08-21 23:24:01,094 - utils.logger - INFO - Geradas listas: 2 localizados, 199 não localizados
+2025-08-21 23:24:01,094 - utils.logger - INFO - Dados carregados: 2 localizados, 199 não localizados
+2025-08-21 23:24:01,095 - werkzeug - INFO - 127.0.0.1 - - [21/Aug/2025 23:24:01] "POST / HTTP/1.1" 200 -
+2025-08-21 23:24:01,116 - werkzeug - INFO - 127.0.0.1 - - [21/Aug/2025 23:24:01] "[36mGET /static/style.css HTTP/1.1[0m" 304 -

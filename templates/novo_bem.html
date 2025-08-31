@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Cadastrar Novo Bem - Controle Patrimonial</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body class="bg-light">
+    <header class="bg-primary text-white shadow-sm">
+        <div class="container py-3">
+            <div class="row align-items-center">
+                <div class="col-md-8">
+                    <h1 class="h4 mb-0 fw-bold">
+                        <i class="bi bi-plus-circle me-2"></i>Cadastrar Novo Bem
+                    </h1>
+                </div>
+                <div class="col-md-4 text-md-end">
+                    <a href="{{ url_for('index') }}" class="btn btn-light btn-sm">
+                        <i class="bi bi-arrow-left me-1"></i>Voltar
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="container py-4">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <!-- Alertas de erro -->
+                {% if erro %}
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <i class="bi bi-exclamation-triangle me-2"></i>
+                    {{ erro }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                {% endif %}
+
+                <div class="card shadow-sm">
+                    <div class="card-header bg-white">
+                        <h5 class="mb-0">
+                            <i class="bi bi-info-circle me-2 text-primary"></i>
+                            Informações do Bem Patrimonial
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <form id="formNovoBem" method="POST" action="{{ url_for('criar_bem') }}">
+                            <div class="row g-3">
+                                <!-- Número do Bem -->
+                                <div class="col-md-6">
+                                    <label class="form-label fw-semibold">
+                                        <i class="bi bi-upc-scan me-1 text-primary"></i>Número do Bem *
+                                    </label>
+                                    <input type="text" class="form-control {% if dados and dados.numero and not re.match('^[A-Za-z0-9-]+$', dados.numero) %}is-invalid{% endif %}" 
+                                           name="numero" value="{{ dados.numero if dados else '' }}"
+                                           pattern="[A-Za-z0-9-]+" required
+                                           placeholder="Ex: 12345, ABC-001">
+                                    <div class="form-text">Código único de identificação</div>
+                                </div>
+
+                                <!-- Situação -->
+                                <div class="col-md-6">
+                                    <label class="form-label fw-semibold">
+                                        <i class="bi bi-info-circle me-1 text-primary"></i>Situação *
+                                    </label>
+                                    <select class="form-select" name="situacao" required>
+                                        <option value="Pendente" {% if dados and dados.situacao == 'Pendente' %}selected{% endif %}>Pendente (não localizado)</option>
+                                        <option value="OK" {% if dados and dados.situacao == 'OK' %}selected{% endif %}>Localizado</option>
+                                        <option value="Inativo" {% if dados and dados.situacao == 'Inativo' %}selected{% endif %}>Inativo</option>
+                                        <option value="Manutenção" {% if dados and dados.situacao == 'Manutenção' %}selected{% endif %}>Em Manutenção</option>
+                                    </select>
+                                </div>
+
+                                <!-- Nome do Item -->
+                                <div class="col-12">
+                                    <label class="form-label fw-semibold">
+                                        <i class="bi bi-tag me-1 text-primary"></i>Nome do Item *
+                                    </label>
+                                    <input type="text" class="form-control" name="nome" 
+                                           value="{{ dados.nome if dados else '' }}" required
+                                           placeholder="Ex: Computador Dell, Mesa Executiva">
+                                </div>
+
+                                <!-- Localização -->
+                                <div class="col-12">
+                                    <label class="form-label fw-semibold">
+                                        <i class="bi bi-geo-alt me-1 text-primary"></i>Localização
+                                    </label>
+                                    <textarea class="form-control" name="localizacao" rows="2"
+                                              placeholder="Ex: Sala 101, Almoxarifado Central, Prateleira B2">{{ dados.localizacao if dados else '' }}</textarea>
+                                </div>
+
+                                <!-- Observações -->
+                                <div class="col-12">
+                                    <label class="form-label">
+                                        <i class="bi bi-chat-text me-1 text-primary"></i>Observações
+                                    </label>
+                                    <textarea class="form-control" name="observacoes" rows="2"
+                                              placeholder="Informações adicionais sobre o bem">{{ dados.observacoes if dados else '' }}</textarea>
+                                </div>
+
+                                <!-- Alertas -->
+                                <div class="col-12">
+                                    <div class="alert alert-info">
+                                        <i class="bi bi-lightbulb me-2"></i>
+                                        Campos marcados com <span class="text-danger">*</span> são obrigatórios
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="card-footer bg-white">
+                        <div class="d-flex gap-2 justify-content-end">
+                            <a href="{{ url_for('index') }}" class="btn btn-secondary">
+                                <i class="bi bi-x-circle me-1"></i>Cancelar
+                            </a>
+                            <button type="submit" form="formNovoBem" class="btn btn-success">
+                                <i class="bi bi-check-circle me-1"></i>Cadastrar Bem
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card de Ajuda -->
+                <div class="card mt-4">
+                    <div class="card-header bg-light">
+                        <h6 class="mb-0">
+                            <i class="bi bi-question-circle me-2"></i>
+                            Como preencher corretamente
+                        </h6>
+                    </div>
+                    <div class="card-body">
+                        <ul class="list-unstyled">
+                            <li><strong>Número do Bem:</strong> Código único, pode conter letras, números e hífens</li>
+                            <li><strong>Situação:</strong> "Pendente" para bens ainda não localizados</li>
+                            <li><strong>Nome:</strong> Descrição clara do item</li>
+                            <li><strong>Localização:</strong> Onde o bem está fisicamente</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Validação em tempo real do formato do número
+        document.querySelector('input[name="numero"]').addEventListener('input', function(e) {
+            const valor = e.target.value;
+            if (valor && !/^[A-Za-z0-9-]+$/.test(valor)) {
+                e.target.classList.add('is-invalid');
+            } else {
+                e.target.classList.remove('is-invalid');
+            }
+        });
+
+        // Prevenir envio duplo apenas
+        document.getElementById('formNovoBem').addEventListener('submit', function() {
+            const btn = this.querySelector('button[type="submit"]');
+            btn.disabled = true;
+            btn.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span>Cadastrando...';
+        });
+    </script>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

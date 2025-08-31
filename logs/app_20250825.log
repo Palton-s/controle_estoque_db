@@ -1,0 +1,429 @@
+2025-08-25 00:40:18,835 - utils.logger - INFO - Iniciando aplicação Flask
+2025-08-25 00:40:18,909 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-08-25 00:40:18,909 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-08-25 00:40:18,920 - werkzeug - INFO -  * Restarting with stat
+2025-08-25 00:40:19,464 - utils.logger - INFO - Iniciando aplicação Flask
+2025-08-25 00:40:19,473 - werkzeug - WARNING -  * Debugger is active!
+2025-08-25 00:40:19,478 - werkzeug - INFO -  * Debugger PIN: 425-947-988
+2025-08-25 00:40:25,834 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 00:40:25] "[35m[1mGET / HTTP/1.1[0m" 500 -
+2025-08-25 00:40:25,879 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 00:40:25] "GET /?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1" 200 -
+2025-08-25 00:40:25,879 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 00:40:25] "GET /?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1" 200 -
+2025-08-25 00:40:25,937 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 00:40:25] "GET /?__debugger__=yes&cmd=resource&f=console.png&s=YSGAbInHmTRckEMYI6X3 HTTP/1.1" 200 -
+2025-08-25 00:46:08,346 - utils.logger - INFO - Iniciando aplicação Flask
+2025-08-25 00:46:08,364 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-08-25 00:46:08,364 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-08-25 00:46:08,366 - werkzeug - INFO -  * Restarting with stat
+2025-08-25 00:46:08,886 - utils.logger - INFO - Iniciando aplicação Flask
+2025-08-25 00:46:08,894 - werkzeug - WARNING -  * Debugger is active!
+2025-08-25 00:46:08,897 - werkzeug - INFO -  * Debugger PIN: 425-947-988
+2025-08-25 00:46:12,164 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 00:46:12] "[35m[1mGET / HTTP/1.1[0m" 500 -
+2025-08-25 00:46:12,265 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 00:46:12] "[36mGET /?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1[0m" 304 -
+2025-08-25 00:46:12,267 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 00:46:12] "[36mGET /?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1[0m" 304 -
+2025-08-25 00:46:12,330 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 00:46:12] "GET /?__debugger__=yes&cmd=resource&f=console.png&s=2cLtSrEAHyKUDSGVwhXI HTTP/1.1" 200 -
+2025-08-25 00:59:23,962 - werkzeug - INFO -  * Detected change in 'D:\\controle_estoque_db\\app.py', reloading
+2025-08-25 00:59:24,047 - werkzeug - INFO -  * Restarting with stat
+2025-08-25 00:59:24,651 - utils.logger - INFO - Iniciando aplicação Flask
+2025-08-25 00:59:24,660 - werkzeug - WARNING -  * Debugger is active!
+2025-08-25 00:59:24,663 - werkzeug - INFO -  * Debugger PIN: 425-947-988
+2025-08-25 00:59:36,236 - utils.logger - INFO - Iniciando aplicação Flask
+2025-08-25 00:59:36,258 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-08-25 00:59:36,258 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-08-25 00:59:36,259 - werkzeug - INFO -  * Restarting with stat
+2025-08-25 00:59:36,793 - utils.logger - INFO - Iniciando aplicação Flask
+2025-08-25 00:59:36,801 - werkzeug - WARNING -  * Debugger is active!
+2025-08-25 00:59:36,804 - werkzeug - INFO -  * Debugger PIN: 425-947-988
+2025-08-25 00:59:39,394 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 00:59:39] "[35m[1mGET / HTTP/1.1[0m" 500 -
+2025-08-25 00:59:39,408 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 00:59:39] "[36mGET /?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1[0m" 304 -
+2025-08-25 00:59:39,408 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 00:59:39] "[36mGET /?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1[0m" 304 -
+2025-08-25 00:59:39,482 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 00:59:39] "GET /?__debugger__=yes&cmd=resource&f=console.png&s=AJj8Rs1mByjsRFrPDzNn HTTP/1.1" 200 -
+2025-08-25 01:00:15,343 - utils.logger - INFO - Iniciando aplicação Flask
+2025-08-25 01:00:15,366 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-08-25 01:00:15,366 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-08-25 01:00:15,367 - werkzeug - INFO -  * Restarting with stat
+2025-08-25 01:00:15,904 - utils.logger - INFO - Iniciando aplicação Flask
+2025-08-25 01:00:15,913 - werkzeug - WARNING -  * Debugger is active!
+2025-08-25 01:00:15,916 - werkzeug - INFO -  * Debugger PIN: 425-947-988
+2025-08-25 01:00:19,493 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 01:00:19] "[35m[1mGET / HTTP/1.1[0m" 500 -
+2025-08-25 01:00:19,591 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 01:00:19] "[36mGET /?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1[0m" 304 -
+2025-08-25 01:00:19,592 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 01:00:19] "[36mGET /?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1[0m" 304 -
+2025-08-25 01:00:19,657 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 01:00:19] "GET /?__debugger__=yes&cmd=resource&f=console.png&s=GQo3XKskdc0oVOlcOqAL HTTP/1.1" 200 -
+2025-08-25 01:02:52,870 - werkzeug - INFO -  * Detected change in 'D:\\controle_estoque_db\\app.py', reloading
+2025-08-25 01:02:52,952 - werkzeug - INFO -  * Restarting with stat
+2025-08-25 01:02:53,507 - utils.logger - INFO - Iniciando aplicação Flask
+2025-08-25 01:02:53,517 - werkzeug - WARNING -  * Debugger is active!
+2025-08-25 01:02:53,520 - werkzeug - INFO -  * Debugger PIN: 425-947-988
+2025-08-25 01:02:58,612 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 01:02:58] "[35m[1mGET / HTTP/1.1[0m" 500 -
+2025-08-25 01:02:58,629 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 01:02:58] "[36mGET /?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1[0m" 304 -
+2025-08-25 01:02:58,630 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 01:02:58] "[36mGET /?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1[0m" 304 -
+2025-08-25 01:02:58,639 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 01:02:58] "GET /?__debugger__=yes&cmd=resource&f=console.png&s=sQU0GrBFKYjJaAdmXAAy HTTP/1.1" 200 -
+2025-08-25 01:02:59,519 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 01:02:59] "[35m[1mGET / HTTP/1.1[0m" 500 -
+2025-08-25 01:02:59,534 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 01:02:59] "[36mGET /?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1[0m" 304 -
+2025-08-25 01:02:59,534 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 01:02:59] "[36mGET /?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1[0m" 304 -
+2025-08-25 01:02:59,542 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 01:02:59] "[36mGET /?__debugger__=yes&cmd=resource&f=console.png&s=sQU0GrBFKYjJaAdmXAAy HTTP/1.1[0m" 304 -
+2025-08-25 01:03:10,128 - utils.logger - INFO - Iniciando aplicação Flask
+2025-08-25 01:03:10,146 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-08-25 01:03:10,146 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-08-25 01:03:10,147 - werkzeug - INFO -  * Restarting with stat
+2025-08-25 01:03:10,685 - utils.logger - INFO - Iniciando aplicação Flask
+2025-08-25 01:03:10,694 - werkzeug - WARNING -  * Debugger is active!
+2025-08-25 01:03:10,696 - werkzeug - INFO -  * Debugger PIN: 425-947-988
+2025-08-25 01:03:12,983 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 01:03:12] "[35m[1mGET / HTTP/1.1[0m" 500 -
+2025-08-25 01:03:13,091 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 01:03:13] "[36mGET /?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1[0m" 304 -
+2025-08-25 01:03:13,091 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 01:03:13] "[36mGET /?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1[0m" 304 -
+2025-08-25 01:03:13,149 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 01:03:13] "GET /?__debugger__=yes&cmd=resource&f=console.png&s=JgIdBgpIAQMfNGLG9Doj HTTP/1.1" 200 -
+2025-08-25 01:09:51,218 - werkzeug - INFO -  * Detected change in 'D:\\controle_estoque_db\\app.py', reloading
+2025-08-25 01:09:51,300 - werkzeug - INFO -  * Restarting with stat
+2025-08-25 01:10:02,646 - utils.logger - INFO - Iniciando aplicação Flask
+2025-08-25 01:10:02,664 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-08-25 01:10:02,664 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-08-25 01:10:02,666 - werkzeug - INFO -  * Restarting with stat
+2025-08-25 01:10:03,192 - utils.logger - INFO - Iniciando aplicação Flask
+2025-08-25 01:10:03,199 - werkzeug - WARNING -  * Debugger is active!
+2025-08-25 01:10:03,202 - werkzeug - INFO -  * Debugger PIN: 425-947-988
+2025-08-25 01:10:06,638 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 01:10:06] "[35m[1mGET / HTTP/1.1[0m" 500 -
+2025-08-25 01:10:06,653 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 01:10:06] "[36mGET /?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1[0m" 304 -
+2025-08-25 01:10:06,653 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 01:10:06] "[36mGET /?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1[0m" 304 -
+2025-08-25 01:10:06,700 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 01:10:06] "GET /?__debugger__=yes&cmd=resource&f=console.png&s=87YSpiHE0lIVj7pxomMB HTTP/1.1" 200 -
+2025-08-25 01:24:30,465 - utils.logger - INFO - Iniciando aplicação Flask
+2025-08-25 01:24:30,505 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-08-25 01:24:30,505 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-08-25 01:24:30,506 - werkzeug - INFO -  * Restarting with stat
+2025-08-25 01:24:31,029 - utils.logger - INFO - Iniciando aplicação Flask
+2025-08-25 01:24:31,038 - werkzeug - WARNING -  * Debugger is active!
+2025-08-25 01:24:31,042 - werkzeug - INFO -  * Debugger PIN: 425-947-988
+2025-08-25 01:24:36,991 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 01:24:36] "GET / HTTP/1.1" 200 -
+2025-08-25 01:24:37,117 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 01:24:37] "GET /static/style.css HTTP/1.1" 200 -
+2025-08-25 01:24:37,168 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 01:24:37] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2025-08-25 01:24:45,414 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 01:24:45] "GET /visualizar/localizados HTTP/1.1" 200 -
+2025-08-25 01:24:45,434 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 01:24:45] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-08-25 01:25:09,556 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 01:25:09] "GET /visualizar/localizados HTTP/1.1" 200 -
+2025-08-25 01:25:09,583 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 01:25:09] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-08-25 01:25:22,280 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 01:25:22] "GET / HTTP/1.1" 200 -
+2025-08-25 01:25:22,301 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 01:25:22] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-08-25 01:25:26,782 - utils.logger - INFO - Localização do bem 2022005797: Teste de localização
+2025-08-25 01:25:26,782 - utils.logger - INFO - Verificação do bem 2022005797: Encontrado
+2025-08-25 01:25:27,050 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 01:25:27] "POST / HTTP/1.1" 200 -
+2025-08-25 01:25:27,067 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 01:25:27] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-08-25 01:25:52,564 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 01:25:52] "GET /visualizar/localizados HTTP/1.1" 200 -
+2025-08-25 01:25:52,592 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 01:25:52] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-08-25 01:26:08,946 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 01:26:08] "GET / HTTP/1.1" 200 -
+2025-08-25 01:26:08,969 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 01:26:08] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-08-25 01:26:12,355 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 01:26:12] "GET /visualizar/nao-localizados HTTP/1.1" 200 -
+2025-08-25 01:26:12,378 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 01:26:12] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-08-25 01:26:15,915 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 01:26:15] "GET /visualizar/nao-localizados?pagina=2&por_pagina=200 HTTP/1.1" 200 -
+2025-08-25 01:26:15,936 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 01:26:15] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-08-25 01:26:31,963 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 01:26:31] "GET / HTTP/1.1" 200 -
+2025-08-25 01:26:31,984 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 01:26:31] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-08-25 01:26:47,602 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 01:26:47] "GET /visualizar/nao-localizados HTTP/1.1" 200 -
+2025-08-25 01:26:47,625 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 01:26:47] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-08-25 01:26:59,713 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 01:26:59] "GET / HTTP/1.1" 200 -
+2025-08-25 01:26:59,732 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 01:26:59] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-08-25 01:27:04,585 - utils.logger - INFO - Localização do bem 2022005795: Não definida
+2025-08-25 01:27:04,585 - utils.logger - INFO - Verificação do bem 2022005795: Encontrado
+2025-08-25 01:27:04,737 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 01:27:04] "POST / HTTP/1.1" 200 -
+2025-08-25 01:27:04,751 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 01:27:04] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-08-25 01:28:05,647 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 01:28:05] "GET /visualizar/localizados HTTP/1.1" 200 -
+2025-08-25 01:28:05,675 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 01:28:05] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-08-25 01:28:24,115 - utils.logger - INFO - Localização do bem 2022005797: Teste de localização
+2025-08-25 01:28:24,116 - utils.logger - INFO - Verificação do bem 2022005797: Encontrado
+2025-08-25 01:28:24,269 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 01:28:24] "POST / HTTP/1.1" 200 -
+2025-08-25 01:28:24,284 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 01:28:24] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-08-25 01:30:24,165 - utils.logger - INFO - Iniciando aplicação Flask
+2025-08-25 01:30:24,189 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-08-25 01:30:24,189 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-08-25 01:30:24,190 - werkzeug - INFO -  * Restarting with stat
+2025-08-25 01:30:24,720 - utils.logger - INFO - Iniciando aplicação Flask
+2025-08-25 01:30:24,729 - werkzeug - WARNING -  * Debugger is active!
+2025-08-25 01:30:24,731 - werkzeug - INFO -  * Debugger PIN: 425-947-988
+2025-08-25 01:30:27,229 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 01:30:27] "GET / HTTP/1.1" 200 -
+2025-08-25 01:30:27,333 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 01:30:27] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-08-25 01:30:39,574 - utils.logger - INFO - Localização do bem 2022005795: Não definida
+2025-08-25 01:30:39,574 - utils.logger - INFO - Verificação do bem 2022005795: Encontrado
+2025-08-25 01:30:39,737 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 01:30:39] "POST / HTTP/1.1" 200 -
+2025-08-25 01:30:39,754 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 01:30:39] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-08-25 01:31:06,180 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 01:31:06] "GET / HTTP/1.1" 200 -
+2025-08-25 01:31:06,201 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 01:31:06] "GET /static/style.css HTTP/1.1" 200 -
+2025-08-25 01:31:06,595 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 01:31:06] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2025-08-25 01:31:22,934 - utils.logger - INFO - Localização do bem 2022005797: Teste de localização
+2025-08-25 01:31:22,935 - utils.logger - INFO - Verificação do bem 2022005797: Encontrado
+2025-08-25 01:31:23,125 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 01:31:23] "POST / HTTP/1.1" 200 -
+2025-08-25 01:31:23,135 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 01:31:23] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-08-25 16:30:45,528 - utils.logger - INFO - Iniciando aplicação Flask
+2025-08-25 16:30:45,603 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-08-25 16:30:45,604 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-08-25 16:30:45,604 - werkzeug - INFO -  * Restarting with stat
+2025-08-25 16:30:46,141 - utils.logger - INFO - Iniciando aplicação Flask
+2025-08-25 16:30:46,150 - werkzeug - WARNING -  * Debugger is active!
+2025-08-25 16:30:46,153 - werkzeug - INFO -  * Debugger PIN: 425-947-988
+2025-08-25 16:30:57,797 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 16:30:57] "GET / HTTP/1.1" 200 -
+2025-08-25 16:30:57,872 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 16:30:57] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-08-25 16:31:00,896 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 16:31:00] "GET /visualizar/localizados HTTP/1.1" 200 -
+2025-08-25 16:31:00,918 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 16:31:00] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-08-25 16:31:07,311 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 16:31:07] "GET / HTTP/1.1" 200 -
+2025-08-25 16:31:07,338 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 16:31:07] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-08-25 16:31:14,771 - utils.logger - INFO - Verificação do bem 442118: Encontrado
+2025-08-25 16:31:14,941 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 16:31:14] "POST / HTTP/1.1" 200 -
+2025-08-25 16:31:14,963 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 16:31:14] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-08-25 16:31:23,852 - utils.logger - INFO - Verificação do bem 442118: Encontrado
+2025-08-25 16:31:23,992 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 16:31:23] "POST / HTTP/1.1" 200 -
+2025-08-25 16:31:24,006 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 16:31:24] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-08-25 16:31:49,044 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 16:31:49] "GET /visualizar/nao-localizados HTTP/1.1" 200 -
+2025-08-25 16:31:49,068 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 16:31:49] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-08-25 16:31:58,395 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 16:31:58] "GET / HTTP/1.1" 200 -
+2025-08-25 16:31:58,415 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 16:31:58] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-08-25 16:32:04,473 - utils.logger - INFO - Localização do bem 419252: 110141_5097 - ACE/ COAP/ COORDENAÃ‡ÃƒO
+2025-08-25 16:32:04,474 - utils.logger - INFO - Verificação do bem 419252: Encontrado
+2025-08-25 16:32:04,651 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 16:32:04] "POST / HTTP/1.1" 200 -
+2025-08-25 16:32:04,666 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 16:32:04] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-08-25 16:44:54,002 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 16:44:54] "GET /visualizar/localizados HTTP/1.1" 200 -
+2025-08-25 16:44:54,041 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 16:44:54] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-08-25 16:45:08,843 - utils.logger - INFO - Localização do bem 2022005797: Teste de localização
+2025-08-25 16:45:08,844 - utils.logger - INFO - Verificação do bem 2022005797: Encontrado
+2025-08-25 16:45:09,039 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 16:45:09] "POST / HTTP/1.1" 200 -
+2025-08-25 16:45:09,069 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 16:45:09] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-08-25 17:17:03,862 - werkzeug - INFO -  * Detected change in 'D:\\controle_estoque_db\\app.py', reloading
+2025-08-25 17:17:04,021 - werkzeug - INFO -  * Restarting with stat
+2025-08-25 17:17:46,515 - utils.logger - INFO - Iniciando aplicação Flask
+2025-08-25 17:17:46,536 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-08-25 17:17:46,536 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-08-25 17:17:46,538 - werkzeug - INFO -  * Restarting with stat
+2025-08-25 17:17:47,055 - utils.logger - INFO - Iniciando aplicação Flask
+2025-08-25 17:17:47,064 - werkzeug - WARNING -  * Debugger is active!
+2025-08-25 17:17:47,067 - werkzeug - INFO -  * Debugger PIN: 425-947-988
+2025-08-25 17:17:51,142 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 17:17:51] "GET / HTTP/1.1" 200 -
+2025-08-25 17:17:51,164 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 17:17:51] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-08-25 17:18:01,159 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 17:18:01] "GET /visualizar/localizados HTTP/1.1" 200 -
+2025-08-25 17:18:01,182 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 17:18:01] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-08-25 17:18:07,903 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 17:18:07] "GET / HTTP/1.1" 200 -
+2025-08-25 17:18:07,925 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 17:18:07] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-08-25 17:18:12,017 - utils.logger - INFO - Localização do bem 2022005797: Teste de localização
+2025-08-25 17:18:12,017 - utils.logger - INFO - Verificação do bem 2022005797: Encontrado
+2025-08-25 17:18:12,163 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 17:18:12] "POST / HTTP/1.1" 200 -
+2025-08-25 17:18:12,176 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 17:18:12] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-08-25 17:18:49,780 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 17:18:49] "GET / HTTP/1.1" 200 -
+2025-08-25 17:18:49,805 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 17:18:49] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-08-25 17:18:54,191 - utils.logger - INFO - Localização do bem 2022005797: Teste de localização
+2025-08-25 17:18:54,192 - utils.logger - INFO - Verificação do bem 2022005797: Encontrado
+2025-08-25 17:18:54,340 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 17:18:54] "POST / HTTP/1.1" 200 -
+2025-08-25 17:18:54,358 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 17:18:54] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-08-25 21:02:49,686 - utils.logger - INFO - Iniciando aplicação Flask
+2025-08-25 21:02:49,708 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-08-25 21:02:49,708 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-08-25 21:02:49,709 - werkzeug - INFO -  * Restarting with stat
+2025-08-25 21:02:50,252 - utils.logger - INFO - Iniciando aplicação Flask
+2025-08-25 21:02:50,261 - werkzeug - WARNING -  * Debugger is active!
+2025-08-25 21:02:50,264 - werkzeug - INFO -  * Debugger PIN: 425-947-988
+2025-08-25 21:02:54,702 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 21:02:54] "GET / HTTP/1.1" 200 -
+2025-08-25 21:02:54,726 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 21:02:54] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-08-25 21:03:04,609 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 21:03:04] "GET / HTTP/1.1" 200 -
+2025-08-25 21:03:04,628 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 21:03:04] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-08-25 21:03:07,797 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 21:03:07] "GET /visualizar/localizados HTTP/1.1" 200 -
+2025-08-25 21:03:07,818 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 21:03:07] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-08-25 21:03:21,854 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 21:03:21] "GET / HTTP/1.1" 200 -
+2025-08-25 21:03:21,881 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 21:03:21] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-08-25 21:03:25,841 - utils.logger - INFO - Localização do bem 2022005797: Teste de localização
+2025-08-25 21:03:25,842 - utils.logger - INFO - Verificação do bem 2022005797: Encontrado
+2025-08-25 21:03:25,973 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 21:03:25] "POST / HTTP/1.1" 200 -
+2025-08-25 21:03:25,992 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 21:03:25] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-08-25 21:03:52,536 - utils.logger - INFO - Bem 1006 atualizado com sucesso
+2025-08-25 21:03:52,537 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 21:03:52] "POST /api/bem/editar HTTP/1.1" 200 -
+2025-08-25 21:04:27,409 - utils.logger - INFO - Localização do bem 2022005797: Teste de localização2
+2025-08-25 21:04:27,410 - utils.logger - INFO - Verificação do bem 2022005797: Encontrado
+2025-08-25 21:04:27,546 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 21:04:27] "POST / HTTP/1.1" 200 -
+2025-08-25 21:04:27,569 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 21:04:27] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-08-25 21:04:48,412 - utils.logger - INFO - Bem 1006 atualizado com sucesso
+2025-08-25 21:04:48,413 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 21:04:48] "POST /api/bem/editar HTTP/1.1" 200 -
+2025-08-25 21:04:57,658 - utils.logger - INFO - Localização do bem 2022005797: Teste de localização2
+2025-08-25 21:04:57,659 - utils.logger - INFO - Verificação do bem 2022005797: Encontrado
+2025-08-25 21:04:57,812 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 21:04:57] "POST / HTTP/1.1" 200 -
+2025-08-25 21:04:57,828 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 21:04:57] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-08-25 21:05:19,658 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 21:05:19] "GET /visualizar/nao-localizados HTTP/1.1" 200 -
+2025-08-25 21:05:19,692 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 21:05:19] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-08-25 21:05:24,175 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 21:05:24] "GET / HTTP/1.1" 200 -
+2025-08-25 21:05:24,200 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 21:05:24] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-08-25 21:05:25,860 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 21:05:25] "GET /visualizar/nao-localizados HTTP/1.1" 200 -
+2025-08-25 21:05:25,880 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 21:05:25] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-08-25 21:05:30,952 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 21:05:30] "GET / HTTP/1.1" 200 -
+2025-08-25 21:05:30,971 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 21:05:30] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-08-25 21:05:38,720 - utils.logger - INFO - Localização do bem 2022005797: Teste de localização2
+2025-08-25 21:05:38,720 - utils.logger - INFO - Verificação do bem 2022005797: Encontrado
+2025-08-25 21:05:38,850 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 21:05:38] "POST / HTTP/1.1" 200 -
+2025-08-25 21:05:38,867 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 21:05:38] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-08-25 21:08:52,913 - utils.logger - INFO - Localização do bem 2022005797: Teste de localização2
+2025-08-25 21:08:52,913 - utils.logger - INFO - Verificação do bem 2022005797: Encontrado
+2025-08-25 21:08:53,075 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 21:08:53] "POST / HTTP/1.1" 200 -
+2025-08-25 21:08:53,115 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 21:08:53] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-08-25 21:09:22,281 - utils.logger - INFO - Bem 1006 atualizado com sucesso
+2025-08-25 21:09:22,282 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 21:09:22] "POST /api/bem/editar HTTP/1.1" 200 -
+2025-08-25 21:09:32,658 - utils.logger - INFO - Bem 1006 atualizado com sucesso
+2025-08-25 21:09:32,659 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 21:09:32] "POST /api/bem/editar HTTP/1.1" 200 -
+2025-08-25 21:15:44,049 - utils.logger - INFO - Iniciando aplicação Flask
+2025-08-25 21:15:44,069 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-08-25 21:15:44,069 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-08-25 21:15:44,071 - werkzeug - INFO -  * Restarting with stat
+2025-08-25 21:15:44,596 - utils.logger - INFO - Iniciando aplicação Flask
+2025-08-25 21:15:44,607 - werkzeug - WARNING -  * Debugger is active!
+2025-08-25 21:15:44,609 - werkzeug - INFO -  * Debugger PIN: 425-947-988
+2025-08-25 21:15:50,796 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 21:15:50] "GET / HTTP/1.1" 200 -
+2025-08-25 21:15:50,897 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 21:15:50] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-08-25 21:16:07,163 - utils.logger - INFO - Localização do bem 2022005797: Teste de localização2
+2025-08-25 21:16:07,163 - utils.logger - INFO - Verificação do bem 2022005797: Encontrado
+2025-08-25 21:16:07,294 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 21:16:07] "POST / HTTP/1.1" 200 -
+2025-08-25 21:16:07,315 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 21:16:07] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-08-25 21:16:17,052 - utils.logger - INFO - Bem 1006 atualizado com sucesso
+2025-08-25 21:16:17,053 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 21:16:17] "POST /api/bem/editar HTTP/1.1" 200 -
+2025-08-25 21:16:18,713 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 21:16:18] "GET / HTTP/1.1" 200 -
+2025-08-25 21:16:18,730 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 21:16:18] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-08-25 21:16:25,912 - utils.logger - INFO - Localização do bem 2022005797: Teste de localização2
+2025-08-25 21:16:25,913 - utils.logger - INFO - Verificação do bem 2022005797: Encontrado
+2025-08-25 21:16:26,063 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 21:16:26] "POST / HTTP/1.1" 200 -
+2025-08-25 21:16:26,082 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 21:16:26] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-08-25 21:16:59,562 - utils.logger - INFO - Bem 1006 atualizado com sucesso
+2025-08-25 21:16:59,563 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 21:16:59] "POST /api/bem/editar HTTP/1.1" 200 -
+2025-08-25 21:17:01,418 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 21:17:01] "GET / HTTP/1.1" 200 -
+2025-08-25 21:17:01,435 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 21:17:01] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-08-25 21:17:05,688 - utils.logger - INFO - Localização do bem 2022005797: Teste de localização3
+2025-08-25 21:17:05,688 - utils.logger - INFO - Verificação do bem 2022005797: Encontrado
+2025-08-25 21:17:05,817 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 21:17:05] "POST / HTTP/1.1" 200 -
+2025-08-25 21:17:05,835 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 21:17:05] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-08-25 21:17:34,656 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 21:17:34] "GET /visualizar/nao-localizados HTTP/1.1" 200 -
+2025-08-25 21:17:34,684 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 21:17:34] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-08-25 21:17:37,505 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 21:17:37] "GET / HTTP/1.1" 200 -
+2025-08-25 21:17:37,524 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 21:17:37] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-08-25 21:17:44,197 - utils.logger - INFO - Relatório exportado: D:\controle_estoque_db\relatorios\bens_localizados_20250825-211743.xlsx (6 registros)
+2025-08-25 21:17:44,209 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 21:17:44] "GET /exportar/localizados HTTP/1.1" 200 -
+2025-08-25 21:18:06,250 - utils.logger - INFO - Relatório exportado: D:\controle_estoque_db\relatorios\bens_nao_localizados_20250825-211747.xlsx (318752 registros)
+2025-08-25 21:18:06,302 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 21:18:06] "GET /exportar/nao-localizados HTTP/1.1" 200 -
+2025-08-25 21:20:17,613 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 21:20:17] "GET /visualizar/nao-localizados HTTP/1.1" 200 -
+2025-08-25 21:20:17,639 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 21:20:17] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-08-25 21:20:33,806 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 21:20:33] "GET / HTTP/1.1" 200 -
+2025-08-25 21:20:33,834 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 21:20:33] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-08-25 21:20:39,764 - utils.logger - INFO - Localização do bem 351725: 110141_5906 - ACE/COGED/MICROFILMAGEM
+2025-08-25 21:20:39,765 - utils.logger - INFO - Verificação do bem 351725: Encontrado
+2025-08-25 21:20:39,950 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 21:20:39] "POST / HTTP/1.1" 200 -
+2025-08-25 21:20:39,969 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 21:20:39] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-08-25 21:20:53,794 - utils.logger - INFO - Bem 1037 atualizado com sucesso
+2025-08-25 21:20:53,795 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 21:20:53] "POST /api/bem/editar HTTP/1.1" 200 -
+2025-08-25 21:20:55,593 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 21:20:55] "GET / HTTP/1.1" 200 -
+2025-08-25 21:20:55,608 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 21:20:55] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-08-25 21:21:00,649 - utils.logger - INFO - Localização do bem 351725: 110141_5906 - ACE/COGED/MICROFILMAGEM
+2025-08-25 21:21:00,650 - utils.logger - INFO - Verificação do bem 351725: Encontrado
+2025-08-25 21:21:00,823 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 21:21:00] "POST / HTTP/1.1" 200 -
+2025-08-25 21:21:00,842 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 21:21:00] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-08-25 21:21:25,545 - utils.logger - INFO - Localização do bem 351725: 110141_5906 - ACE/COGED/MICROFILMAGEM
+2025-08-25 21:21:25,545 - utils.logger - INFO - Verificação do bem 351725: Encontrado
+2025-08-25 21:21:25,716 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 21:21:25] "POST / HTTP/1.1" 200 -
+2025-08-25 21:21:25,739 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 21:21:25] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-08-25 21:22:57,020 - werkzeug - INFO -  * Detected change in 'D:\\controle_estoque_db\\app.py', reloading
+2025-08-25 21:22:57,512 - werkzeug - INFO -  * Restarting with stat
+2025-08-25 21:22:58,129 - utils.logger - INFO - Iniciando aplicação Flask
+2025-08-25 21:22:58,139 - werkzeug - WARNING -  * Debugger is active!
+2025-08-25 21:22:58,142 - werkzeug - INFO -  * Debugger PIN: 425-947-988
+2025-08-25 21:23:07,397 - utils.logger - INFO - Iniciando aplicação Flask
+2025-08-25 21:23:07,416 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-08-25 21:23:07,417 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-08-25 21:23:07,418 - werkzeug - INFO -  * Restarting with stat
+2025-08-25 21:23:07,944 - utils.logger - INFO - Iniciando aplicação Flask
+2025-08-25 21:23:07,952 - werkzeug - WARNING -  * Debugger is active!
+2025-08-25 21:23:07,955 - werkzeug - INFO -  * Debugger PIN: 425-947-988
+2025-08-25 21:23:14,808 - utils.logger - INFO - Localização do bem 351725: 110141_5906 - ACE/COGED/MICROFILMAGEM
+2025-08-25 21:23:14,808 - utils.logger - INFO - Verificação do bem 351725: Encontrado
+2025-08-25 21:23:14,950 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 21:23:14] "POST / HTTP/1.1" 200 -
+2025-08-25 21:23:14,975 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 21:23:14] "GET /static/style.css HTTP/1.1" 200 -
+2025-08-25 21:23:15,178 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 21:23:15] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2025-08-25 21:23:32,584 - utils.logger - INFO - Localização do bem 351725: 110141_5906 - ACE/COGED/MICROFILMAGEM
+2025-08-25 21:23:32,585 - utils.logger - INFO - Verificação do bem 351725: Encontrado
+2025-08-25 21:23:32,728 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 21:23:32] "POST / HTTP/1.1" 200 -
+2025-08-25 21:23:32,746 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 21:23:32] "GET /static/style.css HTTP/1.1" 200 -
+2025-08-25 21:23:32,961 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 21:23:32] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2025-08-25 21:23:47,382 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 21:23:47] "GET /visualizar/nao-localizados HTTP/1.1" 200 -
+2025-08-25 21:23:47,411 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 21:23:47] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-08-25 21:24:05,495 - utils.logger - INFO - Localização do bem 441611: 110141_5909 - ACE/COAP/SALAS ANEXAS AO AUDITÃ“RIO
+2025-08-25 21:24:05,496 - utils.logger - INFO - Verificação do bem 441611: Encontrado
+2025-08-25 21:24:05,640 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 21:24:05] "POST / HTTP/1.1" 200 -
+2025-08-25 21:24:05,657 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 21:24:05] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-08-25 21:24:46,429 - utils.logger - INFO - Dados recebidos para edição: {'bem_id': 1025, 'numero': '441611', 'nome': 'ARMARIO ALTO teste', 'localizacao': '110141_5909 - ACE/COAP/SALAS ANEXAS AO AUDITÃ“RIO', 'situacao': 'Pendente'}
+2025-08-25 21:24:46,430 - utils.logger - ERROR - Erro ao editar bem: cannot import name 'obter_bem_por_id' from 'utils.db_handler' (D:\controle_estoque_db\utils\db_handler.py)
+2025-08-25 21:24:46,430 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 21:24:46] "POST /api/bem/editar HTTP/1.1" 200 -
+2025-08-25 21:24:59,166 - utils.logger - INFO - Dados recebidos para edição: {'bem_id': 1025, 'numero': '441611', 'nome': 'ARMARIO ALTO teste', 'localizacao': '110141_5909 - ACE/COAP/SALAS ANEXAS AO AUDITÃ“RIO', 'situacao': 'Pendente'}
+2025-08-25 21:24:59,166 - utils.logger - ERROR - Erro ao editar bem: cannot import name 'obter_bem_por_id' from 'utils.db_handler' (D:\controle_estoque_db\utils\db_handler.py)
+2025-08-25 21:24:59,166 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 21:24:59] "POST /api/bem/editar HTTP/1.1" 200 -
+2025-08-25 21:26:06,378 - werkzeug - INFO -  * Detected change in 'D:\\controle_estoque_db\\app.py', reloading
+2025-08-25 21:26:06,490 - werkzeug - INFO -  * Restarting with stat
+2025-08-25 21:26:07,059 - utils.logger - INFO - Iniciando aplicação Flask
+2025-08-25 21:26:07,068 - werkzeug - WARNING -  * Debugger is active!
+2025-08-25 21:26:07,071 - werkzeug - INFO -  * Debugger PIN: 425-947-988
+2025-08-25 21:26:29,696 - utils.logger - INFO - Localização do bem 441611: 110141_5909 - ACE/COAP/SALAS ANEXAS AO AUDITÃ“RIO
+2025-08-25 21:26:29,696 - utils.logger - INFO - Verificação do bem 441611: Encontrado
+2025-08-25 21:26:29,857 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 21:26:29] "POST / HTTP/1.1" 200 -
+2025-08-25 21:26:29,874 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 21:26:29] "GET /static/style.css HTTP/1.1" 200 -
+2025-08-25 21:26:30,084 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 21:26:30] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2025-08-25 21:26:59,215 - utils.logger - INFO - Bem 1025 atualizado com sucesso
+2025-08-25 21:26:59,215 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 21:26:59] "POST /api/bem/editar HTTP/1.1" 200 -
+2025-08-25 21:27:01,128 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 21:27:01] "GET / HTTP/1.1" 200 -
+2025-08-25 21:27:01,150 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 21:27:01] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-08-25 21:27:13,808 - utils.logger - INFO - Localização do bem 441611: 110141_5909 - ACE/COAP/SALAS ANEXAS AO AUDITÃ“RIO
+2025-08-25 21:27:13,809 - utils.logger - INFO - Verificação do bem 441611: Encontrado
+2025-08-25 21:27:13,960 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 21:27:13] "POST / HTTP/1.1" 200 -
+2025-08-25 21:27:13,983 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 21:27:13] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-08-25 21:27:37,180 - utils.logger - INFO - Relatório exportado: D:\controle_estoque_db\relatorios\bens_localizados_20250825-212737.xlsx (8 registros)
+2025-08-25 21:27:37,190 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 21:27:37] "GET /exportar/localizados HTTP/1.1" 200 -
+2025-08-25 21:36:35,910 - utils.logger - INFO - Iniciando aplicação Flask
+2025-08-25 21:36:35,934 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-08-25 21:36:35,934 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-08-25 21:36:35,935 - werkzeug - INFO -  * Restarting with stat
+2025-08-25 21:36:36,494 - utils.logger - INFO - Iniciando aplicação Flask
+2025-08-25 21:36:36,503 - werkzeug - WARNING -  * Debugger is active!
+2025-08-25 21:36:36,507 - werkzeug - INFO -  * Debugger PIN: 425-947-988
+2025-08-25 21:36:49,027 - utils.logger - INFO - Localização do bem 441611: 110141_5909 - ACE/COAP/SALAS ANEXAS AO AUDITÃ“RIO
+2025-08-25 21:36:49,027 - utils.logger - INFO - Verificação do bem 441611: Encontrado
+2025-08-25 21:36:49,250 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 21:36:49] "POST / HTTP/1.1" 200 -
+2025-08-25 21:36:49,264 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 21:36:49] "GET /static/style.css HTTP/1.1" 200 -
+2025-08-25 21:36:49,498 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 21:36:49] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2025-08-25 21:37:00,164 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 21:37:00] "GET /visualizar/nao-localizados HTTP/1.1" 200 -
+2025-08-25 21:37:00,193 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 21:37:00] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-08-25 21:37:10,231 - utils.logger - INFO - Localização do bem 2022005792: Não definida
+2025-08-25 21:37:10,232 - utils.logger - INFO - Verificação do bem 2022005792: Encontrado
+2025-08-25 21:37:10,375 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 21:37:10] "POST / HTTP/1.1" 200 -
+2025-08-25 21:37:10,393 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 21:37:10] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-08-25 21:37:31,833 - utils.logger - INFO - Bem 1009 atualizado com sucesso
+2025-08-25 21:37:31,833 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 21:37:31] "POST /api/bem/editar HTTP/1.1" 200 -
+2025-08-25 21:37:33,551 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 21:37:33] "GET / HTTP/1.1" 200 -
+2025-08-25 21:37:33,566 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 21:37:33] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-08-25 21:37:39,038 - utils.logger - INFO - Localização do bem 2022005792: Não informada Teste
+
+2025-08-25 21:37:39,039 - utils.logger - INFO - Verificação do bem 2022005792: Encontrado
+2025-08-25 21:37:39,210 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 21:37:39] "POST / HTTP/1.1" 200 -
+2025-08-25 21:37:39,226 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 21:37:39] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-08-25 21:37:48,808 - utils.logger - INFO - Bem 1009 atualizado com sucesso
+2025-08-25 21:37:48,808 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 21:37:48] "POST /api/bem/editar HTTP/1.1" 200 -
+2025-08-25 21:37:50,482 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 21:37:50] "GET / HTTP/1.1" 200 -
+2025-08-25 21:37:50,500 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 21:37:50] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-08-25 21:37:55,407 - utils.logger - INFO - Localização do bem 2022005792: Não informada Teste
+
+2025-08-25 21:37:55,407 - utils.logger - INFO - Verificação do bem 2022005792: Encontrado
+2025-08-25 21:37:55,548 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 21:37:55] "POST / HTTP/1.1" 200 -
+2025-08-25 21:37:55,569 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 21:37:55] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-08-25 21:38:26,864 - utils.logger - INFO - Bem 1009 atualizado com sucesso
+2025-08-25 21:38:26,865 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 21:38:26] "POST /api/bem/editar HTTP/1.1" 200 -
+2025-08-25 21:38:28,311 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 21:38:28] "GET / HTTP/1.1" 200 -
+2025-08-25 21:38:28,330 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 21:38:28] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-08-25 21:38:32,695 - utils.logger - INFO - Localização do bem 2022005792: Não informada Teste
+
+2025-08-25 21:38:32,696 - utils.logger - INFO - Verificação do bem 2022005792: Encontrado
+2025-08-25 21:38:32,835 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 21:38:32] "POST / HTTP/1.1" 200 -
+2025-08-25 21:38:32,854 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2025 21:38:32] "[36mGET /static/style.css HTTP/1.1[0m" 304 -

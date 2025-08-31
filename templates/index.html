@@ -1,0 +1,853 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>Sistema de Controle Patrimonial - CEAD</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body class="bg-light">
+  <!-- Header Moderno -->
+  <header class="bg-primary text-white shadow-sm">
+    <div class="container py-4">
+      <div class="row align-items-center">
+        <div class="col-md-8">
+          <h1 class="h2 mb-1 fw-bold">
+            <i class="bi bi-building-gear me-2"></i>Controle Patrimonial - CEAD
+          </h1>
+          <p class="mb-0 opacity-75">Gerencie seus bens de forma simples e organizada</p>
+        </div>
+        <div class="col-md-4 text-md-end">
+          <div class="d-flex align-items-center justify-content-md-end gap-2">
+            <div class="bg-white bg-opacity-25 rounded-pill px-3 py-1">
+              <small>
+                <i class="bi bi-database me-1"></i>
+                <span id="total-bens">{{ total_count|number_format }}</span> bens
+              </small>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Adicione isto no index.html, após o header e antes do main content -->
+{% if mensagem_sucesso %}
+<div class="container mt-3">
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <i class="bi bi-check-circle-fill me-2"></i>
+        {{ mensagem_sucesso }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+</div>
+{% endif %}
+
+  <main class="container py-5">
+    <!-- Card de Busca Moderno -->
+    <div class="card shadow-lg border-0 rounded-3 mb-5">
+      <div class="card-header bg-white py-4 border-0">
+        <h2 class="h4 mb-0 text-center">
+          <i class="bi bi-search-heart text-primary me-2"></i>
+          Localizar Bem Patrimonial
+        </h2>
+      </div>
+      <div class="card-body p-4">
+        {% if mensagem %}
+        <div
+          class="alert alert-dismissible fade show {% if '✅' in mensagem or 'sucesso' in mensagem|lower %}alert-success{% elif '❌' in mensagem or 'erro' in mensagem|lower %}alert-danger{% else %}alert-info{% endif %} mb-4"
+          role="alert">
+          <div class="d-flex align-items-center">
+            {% if '✅' in mensagem or 'sucesso' in mensagem|lower %}
+            <i class="bi bi-check-circle-fill me-2"></i>
+            {% elif '❌' in mensagem or 'erro' in mensagem|lower %}
+            <i class="bi bi-exclamation-circle-fill me-2"></i>
+            {% else %}
+            <i class="bi bi-info-circle-fill me-2"></i>
+            {% endif %}
+            <span>{{ mensagem }}</span>
+          </div>
+          <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+        {% endif %}
+
+        <form method="POST" action="/" class="row g-3" autocomplete="off" id="searchForm">
+          <div class="col-md-6">
+            <label for="numero_bem" class="form-label fw-semibold">
+              <i class="bi bi-upc-scan me-1"></i>Número do Bem
+            </label>
+            <input type="text" name="numero_bem" id="numero_bem" class="form-control form-control-lg"
+              placeholder="Ex: 469704, ABC-123" required pattern="[A-Za-z0-9-]+">
+            <div class="form-text">Digite apenas números, letras ou hífen</div>
+          </div>
+
+          <div class="col-md-5">
+            <label for="localizacao" class="form-label fw-semibold">
+              <i class="bi bi-geo-alt me-1"></i>Localização
+            </label>
+            <input type="text" name="localizacao" id="localizacao" class="form-control form-control-lg"
+              placeholder="Ex: Almoxarifado Central, Sala 101">
+            <div class="form-text">Opcional - atualiza a localização</div>
+          </div>
+
+          <div class="col-md-1 d-flex align-items-end">
+            <button type="submit" class="btn btn-primary btn-lg w-100" id="btnLocalizar">
+              <span class="spinner-border spinner-border-sm d-none" id="loadingSpinner"></span>
+              <i class="bi bi-search"></i>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Cards de Estatísticas -->
+    <div class="row g-4 mb-5">
+      <div class="col-md-6">
+        <div class="card border-0 shadow-sm h-100">
+          <div class="card-body text-center p-4">
+            <div
+              class="d-inline-flex align-items-center justify-content-center bg-success bg-opacity-10 rounded-circle mb-3"
+              style="width: 60px; height: 60px;">
+              <i class="bi bi-check-circle-fill text-success fs-3"></i>
+            </div>
+            <h3 class="h2 fw-bold text-success mb-1" id="count-localizados">{{ localizados_count|number_format }}</h3>
+            <p class="text-muted mb-2">Bens Localizados</p>
+            <div class="d-flex gap-2 justify-content-center">
+              <a href="{{ url_for('visualizar', tipo='localizados') }}" class="btn btn-outline-success btn-sm">
+                <i class="bi bi-list-ul me-1"></i>Visualizar
+              </a>
+              <a href="{{ url_for('exportar', tipo='localizados') }}" class="btn btn-success btn-sm">
+                <i class="bi bi-download me-1"></i>Exportar
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-6">
+        <div class="card border-0 shadow-sm h-100">
+          <div class="card-body text-center p-4">
+            <div
+              class="d-inline-flex align-items-center justify-content-center bg-warning bg-opacity-10 rounded-circle mb-3"
+              style="width: 60px; height: 60px;">
+              <i class="bi bi-exclamation-circle-fill text-warning fs-3"></i>
+            </div>
+            <h3 class="h2 fw-bold text-warning mb-1" id="count-pendentes">{{ nao_localizados_count|number_format }}</h3>
+            <p class="text-muted mb-2">Bens Pendentes</p>
+            <div class="d-flex gap-2 justify-content-center">
+              <a href="{{ url_for('visualizar', tipo='nao-localizados') }}" class="btn btn-outline-warning btn-sm">
+                <i class="bi bi-list-ul me-1"></i>Visualizar
+              </a>
+              <a href="{{ url_for('exportar', tipo='nao-localizados') }}" class="btn btn-warning btn-sm">
+                <i class="bi bi-download me-1"></i>Exportar
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Ações Rápidas -->
+    <div class="text-center mb-4">
+      <h3 class="h5 text-muted mb-3">Ações Rápidas</h3>
+      <div class="d-flex flex-wrap justify-content-center gap-2">
+        <a href="{{ url_for('visualizar', tipo='localizados') }}" class="btn btn-outline-primary">
+          <i class="bi bi-check-circle me-1"></i>Localizados
+        </a>
+        <a href="{{ url_for('visualizar', tipo='nao-localizados') }}" class="btn btn-outline-secondary">
+          <i class="bi bi-clock-history me-1"></i>Pendentes
+        </a>
+        <a href="{{ url_for('exportar', tipo='localizados') }}" class="btn btn-outline-success">
+          <i class="bi bi-download me-1"></i>Exportar Localizados
+        </a>
+        <a href="{{ url_for('exportar', tipo='nao-localizados') }}" class="btn btn-outline-warning">
+          <i class="bi bi-download me-1"></i>Exportar Pendentes
+        </a>
+        <a href="{{ url_for('novo_bem') }}" class="btn btn-outline-info">
+          <i class="bi bi-plus-circle me-1"></i>Novo Bem
+        </a>
+
+        <!-- Novo Botão de Importação -->
+        <button type="button" class="btn btn-outline-info" data-bs-toggle="modal" data-bs-target="#importModal">
+          <i class="bi bi-file-earmark-excel me-1"></i>Importar Excel
+        </button>
+
+        <a href="{{ url_for('sair') }}" class="btn btn-outline-danger" onclick="return confirmSair(event)">
+          <i class="bi bi-box-arrow-right me-1"></i>Sair
+        </a>
+      </div>
+    </div>
+
+    <!-- Resumo rápido -->
+    <div class="text-center text-muted small mb-4">
+      <em>Resumo:</em>
+      {{ localizados_count|number_format }} localizado{{ localizados_count|pluralize('', 's') }} •
+      {{ nao_localizados_count|number_format }} não localizado{{ nao_localizados_count|pluralize('', 's') }}
+    </div>
+  </main>
+
+  <!-- Modal de Importação -->
+  <div class="modal fade" id="importModal" tabindex="-1" aria-labelledby="importModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content border-0 shadow-lg rounded-3">
+        <div class="modal-header bg-info text-white rounded-top-3">
+          <h5 class="modal-title" id="importModalLabel">
+            <i class="bi bi-file-earmark-excel me-2"></i>Importar do Excel
+          </h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body p-4">
+          <div class="alert alert-warning">
+            <i class="bi bi-exclamation-triangle me-2"></i>
+            <strong>Atenção:</strong> Esta ação irá recriar todo o banco de dados.
+          </div>
+
+          <form id="importForm" method="POST" action="{{ url_for('importar_excel') }}" enctype="multipart/form-data">
+            <div class="mb-3">
+              <label for="excel_file" class="form-label fw-semibold">
+                <i class="bi bi-file-spreadsheet me-1"></i>Selecionar arquivo Excel
+              </label>
+              <input type="file" class="form-control" id="excel_file" name="excel_file" accept=".xlsx,.xls" required>
+              <div class="form-text">Formatos suportados: .xlsx, .xls</div>
+            </div>
+
+            <div class="mb-3">
+              <label for="aba_nome" class="form-label fw-semibold">
+                <i class="bi bi-grid me-1"></i>Nome da aba
+              </label>
+              <input type="text" class="form-control" id="aba_nome" name="aba_nome" value="Estoque" required>
+              <div class="form-text">Nome da aba onde estão os dados</div>
+            </div>
+
+            <div class="form-check mb-3">
+              <input class="form-check-input" type="checkbox" id="backup" name="backup" checked>
+              <label class="form-check-label" for="backup">
+                <i class="bi bi-shield-check me-1"></i>Criar backup do banco atual
+              </label>
+            </div>
+
+            <div id="importStatus" class="d-none">
+              <div class="progress mb-3">
+                <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar"
+                  style="width: 0%"></div>
+              </div>
+              <div id="statusMessage" class="small"></div>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer border-0">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+            <i class="bi bi-x-circle me-1"></i>Cancelar
+          </button>
+          <button type="button" class="btn btn-info" id="btnImportar">
+            <i class="bi bi-upload me-1"></i>Importar
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal de Detalhes do Bem com CRUD -->
+  <div class="modal fade" id="resultadoModal" tabindex="-1" aria-labelledby="resultadoModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-content border-0 shadow-lg rounded-3">
+        <div class="modal-header bg-primary text-white rounded-top-3">
+          <h5 class="modal-title" id="resultadoModalLabel">
+            <i class="bi bi-info-circle me-2"></i>Gestão do Bem Patrimonial
+          </h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body p-4">
+
+          {% if bem_detalhes %}
+          <div id="detalhesBem">
+            <div class="row g-4">
+              <!-- Cabeçalho com número do bem -->
+              <div class="col-12">
+                <div class="bg-light rounded-3 p-3">
+                  <h6 class="mb-1 text-primary fw-semibold">
+                    <i class="bi bi-upc-scan me-2"></i>Número do Bem
+                  </h6>
+                  <p class="fs-4 fw-bold mb-0">{{ bem_detalhes.numero }}</p>
+                </div>
+              </div>
+
+              <!-- Nome do Item -->
+              <div class="col-md-6">
+                <div class="border rounded-3 p-3 h-100">
+                  <h6 class="text-primary fw-semibold mb-2">
+                    <i class="bi bi-tag me-2"></i>Nome do Item
+                  </h6>
+                  <p class="fs-5 mb-0">{{ bem_detalhes.nome }}</p>
+                </div>
+              </div>
+
+              <!-- Situação -->
+              <div class="col-md-6">
+                <div class="border rounded-3 p-3 h-100">
+                  <h6 class="text-primary fw-semibold mb-2">
+                    <i class="bi bi-info-circle me-2"></i>Situação
+                  </h6>
+                  <p class="mb-0">
+                    {% if bem_detalhes.situacao and 'OK' in bem_detalhes.situacao %}
+                    <span class="badge bg-success fs-6 p-2">
+                      <i class="bi bi-check-circle-fill me-1"></i>LOCALIZADO
+                    </span>
+                    {% else %}
+                    <span class="badge bg-warning fs-6 p-2">
+                      <i class="bi bi-clock-history me-1"></i>{{ bem_detalhes.situacao }}
+                    </span>
+                    {% endif %}
+                  </p>
+                </div>
+              </div>
+
+              <!-- Localização -->
+              <div class="col-12">
+                <div class="border rounded-3 p-3">
+                  <h6 class="text-primary fw-semibold mb-2">
+                    <i class="bi bi-geo-alt me-2"></i>Localização
+                  </h6>
+                  <p class="fs-5 mb-0">
+                    {% if bem_detalhes.localizacao and bem_detalhes.localizacao != 'Não informada' %}
+                    <span class="text-success">
+                      <i class="bi bi-geo-alt-fill me-1"></i>{{ bem_detalhes.localizacao }}
+                    </span>
+                    {% else %}
+                    <span class="text-muted">
+                      <i class="bi bi-geo-alt me-1"></i>Localização não informada
+                    </span>
+                    {% endif %}
+                  </p>
+                </div>
+              </div>
+
+              <!-- Informações Adicionais -->
+              <div class="col-12">
+                <div class="bg-light rounded-3 p-3">
+                  <h6 class="text-muted mb-2">
+                    <i class="bi bi-lightbulb me-2"></i>Informações
+                  </h6>
+                  <p class="small text-muted mb-0">
+                    {% if bem_detalhes.situacao and 'OK' in bem_detalhes.situacao %}
+                    ✅ Este bem já foi localizado e está devidamente registrado no sistema.
+                    {% else %}
+                    ⏳ Este bem ainda não foi localizado. Utilize o campo de localização para atualizar.
+                    {% endif %}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {% else %}
+          <!-- Estado de erro -->
+          <div class="text-center py-5">
+            <i class="bi bi-exclamation-triangle display-4 text-warning mb-3"></i>
+            <h4 class="text-warning mb-3">Bem não encontrado</h4>
+            <p class="text-muted mb-4">
+              O número do bem informado não foi encontrado em nosso sistema.
+              Verifique o número e tente novamente.
+            </p>
+            <button type="button" class="btn btn-primary" data-bs-dismiss="modal">
+              <i class="bi bi-arrow-left me-1"></i>Voltar e tentar novamente
+            </button>
+          </div>
+          {% endif %}
+
+          <!-- Formulário de Edição (inicialmente oculto) -->
+          <div id="formEdicao" style="display: none;">
+            <form id="formEditarBem">
+              <input type="hidden" id="bem_id" name="bem_id">
+
+              <div class="row g-3">
+                <div class="col-md-6">
+                  <label class="form-label fw-semibold">Número do Bem *</label>
+                  <input type="text" class="form-control" id="edt_numero" name="numero" required pattern="[A-Za-z0-9-]+"
+                    readonly>
+                </div>
+
+                <div class="col-md-6">
+                  <label class="form-label fw-semibold">Situação *</label>
+                  <select class="form-select" id="edt_situacao" name="situacao" required>
+                    <option value="Pendente">Pendente</option>
+                    <option value="OK">Localizado</option>
+                    <option value="Inativo">Inativo</option>
+                    <option value="Manutenção">Em Manutenção</option>
+                  </select>
+                </div>
+
+                <div class="col-12">
+                  <label class="form-label fw-semibold">Nome do Item *</label>
+                  <input type="text" class="form-control" id="edt_nome" name="nome" required>
+                </div>
+
+                <div class="col-12">
+                  <label class="form-label fw-semibold">Localização</label>
+                  <textarea class="form-control" id="edt_localizacao" name="localizacao" rows="2"
+                    placeholder="Ex: Almoxarifado Central, Prateleira B2"></textarea>
+                </div>
+
+                <div class="col-12">
+                  <div class="alert alert-warning">
+                    <i class="bi bi-exclamation-triangle me-2"></i>
+                    Campos marcados com * são obrigatórios
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+        <div class="modal-footer border-0">
+          <!-- Botões para Modo Visualização -->
+          <div id="botoesVisualizacao">
+            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+              <i class="bi bi-x-circle me-1"></i>Fechar
+            </button>
+            <button type="button" class="btn btn-outline-primary" onclick=window.location.href="/">
+              <i class="bi bi-arrow-repeat me-1"></i>Nova Busca
+            </button>
+            <button type="button" class="btn btn-warning" onclick="habilitarEdicao()">
+              <i class="bi bi-pencil me-1"></i>Editar
+            </button>
+            <button type="button" class="btn btn-danger" onclick="confirmarExclusao()">
+              <i class="bi bi-trash me-1"></i>Excluir
+            </button>
+          </div>
+
+          <!-- Botões para Modo Edição -->
+          <div id="botoesEdicao" style="display: none;">
+            <button type="button" class="btn btn-secondary" onclick="cancelarEdicao()">
+              <i class="bi bi-x-circle me-1"></i>Cancelar
+            </button>
+            <button type="button" class="btn btn-success" onclick="salvarEdicao()">
+              <i class="bi bi-check-circle me-1"></i>Salvar
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal de Confirmação de Exclusão -->
+  <div class="modal fade" id="confirmacaoExclusaoModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header bg-danger text-white">
+          <h5 class="modal-title"><i class="bi bi-exclamation-triangle me-2"></i>Confirmar Exclusão</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <p>Tem certeza que deseja excluir este bem patrimonial?</p>
+          <p class="text-muted small">Esta ação não pode ser desfeita.</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+          <button type="button" class="btn btn-danger" onclick="excluirBem()">Confirmar Exclusão</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="bg-dark text-white py-3 mt-5">
+    <div class="container">
+      <div class="row align-items-center">
+        <div class="col-md-6">
+          <p class="mb-0 small">
+            <i class="bi bi-c-circle me-1"></i> 2023 Sistema de Controle Patrimonial
+          </p>
+        </div>
+        <div class="col-md-6 text-md-end">
+          <small class="opacity-75">Versão 1.0.0 • {{ total_count|number_format }} bens cadastrados</small>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    // Validação em tempo real
+    document.getElementById('numero_bem')?.addEventListener('input', function (e) {
+      const valor = e.target.value;
+      const btn = document.getElementById('btnLocalizar');
+
+      if (valor && !/^[A-Za-z0-9-]+$/.test(valor)) {
+        e.target.classList.add('is-invalid');
+        btn.disabled = true;
+      } else {
+        e.target.classList.remove('is-invalid');
+        btn.disabled = false;
+      }
+    });
+
+    // Loading spinner para busca
+    document.getElementById('searchForm')?.addEventListener('submit', function () {
+      const spinner = document.getElementById('loadingSpinner');
+      const icon = document.getElementById('btnLocalizar').querySelector('i');
+
+      if (spinner) spinner.classList.remove('d-none');
+      if (icon) icon.classList.add('d-none');
+    });
+
+    // Loading para importação
+    document.getElementById('btnImportar')?.addEventListener('click', function () {
+      const fileInput = document.getElementById('excel_file');
+      const statusDiv = document.getElementById('importStatus');
+      const statusMessage = document.getElementById('statusMessage');
+      const progressBar = document.querySelector('.progress-bar');
+      const btnImportar = this;
+
+      if (!fileInput.files.length) {
+        alert('Por favor, selecione um arquivo Excel.');
+        return;
+      }
+
+      // Mostrar status
+      statusDiv.classList.remove('d-none');
+      statusMessage.innerHTML = '<i class="bi bi-hourglass-split me-1"></i>Iniciando importação...';
+      progressBar.style.width = '25%';
+      btnImportar.disabled = true;
+      btnImportar.innerHTML = '<i class="bi bi-hourglass-split me-1"></i>Importando...';
+
+      // Simular progresso
+      let progress = 25;
+      const interval = setInterval(() => {
+        progress += 5;
+        progressBar.style.width = progress + '%';
+
+        if (progress >= 75) {
+          clearInterval(interval);
+          statusMessage.innerHTML = '<i class="bi bi-database me-1"></i>Finalizando importação...';
+        }
+      }, 200);
+
+      // Enviar formulário
+      document.getElementById('importForm').submit();
+    });
+
+    // Confirmação antes de sair
+    function confirmSair(event) {
+      const confirmar = confirm('Deseja realmente sair do aplicativo? A janela será fechada.');
+      if (!confirmar) {
+        event.preventDefault();
+        return false;
+      }
+      return true;
+    }
+
+    // Atalho de teclado Ctrl+Q para sair
+    document.addEventListener('keydown', function (e) {
+      if (e.ctrlKey && e.key === 'q') {
+        e.preventDefault();
+        if (confirm('Deseja sair do aplicativo? (Ctrl+Q)')) {
+          window.location.href = "{{ url_for('sair') }}";
+        }
+      }
+    });
+
+    // Mostrar modal se necessário
+    {% if show_modal %}
+    const modal = new bootstrap.Modal('#resultadoModal');
+    setTimeout(() => modal.show(), 100);
+    {% endif %}
+
+    // Atualizar contador total
+document.addEventListener('DOMContentLoaded', function () {
+  const total = {{ total_count }};  
+  const totalElement = document.getElementById('total-bens');
+  if (totalElement) {
+    totalElement.textContent = total.toLocaleString();
+  }
+
+  // Atualizar contadores individuais
+  document.getElementById('count-localizados').textContent = {{ localizados_count }};
+  document.getElementById('count-pendentes').textContent = {{ nao_localizados_count }};
+});
+
+
+    // Foco automático no campo de busca
+    document.addEventListener('DOMContentLoaded', function () {
+      const campoBusca = document.getElementById('numero_bem');
+      if (campoBusca) {
+        setTimeout(() => campoBusca.focus(), 100);
+      }
+    });
+
+    // Drag and drop para arquivo
+    const fileInput = document.getElementById('excel_file');
+    const fileLabel = fileInput?.previousElementSibling;
+
+    if (fileInput && fileLabel) {
+      fileLabel.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        fileLabel.classList.add('dragover');
+      });
+
+      fileLabel.addEventListener('dragleave', () => {
+        fileLabel.classList.remove('dragover');
+      });
+
+      fileLabel.addEventListener('drop', (e) => {
+        e.preventDefault();
+        fileLabel.classList.remove('dragover');
+        if (e.dataTransfer.files.length) {
+          fileInput.files = e.dataTransfer.files;
+          // Atualizar visualmente
+          const fileName = e.dataTransfer.files[0].name;
+          fileLabel.querySelector('.form-text').textContent = `Arquivo selecionado: ${fileName}`;
+        }
+      });
+    }
+    // ==============================================
+    // FUNÇÕES DO CRUD (JavaScript para o modal)
+    // ==============================================
+
+    let bemAtual = null;
+
+    // Debug helper
+    function debug(message, data = null) {
+      console.log(`[DEBUG] ${message}`, data || '');
+    }
+
+    // Função para preencher o modal com dados do bem
+    function preencherModalDetalhes(dados) {
+      debug('Preenchendo modal com dados:', dados);
+      bemAtual = dados;
+
+      const detalhesHTML = `
+        <div class="row g-4">
+          <div class="col-12">
+            <div class="bg-light rounded-3 p-3">
+              <h6 class="mb-1 text-primary fw-semibold">
+                <i class="bi bi-upc-scan me-2"></i>Número do Bem
+              </h6>
+              <p class="fs-4 fw-bold mb-0">${dados.numero}</p>
+            </div>
+          </div>
+          
+          <div class="col-md-6">
+            <div class="border rounded-3 p-3 h-100">
+              <h6 class="text-primary fw-semibold mb-2">
+                <i class="bi bi-tag me-2"></i>Nome do Item
+              </h6>
+              <p class="fs-5 mb-0">${dados.nome}</p>
+            </div>
+          </div>
+          
+          <div class="col-md-6">
+            <div class="border rounded-3 p-3 h-100">
+              <h6 class="text-primary fw-semibold mb-2">
+                <i class="bi bi-info-circle me-2"></i>Situação
+              </h6>
+              <p class="mb-0">
+                ${dados.situacao === 'OK' ?
+          '<span class="badge bg-success fs-6 p-2"><i class="bi bi-check-circle-fill me-1"></i>LOCALIZADO</span>' :
+          `<span class="badge bg-warning fs-6 p-2"><i class="bi bi-clock-history me-1"></i>${dados.situacao}</span>`
+        }
+              </p>
+            </div>
+          </div>
+          
+          <div class="col-12">
+            <div class="border rounded-3 p-3">
+              <h6 class="text-primary fw-semibold mb-2">
+                <i class="bi bi-geo-alt me-2"></i>Localização
+              </h6>
+              <p class="fs-5 mb-0">
+                ${dados.localizacao ?
+          `<span class="text-success"><i class="bi bi-geo-alt-fill me-1"></i>${dados.localizacao}</span>` :
+          '<span class="text-muted"><i class="bi bi-geo-alt me-1"></i>Localização não informada</span>'
+        }
+              </p>
+            </div>
+          </div>
+          
+          <div class="col-12">
+            <div class="bg-light rounded-3 p-3">
+              <h6 class="text-muted mb-2">
+                <i class="bi bi-calendar me-2"></i>Datas
+              </h6>
+              <div class="row">
+                <div class="col-md-6">
+                  <small class="text-muted">Cadastro:</small>
+                  <div>${new Date(dados.data_criacao).toLocaleDateString('pt-BR')}</div>
+                </div>
+                ${dados.data_localizacao ? `
+                <div class="col-md-6">
+                  <small class="text-muted">Última localização:</small>
+                  <div>${new Date(dados.data_localizacao).toLocaleDateString('pt-BR')}</div>
+                </div>
+                ` : ''}
+              </div>
+            </div>
+          </div>
+        </div>
+    `;
+
+      document.getElementById('detalhesBem').innerHTML = detalhesHTML;
+      document.getElementById('botoesVisualizacao').style.display = 'flex';
+      document.getElementById('botoesEdicao').style.display = 'none';
+      document.getElementById('detalhesBem').style.display = 'block';
+      document.getElementById('formEdicao').style.display = 'none';
+    }
+
+    // Funções do CRUD
+    function habilitarEdicao() {
+      debug('habilitarEdicao chamada');
+      console.log('bemAtual disponível:', bemAtual);
+
+      if (!bemAtual) {
+        alert('Erro: Dados do bem não carregados. Por favor, recarregue a página e tente novamente.');
+        console.error('bemAtual é null ou undefined');
+        return;
+      }
+
+      try {
+        // Preencher formulário
+        document.getElementById('bem_id').value = bemAtual.id;
+        document.getElementById('edt_numero').value = bemAtual.numero;
+        document.getElementById('edt_nome').value = bemAtual.nome;
+        document.getElementById('edt_localizacao').value = bemAtual.localizacao || '';
+        document.getElementById('edt_situacao').value = bemAtual.situacao;
+
+        // Alternar visibilidade
+        document.getElementById('detalhesBem').style.display = 'none';
+        document.getElementById('formEdicao').style.display = 'block';
+        document.getElementById('botoesVisualizacao').style.display = 'none';
+        document.getElementById('botoesEdicao').style.display = 'flex';
+
+        debug('Edição habilitada com sucesso');
+      } catch (error) {
+        console.error('Erro ao habilitar edição:', error);
+        alert('Erro ao carregar formulário de edição.');
+      }
+    }
+
+    function cancelarEdicao() {
+      debug('cancelarEdicao chamada');
+      document.getElementById('detalhesBem').style.display = 'block';
+      document.getElementById('formEdicao').style.display = 'none';
+      document.getElementById('botoesVisualizacao').style.display = 'flex';
+      document.getElementById('botoesEdicao').style.display = 'none';
+    }
+
+    function salvarEdicao() {
+      debug('salvarEdicao chamada');
+
+      try {
+        const formData = {
+          bem_id: parseInt(document.getElementById('bem_id').value),
+          numero: document.getElementById('edt_numero').value,
+          nome: document.getElementById('edt_nome').value,
+          localizacao: document.getElementById('edt_localizacao').value,
+          situacao: document.getElementById('edt_situacao').value
+        };
+
+        debug('Dados do formulário para enviar:', formData);
+
+        fetch('/api/bem/editar', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(formData)
+        })
+          .then(response => {
+            if (!response.ok) {
+              throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+          })
+          .then(data => {
+            debug('Resposta da API:', data);
+            if (data.success) {
+              alert(data.message);
+              // Redirecionar em vez de recarregar
+              window.location.href = "/";
+            } else {
+              alert('Erro: ' + data.message);
+            }
+          })
+          .catch(error => {
+            console.error('Erro na requisição:', error);
+            alert('Erro de conexão. Verifique o console para detalhes.');
+          });
+      } catch (error) {
+        console.error('Erro ao salvar edição:', error);
+        alert('Erro ao processar formulário.');
+      }
+    }
+
+    function confirmarExclusao() {
+      debug('confirmarExclusao chamada');
+      if (!bemAtual) {
+        alert('Dados do bem não disponíveis para exclusão.');
+        return;
+      }
+      new bootstrap.Modal(document.getElementById('confirmacaoExclusaoModal')).show();
+    }
+
+    function excluirBem() {
+      debug('excluirBem chamada', bemAtual);
+
+      if (!bemAtual || !bemAtual.id) {
+        alert('Erro: ID do bem não disponível.');
+        return;
+      }
+
+      fetch(`/api/bem/excluir/${bemAtual.id}`, {
+        method: 'DELETE'
+      })
+        .then(response => response.json())
+        .then(data => {
+          bootstrap.Modal.getInstance(document.getElementById('confirmacaoExclusaoModal')).hide();
+          bootstrap.Modal.getInstance(document.getElementById('resultadoModal')).hide();
+
+          if (data.success) {
+            alert(data.message);
+            window.location.href = "/";
+          } else {
+            alert('Erro: ' + data.message);
+          }
+        })
+        .catch(error => {
+          console.error('Erro na exclusão:', error);
+          alert('Erro de conexão ao excluir.');
+        });
+    }
+
+    // Inicialização
+    document.addEventListener('DOMContentLoaded', function () {
+      debug('Página carregada');
+
+     // Verificar se temos dados do bem na template
+{% if bem_detalhes %}
+bemAtual = {{ bem_detalhes | tojson | safe }};
+debug('bemAtual carregado da template', bemAtual);
+{% endif %}
+
+
+    // Configurar evento do modal
+    const modal = document.getElementById('resultadoModal');
+    if (modal) {
+      modal.addEventListener('show.bs.modal', function () {
+        debug('Modal aberto');
+        if (bemAtual) {
+          preencherModalDetalhes(bemAtual);
+        }
+      });
+    }
+
+    // Debug: Expor funções globalmente para teste
+    window.habilitarEdicao = habilitarEdicao;
+    window.bemAtual = bemAtual;
+});
+  </script>
+</body>
+
+</html>
