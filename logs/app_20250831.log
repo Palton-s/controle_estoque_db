@@ -1,0 +1,40 @@
+2025-08-31 00:00:17,373 - utils.logger - INFO - Iniciando aplicação Flask
+2025-08-31 00:00:17,436 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-08-31 00:00:17,436 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-08-31 00:00:17,437 - werkzeug - INFO -  * Restarting with stat
+2025-08-31 00:00:17,981 - utils.logger - INFO - Iniciando aplicação Flask
+2025-08-31 00:00:17,992 - werkzeug - WARNING -  * Debugger is active!
+2025-08-31 00:00:17,995 - werkzeug - INFO -  * Debugger PIN: 425-947-988
+2025-08-31 00:00:22,466 - werkzeug - INFO - 127.0.0.1 - - [31/Aug/2025 00:00:22] "GET / HTTP/1.1" 200 -
+2025-08-31 00:00:22,532 - werkzeug - INFO - 127.0.0.1 - - [31/Aug/2025 00:00:22] "GET /static/style.css HTTP/1.1" 200 -
+2025-08-31 00:00:27,147 - werkzeug - INFO - 127.0.0.1 - - [31/Aug/2025 00:00:27] "GET /visualizar/nao-localizados HTTP/1.1" 200 -
+2025-08-31 00:00:27,167 - werkzeug - INFO - 127.0.0.1 - - [31/Aug/2025 00:00:27] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-08-31 00:00:41,669 - werkzeug - INFO - 127.0.0.1 - - [31/Aug/2025 00:00:41] "GET / HTTP/1.1" 200 -
+2025-08-31 00:00:41,695 - werkzeug - INFO - 127.0.0.1 - - [31/Aug/2025 00:00:41] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-08-31 00:00:51,578 - utils.logger - INFO - Localização do bem 2022005793: Não definida
+2025-08-31 00:00:51,579 - utils.logger - INFO - Verificação do bem 2022005793: Encontrado
+2025-08-31 00:00:51,924 - werkzeug - INFO - 127.0.0.1 - - [31/Aug/2025 00:00:51] "POST / HTTP/1.1" 200 -
+2025-08-31 00:00:51,944 - werkzeug - INFO - 127.0.0.1 - - [31/Aug/2025 00:00:51] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-08-31 00:01:09,060 - utils.logger - INFO - Bem 1013 atualizado com sucesso
+2025-08-31 00:01:09,062 - werkzeug - INFO - 127.0.0.1 - - [31/Aug/2025 00:01:09] "POST /api/bem/editar HTTP/1.1" 200 -
+2025-08-31 00:01:10,669 - werkzeug - INFO - 127.0.0.1 - - [31/Aug/2025 00:01:10] "GET / HTTP/1.1" 200 -
+2025-08-31 00:01:10,694 - werkzeug - INFO - 127.0.0.1 - - [31/Aug/2025 00:01:10] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-08-31 00:01:15,087 - werkzeug - INFO - 127.0.0.1 - - [31/Aug/2025 00:01:15] "GET /novo-bem HTTP/1.1" 200 -
+2025-08-31 00:01:15,109 - werkzeug - INFO - 127.0.0.1 - - [31/Aug/2025 00:01:15] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-08-31 00:01:35,320 - utils.logger - ERROR - Erro ao criar bem: 're' is undefined
+2025-08-31 00:01:35,357 - werkzeug - INFO - 127.0.0.1 - - [31/Aug/2025 00:01:35] "[35m[1mPOST /criar-bem HTTP/1.1[0m" 500 -
+2025-08-31 00:01:35,395 - werkzeug - INFO - 127.0.0.1 - - [31/Aug/2025 00:01:35] "[36mGET /criar-bem?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1[0m" 304 -
+2025-08-31 00:01:35,422 - werkzeug - INFO - 127.0.0.1 - - [31/Aug/2025 00:01:35] "[36mGET /criar-bem?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1[0m" 304 -
+2025-08-31 00:01:35,437 - werkzeug - INFO - 127.0.0.1 - - [31/Aug/2025 00:01:35] "GET /criar-bem?__debugger__=yes&cmd=resource&f=console.png&s=9s1V5fHsk1OYhIDZz2Hp HTTP/1.1" 200 -
+2025-08-31 00:07:16,314 - werkzeug - INFO - 127.0.0.1 - - [31/Aug/2025 00:07:16] "POST /criar-bem HTTP/1.1" 200 -
+2025-08-31 00:07:16,329 - werkzeug - INFO - 127.0.0.1 - - [31/Aug/2025 00:07:16] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-08-31 00:07:24,428 - werkzeug - INFO - 127.0.0.1 - - [31/Aug/2025 00:07:24] "POST /criar-bem HTTP/1.1" 200 -
+2025-08-31 00:07:24,446 - werkzeug - INFO - 127.0.0.1 - - [31/Aug/2025 00:07:24] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-08-31 00:07:35,944 - utils.logger - INFO - Novo bem criado: 002 - Computador Dell - TESTE PARA CRIAR CADASTRO 01
+2025-08-31 00:07:35,945 - werkzeug - INFO - 127.0.0.1 - - [31/Aug/2025 00:07:35] "[32mPOST /criar-bem HTTP/1.1[0m" 302 -
+2025-08-31 00:07:36,046 - werkzeug - INFO - 127.0.0.1 - - [31/Aug/2025 00:07:36] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-08-31 00:07:48,569 - werkzeug - INFO - 127.0.0.1 - - [31/Aug/2025 00:07:48] "GET /visualizar/localizados HTTP/1.1" 200 -
+2025-08-31 00:07:48,590 - werkzeug - INFO - 127.0.0.1 - - [31/Aug/2025 00:07:48] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-08-31 00:07:59,118 - werkzeug - INFO - 127.0.0.1 - - [31/Aug/2025 00:07:59] "GET / HTTP/1.1" 200 -
+2025-08-31 00:07:59,143 - werkzeug - INFO - 127.0.0.1 - - [31/Aug/2025 00:07:59] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
