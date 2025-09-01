@@ -38,3 +38,113 @@
 2025-08-31 00:07:48,590 - werkzeug - INFO - 127.0.0.1 - - [31/Aug/2025 00:07:48] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
 2025-08-31 00:07:59,118 - werkzeug - INFO - 127.0.0.1 - - [31/Aug/2025 00:07:59] "GET / HTTP/1.1" 200 -
 2025-08-31 00:07:59,143 - werkzeug - INFO - 127.0.0.1 - - [31/Aug/2025 00:07:59] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-08-31 23:24:02,181 - utils.logger - INFO - Iniciando aplicação Flask
+2025-08-31 23:24:02,253 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-08-31 23:24:02,253 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-08-31 23:24:02,254 - werkzeug - INFO -  * Restarting with stat
+2025-08-31 23:24:02,782 - utils.logger - INFO - Iniciando aplicação Flask
+2025-08-31 23:24:02,791 - werkzeug - WARNING -  * Debugger is active!
+2025-08-31 23:24:02,797 - werkzeug - INFO -  * Debugger PIN: 425-947-988
+2025-08-31 23:24:16,710 - werkzeug - INFO - 127.0.0.1 - - [31/Aug/2025 23:24:16] "GET / HTTP/1.1" 200 -
+2025-08-31 23:24:16,778 - werkzeug - INFO - 127.0.0.1 - - [31/Aug/2025 23:24:16] "GET /static/style.css HTTP/1.1" 200 -
+2025-08-31 23:24:19,351 - werkzeug - INFO - 127.0.0.1 - - [31/Aug/2025 23:24:19] "GET /visualizar/nao-localizados HTTP/1.1" 200 -
+2025-08-31 23:24:19,379 - werkzeug - INFO - 127.0.0.1 - - [31/Aug/2025 23:24:19] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-08-31 23:24:25,704 - werkzeug - INFO - 127.0.0.1 - - [31/Aug/2025 23:24:25] "GET / HTTP/1.1" 200 -
+2025-08-31 23:24:25,727 - werkzeug - INFO - 127.0.0.1 - - [31/Aug/2025 23:24:25] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-08-31 23:24:29,693 - utils.logger - INFO - Localização do bem 2022005794: Não definida
+2025-08-31 23:24:29,694 - utils.logger - INFO - Verificação do bem 2022005794: Encontrado
+2025-08-31 23:24:29,986 - werkzeug - INFO - 127.0.0.1 - - [31/Aug/2025 23:24:29] "POST / HTTP/1.1" 200 -
+2025-08-31 23:24:30,007 - werkzeug - INFO - 127.0.0.1 - - [31/Aug/2025 23:24:30] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-08-31 23:30:58,753 - werkzeug - INFO - 127.0.0.1 - - [31/Aug/2025 23:30:58] "GET / HTTP/1.1" 200 -
+2025-08-31 23:30:58,774 - werkzeug - INFO - 127.0.0.1 - - [31/Aug/2025 23:30:58] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-08-31 23:31:02,528 - werkzeug - INFO - 127.0.0.1 - - [31/Aug/2025 23:31:02] "GET /visualizar/localizados HTTP/1.1" 200 -
+2025-08-31 23:31:02,551 - werkzeug - INFO - 127.0.0.1 - - [31/Aug/2025 23:31:02] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-08-31 23:31:08,626 - werkzeug - INFO - 127.0.0.1 - - [31/Aug/2025 23:31:08] "GET / HTTP/1.1" 200 -
+2025-08-31 23:31:08,649 - werkzeug - INFO - 127.0.0.1 - - [31/Aug/2025 23:31:08] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-08-31 23:31:13,359 - utils.logger - INFO - Localização do bem 2022005797: Teste de localização3
+2025-08-31 23:31:13,360 - utils.logger - INFO - Verificação do bem 2022005797: Encontrado
+2025-08-31 23:31:13,501 - werkzeug - INFO - 127.0.0.1 - - [31/Aug/2025 23:31:13] "POST / HTTP/1.1" 200 -
+2025-08-31 23:31:13,519 - werkzeug - INFO - 127.0.0.1 - - [31/Aug/2025 23:31:13] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-08-31 23:31:33,782 - utils.logger - INFO - Bem 1006 atualizado com sucesso
+2025-08-31 23:31:33,783 - werkzeug - INFO - 127.0.0.1 - - [31/Aug/2025 23:31:33] "POST /api/bem/editar HTTP/1.1" 200 -
+2025-08-31 23:31:35,012 - werkzeug - INFO - 127.0.0.1 - - [31/Aug/2025 23:31:35] "GET / HTTP/1.1" 200 -
+2025-08-31 23:31:35,028 - werkzeug - INFO - 127.0.0.1 - - [31/Aug/2025 23:31:35] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-08-31 23:31:38,394 - utils.logger - INFO - Localização do bem 2022005797: Teste de localização3 teste teste
+2025-08-31 23:31:38,394 - utils.logger - INFO - Verificação do bem 2022005797: Encontrado
+2025-08-31 23:31:38,544 - werkzeug - INFO - 127.0.0.1 - - [31/Aug/2025 23:31:38] "POST / HTTP/1.1" 200 -
+2025-08-31 23:31:38,564 - werkzeug - INFO - 127.0.0.1 - - [31/Aug/2025 23:31:38] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-08-31 23:32:18,285 - utils.logger - INFO - Verificação do bem 2022005797: Encontrado
+2025-08-31 23:32:18,409 - werkzeug - INFO - 127.0.0.1 - - [31/Aug/2025 23:32:18] "POST / HTTP/1.1" 200 -
+2025-08-31 23:32:18,428 - werkzeug - INFO - 127.0.0.1 - - [31/Aug/2025 23:32:18] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-08-31 23:32:47,890 - utils.logger - INFO - Bem 1006 atualizado com sucesso
+2025-08-31 23:32:47,891 - werkzeug - INFO - 127.0.0.1 - - [31/Aug/2025 23:32:47] "POST /api/bem/editar HTTP/1.1" 200 -
+2025-08-31 23:32:49,419 - werkzeug - INFO - 127.0.0.1 - - [31/Aug/2025 23:32:49] "GET / HTTP/1.1" 200 -
+2025-08-31 23:32:49,438 - werkzeug - INFO - 127.0.0.1 - - [31/Aug/2025 23:32:49] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-08-31 23:32:54,537 - utils.logger - INFO - Localização do bem 2022005797: Sala direção 1 - teste teste
+2025-08-31 23:32:54,538 - utils.logger - INFO - Verificação do bem 2022005797: Encontrado
+2025-08-31 23:32:54,694 - werkzeug - INFO - 127.0.0.1 - - [31/Aug/2025 23:32:54] "POST / HTTP/1.1" 200 -
+2025-08-31 23:32:54,715 - werkzeug - INFO - 127.0.0.1 - - [31/Aug/2025 23:32:54] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-08-31 23:33:04,716 - werkzeug - INFO - 127.0.0.1 - - [31/Aug/2025 23:33:04] "GET /novo-bem HTTP/1.1" 200 -
+2025-08-31 23:33:04,745 - werkzeug - INFO - 127.0.0.1 - - [31/Aug/2025 23:33:04] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-08-31 23:33:37,008 - werkzeug - INFO - 127.0.0.1 - - [31/Aug/2025 23:33:37] "POST /criar-bem HTTP/1.1" 200 -
+2025-08-31 23:33:37,027 - werkzeug - INFO - 127.0.0.1 - - [31/Aug/2025 23:33:37] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-08-31 23:33:52,931 - werkzeug - INFO - 127.0.0.1 - - [31/Aug/2025 23:33:52] "GET / HTTP/1.1" 200 -
+2025-08-31 23:33:52,959 - werkzeug - INFO - 127.0.0.1 - - [31/Aug/2025 23:33:52] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-08-31 23:33:56,286 - utils.logger - INFO - Localização do bem 001: Sala da Direção 1
+2025-08-31 23:33:56,286 - utils.logger - INFO - Verificação do bem 001: Encontrado
+2025-08-31 23:33:56,421 - werkzeug - INFO - 127.0.0.1 - - [31/Aug/2025 23:33:56] "POST / HTTP/1.1" 200 -
+2025-08-31 23:33:56,438 - werkzeug - INFO - 127.0.0.1 - - [31/Aug/2025 23:33:56] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-08-31 23:34:04,309 - utils.logger - INFO - Bem 001 excluído
+2025-08-31 23:34:04,311 - werkzeug - INFO - 127.0.0.1 - - [31/Aug/2025 23:34:04] "DELETE /api/bem/excluir/319772 HTTP/1.1" 200 -
+2025-08-31 23:34:06,237 - werkzeug - INFO - 127.0.0.1 - - [31/Aug/2025 23:34:06] "GET / HTTP/1.1" 200 -
+2025-08-31 23:34:06,253 - werkzeug - INFO - 127.0.0.1 - - [31/Aug/2025 23:34:06] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-08-31 23:34:09,286 - utils.logger - INFO - Localização do bem 001: Não definida
+2025-08-31 23:34:09,287 - utils.logger - INFO - Verificação do bem 001: Não encontrado
+2025-08-31 23:34:09,288 - utils.logger - WARNING - Bem 001 não encontrado no banco
+2025-08-31 23:34:09,319 - werkzeug - INFO - 127.0.0.1 - - [31/Aug/2025 23:34:09] "POST / HTTP/1.1" 200 -
+2025-08-31 23:34:09,339 - werkzeug - INFO - 127.0.0.1 - - [31/Aug/2025 23:34:09] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-08-31 23:55:51,334 - werkzeug - INFO - 127.0.0.1 - - [31/Aug/2025 23:55:51] "GET / HTTP/1.1" 200 -
+2025-08-31 23:55:51,357 - werkzeug - INFO - 127.0.0.1 - - [31/Aug/2025 23:55:51] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-08-31 23:55:58,260 - utils.logger - INFO - Localização do bem 001: Não definida
+2025-08-31 23:55:58,260 - utils.logger - INFO - Verificação do bem 001: Não encontrado
+2025-08-31 23:55:58,261 - utils.logger - WARNING - Bem 001 não encontrado no banco
+2025-08-31 23:55:58,290 - werkzeug - INFO - 127.0.0.1 - - [31/Aug/2025 23:55:58] "POST / HTTP/1.1" 200 -
+2025-08-31 23:55:58,311 - werkzeug - INFO - 127.0.0.1 - - [31/Aug/2025 23:55:58] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-08-31 23:56:10,972 - werkzeug - INFO - 127.0.0.1 - - [31/Aug/2025 23:56:10] "GET / HTTP/1.1" 200 -
+2025-08-31 23:56:10,992 - werkzeug - INFO - 127.0.0.1 - - [31/Aug/2025 23:56:10] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-08-31 23:56:26,900 - werkzeug - INFO - 127.0.0.1 - - [31/Aug/2025 23:56:26] "GET /visualizar/localizados HTTP/1.1" 200 -
+2025-08-31 23:56:26,921 - werkzeug - INFO - 127.0.0.1 - - [31/Aug/2025 23:56:26] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-08-31 23:56:36,807 - utils.logger - INFO - Localização do bem 2022005797: Sala direção 1 - teste teste
+2025-08-31 23:56:36,807 - utils.logger - INFO - Verificação do bem 2022005797: Encontrado
+2025-08-31 23:56:36,951 - werkzeug - INFO - 127.0.0.1 - - [31/Aug/2025 23:56:36] "POST / HTTP/1.1" 200 -
+2025-08-31 23:56:36,968 - werkzeug - INFO - 127.0.0.1 - - [31/Aug/2025 23:56:36] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-08-31 23:59:47,127 - utils.logger - INFO - Localização do bem 001: Não definida
+2025-08-31 23:59:47,128 - utils.logger - INFO - Verificação do bem 001: Não encontrado
+2025-08-31 23:59:47,128 - utils.logger - WARNING - Bem 001 não encontrado no banco
+2025-08-31 23:59:47,161 - werkzeug - INFO - 127.0.0.1 - - [31/Aug/2025 23:59:47] "POST / HTTP/1.1" 200 -
+2025-08-31 23:59:47,181 - werkzeug - INFO - 127.0.0.1 - - [31/Aug/2025 23:59:47] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-09-01 00:01:39,999 - utils.logger - INFO - Localização do bem 001: Não definida
+2025-09-01 00:01:40,000 - utils.logger - INFO - Verificação do bem 001: Não encontrado
+2025-09-01 00:01:40,000 - utils.logger - WARNING - Bem 001 não encontrado no banco
+2025-09-01 00:01:40,085 - werkzeug - INFO - 127.0.0.1 - - [01/Sep/2025 00:01:40] "POST / HTTP/1.1" 200 -
+2025-09-01 00:01:40,099 - werkzeug - INFO - 127.0.0.1 - - [01/Sep/2025 00:01:40] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-09-01 00:01:47,770 - utils.logger - INFO - Localização do bem 001: Não definida
+2025-09-01 00:01:47,771 - utils.logger - INFO - Verificação do bem 001: Não encontrado
+2025-09-01 00:01:47,772 - utils.logger - WARNING - Bem 001 não encontrado no banco
+2025-09-01 00:01:47,805 - werkzeug - INFO - 127.0.0.1 - - [01/Sep/2025 00:01:47] "POST / HTTP/1.1" 200 -
+2025-09-01 00:01:47,820 - werkzeug - INFO - 127.0.0.1 - - [01/Sep/2025 00:01:47] "GET /static/style.css HTTP/1.1" 200 -
+2025-09-01 00:01:48,043 - werkzeug - INFO - 127.0.0.1 - - [01/Sep/2025 00:01:48] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2025-09-01 00:01:55,655 - utils.logger - INFO - Localização do bem 001: Não definida
+2025-09-01 00:01:55,656 - utils.logger - INFO - Verificação do bem 001: Não encontrado
+2025-09-01 00:01:55,657 - utils.logger - WARNING - Bem 001 não encontrado no banco
+2025-09-01 00:01:55,691 - werkzeug - INFO - 127.0.0.1 - - [01/Sep/2025 00:01:55] "POST / HTTP/1.1" 200 -
+2025-09-01 00:01:55,713 - werkzeug - INFO - 127.0.0.1 - - [01/Sep/2025 00:01:55] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-09-01 00:02:05,061 - werkzeug - INFO - 127.0.0.1 - - [01/Sep/2025 00:02:05] "GET /visualizar/localizados HTTP/1.1" 200 -
+2025-09-01 00:02:05,086 - werkzeug - INFO - 127.0.0.1 - - [01/Sep/2025 00:02:05] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-09-01 00:02:11,225 - werkzeug - INFO - 127.0.0.1 - - [01/Sep/2025 00:02:11] "GET / HTTP/1.1" 200 -
+2025-09-01 00:02:11,247 - werkzeug - INFO - 127.0.0.1 - - [01/Sep/2025 00:02:11] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-09-01 00:02:14,713 - utils.logger - INFO - Localização do bem 2022005797: Sala direção 1 - teste teste
+2025-09-01 00:02:14,713 - utils.logger - INFO - Verificação do bem 2022005797: Encontrado
+2025-09-01 00:02:14,837 - werkzeug - INFO - 127.0.0.1 - - [01/Sep/2025 00:02:14] "POST / HTTP/1.1" 200 -
+2025-09-01 00:02:14,854 - werkzeug - INFO - 127.0.0.1 - - [01/Sep/2025 00:02:14] "[36mGET /static/style.css HTTP/1.1[0m" 304 -

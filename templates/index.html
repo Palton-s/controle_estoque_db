@@ -570,13 +570,21 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 
-    // Foco automático no campo de busca
-    document.addEventListener('DOMContentLoaded', function () {
-      const campoBusca = document.getElementById('numero_bem');
-      if (campoBusca) {
-        setTimeout(() => campoBusca.focus(), 100);
+    // Foco automático no campo de busca - versão melhorada
+document.addEventListener('DOMContentLoaded', function () {
+  // Aguardar um pouco mais para garantir que todos os elementos estejam renderizados
+  setTimeout(function() {
+    const campoBusca = document.getElementById('numero_bem');
+    if (campoBusca) {
+      // Verificar se não há modal aberto que possa roubar o foco
+      const modalAberto = document.querySelector('.modal.show');
+      if (!modalAberto) {
+        campoBusca.focus();
+        campoBusca.select(); // Seleciona todo o texto no campo
       }
-    });
+    }
+  }, 300); // Aumentei o tempo para 300ms para maior garantia
+});
 
     // Drag and drop para arquivo
     const fileInput = document.getElementById('excel_file');
@@ -847,6 +855,42 @@ debug('bemAtual carregado da template', bemAtual);
     window.habilitarEdicao = habilitarEdicao;
     window.bemAtual = bemAtual;
 });
+
+
+// Foco automático no campo de número do bem - Solução Completa
+function aplicarFocoCampoBusca() {
+  const campoBusca = document.getElementById('numero_bem');
+  
+  if (!campoBusca) return;
+  
+  // Verificar se há algum modal aberto
+  const modaisAbertos = document.querySelectorAll('.modal.show');
+  
+  // Só aplicar foco se não houver modal aberto
+  if (modaisAbertos.length === 0) {
+    // Forçar o foco e selecionar o texto
+    campoBusca.focus();
+    campoBusca.select();
+    
+    // Rolagem suave até o campo (caso necessário)
+    campoBusca.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+}
+
+// Executar quando o DOM estiver pronto
+document.addEventListener('DOMContentLoaded', function() {
+  // Executar após um pequeno delay para garantir que todos os elementos estejam renderizados
+  setTimeout(aplicarFocoCampoBusca, 100);
+});
+
+// Se estiver usando TurboLinks ou similar (opcional)
+document.addEventListener('turbolinks:load', aplicarFocoCampoBusca);
+
+// Reaplicar foco quando modais forem fechados
+document.addEventListener('hidden.bs.modal', function() {
+  setTimeout(aplicarFocoCampoBusca, 50);
+});
+
   </script>
 </body>
 
