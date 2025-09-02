@@ -410,3 +410,35 @@
 2025-09-01 23:34:31,236 - werkzeug - INFO - 127.0.0.1 - - [01/Sep/2025 23:34:31] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
 2025-09-01 23:35:11,795 - werkzeug - INFO - 127.0.0.1 - - [01/Sep/2025 23:35:11] "GET /novo-bem HTTP/1.1" 200 -
 2025-09-01 23:35:11,826 - werkzeug - INFO - 127.0.0.1 - - [01/Sep/2025 23:35:11] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-09-01 23:38:57,592 - utils.logger - INFO - Iniciando aplicação Flask
+2025-09-01 23:38:57,611 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-09-01 23:38:57,612 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-09-01 23:38:57,613 - werkzeug - INFO -  * Restarting with stat
+2025-09-01 23:38:58,143 - utils.logger - INFO - Iniciando aplicação Flask
+2025-09-01 23:38:58,152 - werkzeug - WARNING -  * Debugger is active!
+2025-09-01 23:38:58,155 - werkzeug - INFO -  * Debugger PIN: 425-947-988
+2025-09-01 23:39:09,510 - werkzeug - INFO - 127.0.0.1 - - [01/Sep/2025 23:39:09] "GET / HTTP/1.1" 200 -
+2025-09-01 23:39:09,645 - werkzeug - INFO - 127.0.0.1 - - [01/Sep/2025 23:39:09] "GET /static/style.css HTTP/1.1" 200 -
+2025-09-01 23:39:12,557 - werkzeug - INFO - 127.0.0.1 - - [01/Sep/2025 23:39:12] "GET /visualizar/localizados HTTP/1.1" 200 -
+2025-09-01 23:39:12,579 - werkzeug - INFO - 127.0.0.1 - - [01/Sep/2025 23:39:12] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-09-01 23:39:16,045 - werkzeug - INFO - 127.0.0.1 - - [01/Sep/2025 23:39:16] "GET / HTTP/1.1" 200 -
+2025-09-01 23:39:16,066 - werkzeug - INFO - 127.0.0.1 - - [01/Sep/2025 23:39:16] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-09-01 23:39:18,927 - werkzeug - INFO - 127.0.0.1 - - [01/Sep/2025 23:39:18] "GET /visualizar/nao-localizados HTTP/1.1" 200 -
+2025-09-01 23:39:18,947 - werkzeug - INFO - 127.0.0.1 - - [01/Sep/2025 23:39:18] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-09-01 23:39:34,419 - werkzeug - INFO - 127.0.0.1 - - [01/Sep/2025 23:39:34] "GET /visualizar/nao-localizados?pagina=1&por_pagina=100 HTTP/1.1" 200 -
+2025-09-01 23:39:34,443 - werkzeug - INFO - 127.0.0.1 - - [01/Sep/2025 23:39:34] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-09-01 23:39:38,640 - werkzeug - INFO - 127.0.0.1 - - [01/Sep/2025 23:39:38] "GET / HTTP/1.1" 200 -
+2025-09-01 23:39:38,665 - werkzeug - INFO - 127.0.0.1 - - [01/Sep/2025 23:39:38] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-09-01 23:39:43,388 - werkzeug - INFO - 127.0.0.1 - - [01/Sep/2025 23:39:43] "GET /visualizar/localizados HTTP/1.1" 200 -
+2025-09-01 23:39:43,408 - werkzeug - INFO - 127.0.0.1 - - [01/Sep/2025 23:39:43] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-09-01 23:39:48,354 - werkzeug - INFO - 127.0.0.1 - - [01/Sep/2025 23:39:48] "GET / HTTP/1.1" 200 -
+2025-09-01 23:39:48,381 - werkzeug - INFO - 127.0.0.1 - - [01/Sep/2025 23:39:48] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-09-01 23:39:51,453 - utils.logger - INFO - Localização do bem 367248: Sala da Direção 1
+2025-09-01 23:39:51,454 - utils.logger - INFO - Verificação do bem 367248: Encontrado
+2025-09-01 23:39:51,572 - werkzeug - INFO - 127.0.0.1 - - [01/Sep/2025 23:39:51] "POST / HTTP/1.1" 200 -
+2025-09-01 23:39:51,590 - werkzeug - INFO - 127.0.0.1 - - [01/Sep/2025 23:39:51] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-09-01 23:40:01,258 - utils.logger - INFO - Bem 319775 atualizado com sucesso
+2025-09-01 23:40:01,259 - werkzeug - INFO - 127.0.0.1 - - [01/Sep/2025 23:40:01] "POST /api/bem/editar HTTP/1.1" 200 -
+2025-09-01 23:40:03,086 - werkzeug - INFO - 127.0.0.1 - - [01/Sep/2025 23:40:03] "GET / HTTP/1.1" 200 -
+2025-09-01 23:40:03,106 - werkzeug - INFO - 127.0.0.1 - - [01/Sep/2025 23:40:03] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
