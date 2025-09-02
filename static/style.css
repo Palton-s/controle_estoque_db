@@ -635,3 +635,135 @@ footer {
     filter: invert(1);
   }
 }
+
+/* Ajustes de alinhamento para o formulário de busca */
+#searchForm .form-label {
+  margin-bottom: 0.5rem;
+}
+
+#searchForm .col-md-2 {
+  display: flex;
+  align-items: flex-end;
+  padding-bottom: 0.7rem;
+}
+
+/* Ajuste para telas menores */
+@media (max-width: 768px) {
+  #searchForm .col-md-2 {
+    padding-bottom: 0;
+    margin-top: 1rem;
+  }
+  
+  #btnLocalizar {
+    margin-top: 0 !important;
+  }
+}
+
+/* Ajustes de tamanho proporcional para os elementos */
+.card {
+  transform: scale(0.98);
+  transform-origin: top center;
+}
+
+.card-header .h5 {
+  font-size: 1.2rem;
+}
+
+.form-control {
+  padding: 0.6rem 0.8rem;
+  font-size: 0.95rem;
+  height: calc(2em + 1rem + 2px);
+}
+
+.btn {
+  padding: 0.6rem 0.8rem;
+  font-size: 0.95rem;
+}
+
+#btnCamera {
+  padding: 0.6rem;
+}
+
+#btnCamera i {
+  font-size: 1.1rem;
+}
+
+#btnLocalizar i {
+  font-size: 1.1rem;
+  line-height: 1;  /* Garante que o ícone não "puxe" altura extra */
+}
+
+/* Ajuste específico para o container de busca */
+#searchForm .col-md-5 {
+  flex: 0 0 auto;
+  width: 38%;
+}
+
+#searchForm .col-md-2 {
+  flex: 0 0 auto;
+  width: 24%;
+}
+
+/* Ajuste para os cards de estatísticas */
+.card-body.text-center.p-4 {
+  padding: 1.8rem !important;
+}
+
+.d-inline-flex.align-items-center.justice-content-center {
+  width: 55px !important;
+  height: 55px !important;
+}
+
+.d-inline-flex.align-items-center.justice-content-center i {
+  font-size: 1.7rem !important;
+}
+
+.h2.fw-bold {
+  font-size: 2rem !important;
+}
+
+/* Ajuste para ações rápidas */
+.text-center.mb-4 .btn {
+  font-size: 0.9rem;
+  padding: 0.5rem 0.8rem;
+}
+
+/* Ajustes para o botão localizar */
+#btnLocalizar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 46px;         /* Garante mesma altura do input */
+  padding: 0;           /* Remove padding que afeta o alinhamento */
+  box-sizing: border-box; /* Garante que height inclui tudo */
+}
+
+
+/* Ajustes responsivos */
+@media (max-width: 768px) {
+  .card {
+    transform: scale(1);
+  }
+  
+  #searchForm .col-md-5,
+  #searchForm .col-md-2 {
+    width: 100%;
+  }
+  
+  #searchForm .col-md-2 {
+    margin-top: 1rem;
+  }
+}
+
+/* Ajuste para garantir que os inputs tenham altura igual */
+#searchForm .form-control {
+  height: 46px;
+}
+
+#searchForm .input-group {
+  height: 46px;
+}
+
+#searchForm .btn {
+  height: 46px;
+}
