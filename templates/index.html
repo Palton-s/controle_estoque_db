@@ -75,13 +75,18 @@
         {% endif %}
 
         <form method="POST" action="/" class="row g-3" autocomplete="off" id="searchForm">
-          <div class="col-md-6">
+          <div class="col-md-5">
             <label for="numero_bem" class="form-label fw-semibold">
               <i class="bi bi-upc-scan me-1"></i>Número do Bem
             </label>
-            <input type="text" name="numero_bem" id="numero_bem" class="form-control form-control-lg"
-              placeholder="Ex: 469704, ABC-123" required pattern="[A-Za-z0-9-]+">
-            <div class="form-text">Digite apenas números, letras ou hífen</div>
+            <div class="input-group">
+              <input type="text" name="numero_bem" id="numero_bem" class="form-control form-control-lg"
+                placeholder="Ex: 469704, ABC-123" required pattern="[A-Za-z0-9-]+">
+              <button type="button" class="btn btn-outline-secondary" id="btnCamera" title="Escanear código de barras">
+                <i class="bi bi-camera"></i>
+              </button>
+            </div>
+            <div class="form-text">Digite apenas números, letras ou hífen, ou use a câmera</div>
           </div>
 
           <div class="col-md-5">
@@ -93,7 +98,7 @@
             <div class="form-text">Opcional - atualiza a localização</div>
           </div>
 
-          <div class="col-md-1 d-flex align-items-end">
+          <div class="col-md-2 d-flex align-items-end">
             <button type="submit" class="btn btn-primary btn-lg w-100" id="btnLocalizar">
               <span class="spinner-border spinner-border-sm d-none" id="loadingSpinner"></span>
               <i class="bi bi-search"></i>
@@ -407,9 +412,6 @@
             <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
               <i class="bi bi-x-circle me-1"></i>Fechar
             </button>
-            <!-- <!<button type="button" class="btn btn-outline-primary" onclick=window.location.href="/">
-              <i class="bi bi-arrow-repeat me-1"></i>Nova Busca
-            </button> -->
             <button type="button" class="btn btn-warning" onclick="habilitarEdicao()">
               <i class="bi bi-pencil me-1"></i>Editar
             </button>
@@ -442,11 +444,46 @@
         </div>
         <div class="modal-body">
           <p>Tem certeza que deseja excluir este bem patrimonial?</p>
-          <p class="text-muted small">Esta ação não pode ser desfeita.</p>
+          <p class="text-muted small">Esta ação não pode essere desfeita.</p>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
           <button type="button" class="btn btn-danger" onclick="excluirBem()">Confirmar Exclusão</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal para Scanner de Código de Barras -->
+  <div class="modal fade" id="scannerModal" tabindex="-1" aria-labelledby="scannerModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header bg-primary text-white">
+          <h5 class="modal-title" id="scannerModalLabel">
+            <i class="bi bi-camera me-2"></i>Escanear Código de Barras
+          </h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body p-0">
+          <div id="scanner-container">
+            <video id="scanner-video" playsinline></video>
+            <div id="scanner-overlay">
+              <div class="corner corner-tl"></div>
+              <div class="corner corner-tr"></div>
+              <div class="corner corner-bl"></div>
+              <div class="corner corner-br"></div>
+              <div class="scanning-line"></div>
+            </div>
+          </div>
+          <div id="scanner-status" class="p-3 bg-dark">
+            <i class="bi bi-info-circle me-1"></i>Posicione o código de barras dentro da área destacada
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" id="switchCameraBtn">
+            <i class="bi bi-camera-reverse me-1"></i>Trocar Câmera
+          </button>
+          <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Fechar</button>
         </div>
       </div>
     </div>
@@ -470,9 +507,142 @@
 
   <!-- Scripts -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- Incluir a biblioteca jsQR para decodificar códigos de barras -->
+  <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.min.js"></script>
   <script>
-    // Validação em tempo real
-    document.getElementById('numero_bem')?.addEventListener('input', function (e) {
+    // Variáveis globais
+    let scannerModal = null;
+    let videoStream = null;
+    let usingFrontCamera = false;
+    let scanningInterval = null;
+
+    // Inicialização quando o DOM estiver carregado
+    document.addEventListener('DOMContentLoaded', function() {
+      // Inicializar o modal do scanner
+      scannerModal = new bootstrap.Modal(document.getElementById('scannerModal'));
+      
+      // Configurar botão da câmera
+      document.getElementById('btnCamera').addEventListener('click', openScanner);
+      
+      // Configurar botão de trocar câmera
+      document.getElementById('switchCameraBtn').addEventListener('click', switchCamera);
+      
+      // Parar a câmera quando o modal for fechado
+      document.getElementById('scannerModal').addEventListener('hidden.bs.modal', stopScanner);
+      
+      // Configurar validação do campo de número do bem
+      document.getElementById('numero_bem').addEventListener('input', validateBemNumber);
+      
+      // Configurar envio do formulário
+      document.getElementById('searchForm').addEventListener('submit', handleFormSubmit);
+    });
+
+    // Abrir o scanner de câmera
+    function openScanner() {
+      scannerModal.show();
+      setTimeout(startScanner, 500); // Pequeno delay para garantir que o modal esteja visível
+    }
+
+    // Iniciar o scanner
+    async function startScanner() {
+      try {
+        // Parar qualquer stream anterior
+        if (videoStream) {
+          stopScanner();
+        }
+        
+        // Solicitar acesso à câmera
+        const constraints = {
+          video: { 
+            facingMode: usingFrontCamera ? "user" : "environment",
+            width: { ideal: 1280 },
+            height: { ideal: 720 }
+          }
+        };
+        
+        videoStream = await navigator.mediaDevices.getUserMedia(constraints);
+        const videoElement = document.getElementById('scanner-video');
+        videoElement.srcObject = videoStream;
+        
+        // Aguardar o vídeo estar pronto
+        videoElement.onloadedmetadata = function() {
+          videoElement.play();
+          startScanning();
+        };
+      } catch (error) {
+        console.error('Erro ao acessar a câmera:', error);
+        document.getElementById('scanner-status').innerHTML = 
+          '<i class="bi bi-exclamation-triangle me-1"></i>Erro ao acessar a câmera: ' + error.message;
+      }
+    }
+
+    // Iniciar o processo de escaneamento
+    function startScanning() {
+      const videoElement = document.getElementById('scanner-video');
+      const canvasElement = document.createElement('canvas');
+      const canvas = canvasElement.getContext('2d');
+      
+      scanningInterval = setInterval(function() {
+        if (videoElement.readyState === videoElement.HAVE_ENOUGH_DATA) {
+          canvasElement.height = videoElement.videoHeight;
+          canvasElement.width = videoElement.videoWidth;
+          
+          // Desenhar o frame do vídeo no canvas
+          canvas.drawImage(videoElement, 0, 0, canvasElement.width, canvasElement.height);
+          
+          // Obter os dados da imagem para processamento
+          const imageData = canvas.getImageData(0, 0, canvasElement.width, canvasElement.height);
+          
+          // Tentar encontrar um código QR ou código de barras
+          const code = jsQR(imageData.data, imageData.width, imageData.height, {
+            inversionAttempts: "dontInvert",
+          });
+          
+          // Se encontrou um código
+          if (code) {
+            // Preencher o campo com o código lido
+            document.getElementById('numero_bem').value = code.data;
+            
+            // Parar o scanner e fechar o modal
+            stopScanner();
+            scannerModal.hide();
+            
+            // Dar foco ao campo de localização para facilitar a entrada de dados
+            document.getElementById('localizacao').focus();
+          }
+        }
+      }, 100); // Verificar a cada 100ms
+    }
+
+    // Parar o scanner
+    function stopScanner() {
+      // Parar o intervalo de escaneamento
+      if (scanningInterval) {
+        clearInterval(scanningInterval);
+        scanningInterval = null;
+      }
+      
+      // Parar a stream de vídeo
+      if (videoStream) {
+        videoStream.getTracks().forEach(track => track.stop());
+        videoStream = null;
+      }
+    }
+
+    // Alternar entre câmera traseira e frontal
+    function switchCamera() {
+      usingFrontCamera = !usingFrontCamera;
+      stopScanner();
+      startScanner();
+      
+      // Atualizar o status
+      document.getElementById('scanner-status').innerHTML = 
+        '<i class="bi bi-info-circle me-1"></i>Usando ' + 
+        (usingFrontCamera ? 'câmera frontal' : 'câmera traseira');
+    }
+
+    // Validar o campo de número do bem
+    function validateBemNumber(e) {
       const valor = e.target.value;
       const btn = document.getElementById('btnLocalizar');
 
@@ -483,134 +653,17 @@
         e.target.classList.remove('is-invalid');
         btn.disabled = false;
       }
-    });
+    }
 
-    // Loading spinner para busca
-    document.getElementById('searchForm')?.addEventListener('submit', function () {
+    // Manipular envio do formulário
+    function handleFormSubmit(e) {
       const spinner = document.getElementById('loadingSpinner');
       const icon = document.getElementById('btnLocalizar').querySelector('i');
 
       if (spinner) spinner.classList.remove('d-none');
       if (icon) icon.classList.add('d-none');
-    });
-
-    // Loading para importação
-    document.getElementById('btnImportar')?.addEventListener('click', function () {
-      const fileInput = document.getElementById('excel_file');
-      const statusDiv = document.getElementById('importStatus');
-      const statusMessage = document.getElementById('statusMessage');
-      const progressBar = document.querySelector('.progress-bar');
-      const btnImportar = this;
-
-      if (!fileInput.files.length) {
-        alert('Por favor, selecione um arquivo Excel.');
-        return;
-      }
-
-      // Mostrar status
-      statusDiv.classList.remove('d-none');
-      statusMessage.innerHTML = '<i class="bi bi-hourglass-split me-1"></i>Iniciando importação...';
-      progressBar.style.width = '25%';
-      btnImportar.disabled = true;
-      btnImportar.innerHTML = '<i class="bi bi-hourglass-split me-1"></i>Importando...';
-
-      // Simular progresso
-      let progress = 25;
-      const interval = setInterval(() => {
-        progress += 5;
-        progressBar.style.width = progress + '%';
-
-        if (progress >= 75) {
-          clearInterval(interval);
-          statusMessage.innerHTML = '<i class="bi bi-database me-1"></i>Finalizando importação...';
-        }
-      }, 200);
-
-      // Enviar formulário
-      document.getElementById('importForm').submit();
-    });
-
-    // Confirmação antes de sair
-    function confirmSair(event) {
-      const confirmar = confirm('Deseja realmente sair do aplicativo? A janela será fechada.');
-      if (!confirmar) {
-        event.preventDefault();
-        return false;
-      }
-      return true;
     }
 
-    // Atalho de teclado Ctrl+Q para sair
-    document.addEventListener('keydown', function (e) {
-      if (e.ctrlKey && e.key === 'q') {
-        e.preventDefault();
-        if (confirm('Deseja sair do aplicativo? (Ctrl+Q)')) {
-          window.location.href = "{{ url_for('sair') }}";
-        }
-      }
-    });
-
-    // Mostrar modal se necessário
-    {% if show_modal %}
-    const modal = new bootstrap.Modal('#resultadoModal');
-    setTimeout(() => modal.show(), 100);
-    {% endif %}
-
-    // Atualizar contador total
-document.addEventListener('DOMContentLoaded', function () {
-  const total = {{ total_count }};  
-  const totalElement = document.getElementById('total-bens');
-  if (totalElement) {
-    totalElement.textContent = total.toLocaleString();
-  }
-
-  // Atualizar contadores individuais
-  document.getElementById('count-localizados').textContent = {{ localizados_count }};
-  document.getElementById('count-pendentes').textContent = {{ nao_localizados_count }};
-});
-
-
-    // Foco automático no campo de busca - versão melhorada
-document.addEventListener('DOMContentLoaded', function () {
-  // Aguardar um pouco mais para garantir que todos os elementos estejam renderizados
-  setTimeout(function() {
-    const campoBusca = document.getElementById('numero_bem');
-    if (campoBusca) {
-      // Verificar se não há modal aberto que possa roubar o foco
-      const modalAberto = document.querySelector('.modal.show');
-      if (!modalAberto) {
-        campoBusca.focus();
-        campoBusca.select(); // Seleciona todo o texto no campo
-      }
-    }
-  }, 300); // Aumentei o tempo para 300ms para maior garantia
-});
-
-    // Drag and drop para arquivo
-    const fileInput = document.getElementById('excel_file');
-    const fileLabel = fileInput?.previousElementSibling;
-
-    if (fileInput && fileLabel) {
-      fileLabel.addEventListener('dragover', (e) => {
-        e.preventDefault();
-        fileLabel.classList.add('dragover');
-      });
-
-      fileLabel.addEventListener('dragleave', () => {
-        fileLabel.classList.remove('dragover');
-      });
-
-      fileLabel.addEventListener('drop', (e) => {
-        e.preventDefault();
-        fileLabel.classList.remove('dragover');
-        if (e.dataTransfer.files.length) {
-          fileInput.files = e.dataTransfer.files;
-          // Atualizar visualmente
-          const fileName = e.dataTransfer.files[0].name;
-          fileLabel.querySelector('.form-text').textContent = `Arquivo selecionado: ${fileName}`;
-        }
-      });
-    }
     // ==============================================
     // FUNÇÕES DO CRUD (JavaScript para o modal)
     // ==============================================
@@ -833,63 +886,58 @@ document.addEventListener('DOMContentLoaded', function () {
     document.addEventListener('DOMContentLoaded', function () {
       debug('Página carregada');
 
-     // Verificar se temos dados do bem na template
-{% if bem_detalhes %}
-bemAtual = {{ bem_detalhes | tojson | safe }};
-debug('bemAtual carregado da template', bemAtual);
-{% endif %}
+      // Verificar se temos dados do bem na template
+      {% if bem_detalhes %}
+      bemAtual = {{ bem_detalhes | tojson | safe }};
+      debug('bemAtual carregado da template', bemAtual);
+      {% endif %}
 
+      // Configurar evento do modal
+      const modal = document.getElementById('resultadoModal');
+      if (modal) {
+        modal.addEventListener('show.bs.modal', function () {
+          debug('Modal aberto');
+          if (bemAtual) {
+            preencherModalDetalhes(bemAtual);
+          }
+        });
+      }
 
-    // Configurar evento do modal
-    const modal = document.getElementById('resultadoModal');
-    if (modal) {
-      modal.addEventListener('show.bs.modal', function () {
-        debug('Modal aberto');
-        if (bemAtual) {
-          preencherModalDetalhes(bemAtual);
-        }
-      });
+      // Debug: Expor funções globalmente para teste
+      window.habilitarEdicao = habilitarEdicao;
+      window.bemAtual = bemAtual;
+    });
+
+    // Foco automático no campo de número do bem - Solução Completa
+    function aplicarFocoCampoBusca() {
+      const campoBusca = document.getElementById('numero_bem');
+      
+      if (!campoBusca) return;
+      
+      // Verificar se há algum modal aberto
+      const modaisAbertos = document.querySelectorAll('.modal.show');
+      
+      // Só aplicar foco se não houver modal aberto
+      if (modaisAbertos.length === 0) {
+        // Forçar o foco e selecionar o texto
+        campoBusca.focus();
+        campoBusca.select();
+        
+        // Rolagem suave até o campo (caso necessário)
+        campoBusca.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
     }
 
-    // Debug: Expor funções globalmente para teste
-    window.habilitarEdicao = habilitarEdicao;
-    window.bemAtual = bemAtual;
-});
+    // Executar quando o DOM estiver pronto
+    document.addEventListener('DOMContentLoaded', function() {
+      // Executar após um pequeno delay para garantir que todos os elementos estejam renderizados
+      setTimeout(aplicarFocoCampoBusca, 100);
+    });
 
-
-// Foco automático no campo de número do bem - Solução Completa
-function aplicarFocoCampoBusca() {
-  const campoBusca = document.getElementById('numero_bem');
-  
-  if (!campoBusca) return;
-  
-  // Verificar se há algum modal aberto
-  const modaisAbertos = document.querySelectorAll('.modal.show');
-  
-  // Só aplicar foco se não houver modal aberto
-  if (modaisAbertos.length === 0) {
-    // Forçar o foco e selecionar o texto
-    campoBusca.focus();
-    campoBusca.select();
-    
-    // Rolagem suave até o campo (caso necessário)
-    campoBusca.scrollIntoView({ behavior: 'smooth', block: 'center' });
-  }
-}
-
-// Executar quando o DOM estiver pronto
-document.addEventListener('DOMContentLoaded', function() {
-  // Executar após um pequeno delay para garantir que todos os elementos estejam renderizados
-  setTimeout(aplicarFocoCampoBusca, 100);
-});
-
-// Se estiver usando TurboLinks ou similar (opcional)
-document.addEventListener('turbolinks:load', aplicarFocoCampoBusca);
-
-// Reaplicar foco quando modais forem fechados
-document.addEventListener('hidden.bs.modal', function() {
-  setTimeout(aplicarFocoCampoBusca, 50);
-});
+    // Reaplicar foco quando modais forem fechados
+    document.addEventListener('hidden.bs.modal', function() {
+      setTimeout(aplicarFocoCampoBusca, 50);
+    });
 
   </script>
 </body>
