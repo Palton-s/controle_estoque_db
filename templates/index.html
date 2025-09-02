@@ -35,84 +35,80 @@
     </div>
   </header>
 
-  <!-- Adicione isto no index.html, após o header e antes do main content -->
-{% if mensagem_sucesso %}
-<div class="container mt-3">
+  {% if mensagem_sucesso %}
+  <div class="container mt-3">
     <div class="alert alert-success alert-dismissible fade show" role="alert">
-        <i class="bi bi-check-circle-fill me-2"></i>
-        {{ mensagem_sucesso }}
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      <i class="bi bi-check-circle-fill me-2"></i>
+      {{ mensagem_sucesso }}
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
-</div>
-{% endif %}
+  </div>
+  {% endif %}
 
   <main class="container py-5">
-
     <!-- Card de Busca Moderno -->
-<div class="card shadow-lg border-0 rounded-3 mb-4">
-  <div class="card-header bg-white py-3 border-0">
-    <h2 class="h5 mb-0 text-center">
-      <i class="bi bi-search-heart text-primary me-2"></i>
-      Localizar Bem Patrimonial
-    </h2>
-  </div>
-  <div class="card-body p-3">
-    {% if mensagem %}
-    <div class="alert alert-dismissible fade show {% if '✅' in mensagem or 'sucesso' in mensagem|lower %}alert-success{% elif '❌' in mensagem or 'erro' in mensagem|lower %}alert-danger{% else %}alert-info{% endif %} mb-3" role="alert">
-      <div class="d-flex align-items-center">
-        {% if '✅' in mensagem or 'sucesso' in mensagem|lower %}
-        <i class="bi bi-check-circle-fill me-2"></i>
-        {% elif '❌' in mensagem or 'erro' in mensagem|lower %}
-        <i class="bi bi-exclamation-circle-fill me-2"></i>
-        {% else %}
-        <i class="bi bi-info-circle-fill me-2"></i>
-        {% endif %}
-        <span>{{ mensagem }}</span>
+    <div class="card shadow-lg border-0 rounded-3 mb-4">
+      <div class="card-header bg-white py-3 border-0">
+        <h2 class="h5 mb-0 text-center">
+          <i class="bi bi-search-heart text-primary me-2"></i>
+          Localizar Bem Patrimonial
+        </h2>
       </div>
-      <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-    </div>
-    {% endif %}
-
-    <form method="POST" action="/" class="row g-3 align-items-end" autocomplete="off" id="searchForm">
-      <div class="col-md-5">
-        <label for="numero_bem" class="form-label fw-semibold">
-          <i class="bi bi-upc-scan me-1"></i>Número do Bem
-        </label>
-        <div class="input-group">
-          <input type="text" name="numero_bem" id="numero_bem" class="form-control form-control" placeholder="Ex: 469704, ABC-123" required pattern="[A-Za-z0-9-]+">
-          <button type="button" class="btn btn-outline-secondary" id="btnCamera" title="Escanear código de barras">
-            <i class="bi bi-camera"></i>
-          </button>
+      <div class="card-body p-3">
+        {% if mensagem %}
+        <div class="alert alert-dismissible fade show {% if '✅' in mensagem or 'sucesso' in mensagem|lower %}alert-success{% elif '❌' in mensagem or 'erro' in mensagem|lower %}alert-danger{% else %}alert-info{% endif %} mb-3" role="alert">
+          <div class="d-flex align-items-center">
+            {% if '✅' in mensagem or 'sucesso' in mensagem|lower %}
+            <i class="bi bi-check-circle-fill me-2"></i>
+            {% elif '❌' in mensagem or 'erro' in mensagem|lower %}
+            <i class="bi bi-exclamation-circle-fill me-2"></i>
+            {% else %}
+            <i class="bi bi-info-circle-fill me-2"></i>
+            {% endif %}
+            <span>{{ mensagem }}</span>
+          </div>
+          <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
         </div>
-        <div class="form-text">Digite apenas números, letras ou hífen, ou use a câmera</div>
-      </div>
+        {% endif %}
 
-      <div class="col-md-5">
-        <label for="localizacao" class="form-label fw-semibold">
-          <i class="bi bi-geo-alt me-1"></i>Localização
-        </label>
-        <input type="text" name="localizacao" id="localizacao" class="form-control form-control" placeholder="Ex: Almoxarifado Central, Sala 101">
-        <div class="form-text">Opcional - atualiza a localização</div>
-      </div>
+        <form method="POST" action="/" class="row g-3 align-items-end" autocomplete="off" id="searchForm">
+          <div class="col-md-5">
+            <label for="numero_bem" class="form-label fw-semibold">
+              <i class="bi bi-upc-scan me-1"></i>Número do Bem
+            </label>
+            <div class="input-group">
+              <input type="text" name="numero_bem" id="numero_bem" class="form-control form-control" placeholder="Ex: 469704, ABC-123" required pattern="[A-Za-z0-9-]+">
+              <button type="button" class="btn btn-outline-secondary" id="btnCamera" title="Escanear código de barras">
+                <i class="bi bi-camera"></i>
+              </button>
+            </div>
+            <div class="form-text">Digite apenas números, letras ou hífen, ou use a câmera</div>
+          </div>
 
-      <div class="col-md-2 d-flex align-items-end">
-        <button type="submit" class="btn btn-primary w-100" id="btnLocalizar" style="height: 42px;">
-          <span class="spinner-border spinner-border-sm d-none" id="loadingSpinner"></span>
-          <i class="bi bi-search"></i>
-        </button>
+          <div class="col-md-5">
+            <label for="localizacao" class="form-label fw-semibold">
+              <i class="bi bi-geo-alt me-1"></i>Localização
+            </label>
+            <input type="text" name="localizacao" id="localizacao" class="form-control form-control" placeholder="Ex: Almoxarifado Central, Sala 101">
+            <div class="form-text">Opcional - atualiza a localização</div>
+          </div>
+
+          <div class="col-md-2 d-flex align-items-end">
+            <button type="submit" class="btn btn-primary w-100" id="btnLocalizar" style="height: 42px;">
+              <span class="spinner-border spinner-border-sm d-none" id="loadingSpinner"></span>
+              <i class="bi bi-search"></i>
+            </button>
+          </div>
+        </form>
       </div>
-    </form>
-  </div>
-</div>
+    </div>
 
     <!-- Cards de Estatísticas -->
     <div class="row g-4 mb-5">
       <div class="col-md-6">
         <div class="card border-0 shadow-sm h-100">
           <div class="card-body text-center p-4">
-            <div
-              class="d-inline-flex align-items-center justify-content-center bg-success bg-opacity-10 rounded-circle mb-3"
-              style="width: 60px; height: 60px;">
+            <div class="d-inline-flex align-items-center justify-content-center bg-success bg-opacity-10 rounded-circle mb-3" style="width: 60px; height: 60px;">
               <i class="bi bi-check-circle-fill text-success fs-3"></i>
             </div>
             <h3 class="h2 fw-bold text-success mb-1" id="count-localizados">{{ localizados_count|number_format }}</h3>
@@ -132,9 +128,7 @@
       <div class="col-md-6">
         <div class="card border-0 shadow-sm h-100">
           <div class="card-body text-center p-4">
-            <div
-              class="d-inline-flex align-items-center justify-content-center bg-warning bg-opacity-10 rounded-circle mb-3"
-              style="width: 60px; height: 60px;">
+            <div class="d-inline-flex align-items-center justify-content-center bg-warning bg-opacity-10 rounded-circle mb-3" style="width: 60px; height: 60px;">
               <i class="bi bi-exclamation-circle-fill text-warning fs-3"></i>
             </div>
             <h3 class="h2 fw-bold text-warning mb-1" id="count-pendentes">{{ nao_localizados_count|number_format }}</h3>
@@ -172,7 +166,7 @@
           <i class="bi bi-plus-circle me-1"></i>Novo Bem
         </a>
 
-        <!-- Novo Botão de Importação -->
+        <!-- Botão de Importação -->
         <button type="button" class="btn btn-outline-info" data-bs-toggle="modal" data-bs-target="#importModal">
           <i class="bi bi-file-earmark-excel me-1"></i>Importar Excel
         </button>
@@ -207,7 +201,7 @@
             <strong>Atenção:</strong> Esta ação irá recriar todo o banco de dados.
           </div>
 
-          <form id="importForm" method="POST" action="{{ url_for('importar_excel') }}" enctype="multipart/form-data">
+          <form id="importForm" method="POST" action="{{ url_for('importar_excel') }}" enctype="multipart/form-data" autocomplete="off">
             <div class="mb-3">
               <label for="excel_file" class="form-label fw-semibold">
                 <i class="bi bi-file-spreadsheet me-1"></i>Selecionar arquivo Excel
@@ -233,8 +227,7 @@
 
             <div id="importStatus" class="d-none">
               <div class="progress mb-3">
-                <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar"
-                  style="width: 0%"></div>
+                <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%"></div>
               </div>
               <div id="statusMessage" class="small"></div>
             </div>
@@ -244,7 +237,8 @@
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
             <i class="bi bi-x-circle me-1"></i>Cancelar
           </button>
-          <button type="button" class="btn btn-info" id="btnImportar">
+          <!-- Botão fora do form, mas enviando o form via HTML5 -->
+          <button type="submit" class="btn btn-info" id="btnImportar" form="importForm">
             <i class="bi bi-upload me-1"></i>Importar
           </button>
         </div>
@@ -368,8 +362,7 @@
               <div class="row g-3">
                 <div class="col-md-6">
                   <label class="form-label fw-semibold">Número do Bem *</label>
-                  <input type="text" class="form-control" id="edt_numero" name="numero" required pattern="[A-Za-z0-9-]+"
-                    readonly>
+                  <input type="text" class="form-control" id="edt_numero" name="numero" required pattern="[A-Za-z0-9-]+" readonly>
                 </div>
 
                 <div class="col-md-6">
@@ -389,8 +382,7 @@
 
                 <div class="col-12">
                   <label class="form-label fw-semibold">Localização</label>
-                  <textarea class="form-control" id="edt_localizacao" name="localizacao" rows="2"
-                    placeholder="Ex: Almoxarifado Central, Prateleira B2"></textarea>
+                  <textarea class="form-control" id="edt_localizacao" name="localizacao" rows="2" placeholder="Ex: Almoxarifado Central, Prateleira B2"></textarea>
                 </div>
 
                 <div class="col-12">
@@ -441,7 +433,7 @@
         </div>
         <div class="modal-body">
           <p>Tem certeza que deseja excluir este bem patrimonial?</p>
-          <p class="text-muted small">Esta ação não pode essere desfeita.</p>
+          <p class="text-muted small">Esta ação não pode ser desfeita.</p>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
@@ -504,175 +496,203 @@
 
   <!-- Scripts -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-  <!-- Incluir a biblioteca jsQR para decodificar códigos de barras -->
+  <!-- Biblioteca jsQR para decodificar QR codes -->
   <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.min.js"></script>
   <script>
-    // Variáveis globais
+    // ===== Utilidades =====
+    function confirmSair(event) {
+      const confirmar = confirm('Deseja realmente sair do aplicativo? A janela será fechada.');
+      if (!confirmar) {
+        event.preventDefault();
+        return false;
+      }
+      return true;
+    }
+
+    // Variáveis globais do scanner
     let scannerModalInstance = null;
     let videoStream = null;
     let usingFrontCamera = false;
     let scanningInterval = null;
 
     // Inicialização quando o DOM estiver carregado
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function () {
       // Inicializar o modal do scanner
       scannerModalInstance = new bootstrap.Modal(document.getElementById('scannerModal'));
-      
+
       // Configurar botão da câmera
-      document.getElementById('btnCamera').addEventListener('click', openScanner);
-      
+      document.getElementById('btnCamera')?.addEventListener('click', openScanner);
+
       // Configurar botão de trocar câmera
-      document.getElementById('switchCameraBtn').addEventListener('click', switchCamera);
-      
+      document.getElementById('switchCameraBtn')?.addEventListener('click', switchCamera);
+
       // Parar a câmera quando o modal for fechado
-      document.getElementById('scannerModal').addEventListener('hidden.bs.modal', stopScanner);
-      
-      // Configurar validação do campo de número do bem
-      document.getElementById('numero_bem').addEventListener('input', validateBemNumber);
-      
-      // Configurar envio do formulário
-      document.getElementById('searchForm').addEventListener('submit', handleFormSubmit);
+      document.getElementById('scannerModal')?.addEventListener('hidden.bs.modal', stopScanner);
+
+      // Validação do número do bem
+      document.getElementById('numero_bem')?.addEventListener('input', validateBemNumber);
+
+      // Spinner no submit de busca
+      document.getElementById('searchForm')?.addEventListener('submit', handleFormSubmit);
+
+      // Mostrar o modal de resultado se houver dados do bem
+      {% if bem_detalhes %}
+      const resultadoModal = new bootstrap.Modal(document.getElementById('resultadoModal'));
+      resultadoModal.show();
+      {% endif %}
+
+      // Foco no campo de busca
+      setTimeout(aplicarFocoCampoBusca, 100);
+
+      // Submissão do formulário de importação (mostra progresso, valida e desabilita o botão)
+      document.getElementById('importForm')?.addEventListener('submit', function (e) {
+        const fileInput = document.getElementById('excel_file');
+        if (!fileInput || fileInput.files.length === 0) {
+          e.preventDefault();
+          alert('Por favor, selecione um arquivo Excel.');
+          return;
+        }
+
+        const statusDiv = document.getElementById('importStatus');
+        const statusMessage = document.getElementById('statusMessage');
+        const progressBar = document.querySelector('#importStatus .progress-bar');
+        const btnImportar = document.getElementById('btnImportar');
+
+        statusDiv?.classList.remove('d-none');
+        if (statusMessage) statusMessage.innerHTML = '<i class="bi bi-hourglass-split me-1"></i>Iniciando importação...';
+        if (progressBar) progressBar.style.width = '25%';
+        if (btnImportar) {
+          btnImportar.disabled = true;
+          btnImportar.innerHTML = '<i class="bi bi-hourglass-split me-1"></i>Importando...';
+        }
+
+        // Simulação leve de progresso até a navegação
+        let progress = 25;
+        const intervalId = setInterval(() => {
+          progress = Math.min(progress + 5, 90);
+          if (progressBar) progressBar.style.width = progress + '%';
+          if (progress >= 90) {
+            clearInterval(intervalId);
+            if (statusMessage) statusMessage.innerHTML = '<i class="bi bi-database me-1"></i>Processando...';
+          }
+        }, 200);
+        // Não usamos preventDefault: deixa enviar normalmente para o backend.
+      });
     });
 
-    // Abrir o scanner de câmera
+    // ===== Scanner (QR) =====
     function openScanner() {
       scannerModalInstance.show();
-      setTimeout(startScanner, 500); // Pequeno delay para garantir que o modal esteja visível
+      setTimeout(startScanner, 500);
     }
 
-    // Iniciar o scanner
     async function startScanner() {
       try {
-        // Parar qualquer stream anterior
-        if (videoStream) {
-          stopScanner();
-        }
-        
-        // Solicitar acesso à câmera
+        if (videoStream) stopScanner();
+
         const constraints = {
-          video: { 
+          video: {
             facingMode: usingFrontCamera ? "user" : "environment",
             width: { ideal: 1280 },
             height: { ideal: 720 }
           }
         };
-        
+
         videoStream = await navigator.mediaDevices.getUserMedia(constraints);
         const videoElement = document.getElementById('scanner-video');
         videoElement.srcObject = videoStream;
-        
-        // Aguardar o vídeo estar pronto
-        videoElement.onloadedmetadata = function() {
+        videoElement.onloadedmetadata = function () {
           videoElement.play();
           startScanning();
         };
       } catch (error) {
         console.error('Erro ao acessar a câmera:', error);
-        document.getElementById('scanner-status').innerHTML = 
+        document.getElementById('scanner-status').innerHTML =
           '<i class="bi bi-exclamation-triangle me-1"></i>Erro ao acessar a câmera: ' + error.message;
       }
     }
 
-    // Iniciar o processo de escaneamento
     function startScanning() {
       const videoElement = document.getElementById('scanner-video');
       const canvasElement = document.createElement('canvas');
       const canvas = canvasElement.getContext('2d');
-      
-      scanningInterval = setInterval(function() {
+
+      scanningInterval = setInterval(function () {
         if (videoElement.readyState === videoElement.HAVE_ENOUGH_DATA) {
           canvasElement.height = videoElement.videoHeight;
           canvasElement.width = videoElement.videoWidth;
-          
-          // Desenhar o frame do vídeo no canvas
           canvas.drawImage(videoElement, 0, 0, canvasElement.width, canvasElement.height);
-          
-          // Obter os dados da imagem para processamento
           const imageData = canvas.getImageData(0, 0, canvasElement.width, canvasElement.height);
-          
-          // Tentar encontrar um código QR ou código de barras
-          const code = jsQR(imageData.data, imageData.width, imageData.height, {
-            inversionAttempts: "dontInvert",
-          });
-          
-          // Se encontrou um código
+          const code = jsQR(imageData.data, imageData.width, imageData.height, { inversionAttempts: "dontInvert" });
+
           if (code) {
-            // Preencher o campo com o código lido
             document.getElementById('numero_bem').value = code.data;
-            
-            // Parar o scanner e fechar o modal
             stopScanner();
             scannerModalInstance.hide();
-            
-            // Dar foco ao campo de localização para facilitar a entrada de dados
             document.getElementById('localizacao').focus();
           }
         }
-      }, 100); // Verificar a cada 100ms
+      }, 100);
     }
 
-    // Parar o scanner
     function stopScanner() {
-      // Parar o intervalo de escaneamento
       if (scanningInterval) {
         clearInterval(scanningInterval);
         scanningInterval = null;
       }
-      
-      // Parar a stream de vídeo
       if (videoStream) {
         videoStream.getTracks().forEach(track => track.stop());
         videoStream = null;
       }
     }
 
-    // Alternar entre câmera traseira e frontal
     function switchCamera() {
       usingFrontCamera = !usingFrontCamera;
       stopScanner();
       startScanner();
-      
-      // Atualizar o status
-      document.getElementById('scanner-status').innerHTML = 
-        '<i class="bi bi-info-circle me-1"></i>Usando ' + 
-        (usingFrontCamera ? 'câmera frontal' : 'câmera traseira');
+      document.getElementById('scanner-status').innerHTML =
+        '<i class="bi bi-info-circle me-1"></i>Usando ' + (usingFrontCamera ? 'câmera frontal' : 'câmera traseira');
     }
 
-    // Validar o campo de número do bem
+    // ===== Busca / UX =====
     function validateBemNumber(e) {
       const valor = e.target.value;
       const btn = document.getElementById('btnLocalizar');
-
       if (valor && !/^[A-Za-z0-9-]+$/.test(valor)) {
         e.target.classList.add('is-invalid');
-        btn.disabled = true;
+        if (btn) btn.disabled = true;
       } else {
         e.target.classList.remove('is-invalid');
-        btn.disabled = false;
+        if (btn) btn.disabled = false;
       }
     }
 
-    // Manipular envio do formulário
-    function handleFormSubmit(e) {
+    function handleFormSubmit() {
       const spinner = document.getElementById('loadingSpinner');
       const icon = document.getElementById('btnLocalizar').querySelector('i');
-
       if (spinner) spinner.classList.remove('d-none');
       if (icon) icon.classList.add('d-none');
     }
 
-    // ==============================================
-    // FUNÇÕES DO CRUD (JavaScript para o modal)
-    // ==============================================
-
-    let bemAtual = null;
-
-    // Debug helper
-    function debug(message, data = null) {
-      console.log(`[DEBUG] ${message}`, data || '');
+    function aplicarFocoCampoBusca() {
+      const campoBusca = document.getElementById('numero_bem');
+      if (!campoBusca) return;
+      const modaisAbertos = document.querySelectorAll('.modal.show');
+      if (modaisAbertos.length === 0) {
+        campoBusca.focus();
+        campoBusca.select();
+        campoBusca.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
     }
 
-    // Função para preencher o modal com dados do bem
+    document.addEventListener('hidden.bs.modal', function () {
+      setTimeout(aplicarFocoCampoBusca, 50);
+    });
+
+    // ===== CRUD (Modal de resultados) =====
+    let bemAtual = null;
+    function debug(message, data = null) { console.log(`[DEBUG] ${message}`, data || ''); }
+
     function preencherModalDetalhes(dados) {
       debug('Preenchendo modal com dados:', dados);
       bemAtual = dados;
@@ -687,7 +707,7 @@
               <p class="fs-4 fw-bold mb-0">${dados.numero}</p>
             </div>
           </div>
-          
+
           <div class="col-md-6">
             <div class="border rounded-3 p-3 h-100">
               <h6 class="text-primary fw-semibold mb-2">
@@ -696,35 +716,35 @@
               <p class="fs-5 mb-0">${dados.nome}</p>
             </div>
           </div>
-          
+
           <div class="col-md-6">
             <div class="border rounded-3 p-3 h-100">
               <h6 class="text-primary fw-semibold mb-2">
                 <i class="bi bi-info-circle me-2"></i>Situação
               </h6>
               <p class="mb-0">
-                ${dados.situacao === 'OK' ?
-          '<span class="badge bg-success fs-6 p-2"><i class="bi bi-check-circle-fill me-1"></i>LOCALIZADO</span>' :
-          `<span class="badge bg-warning fs-6 p-2"><i class="bi bi-clock-history me-1"></i>${dados.situacao}</span>`
-        }
+                ${dados.situacao === 'OK'
+                  ? '<span class="badge bg-success fs-6 p-2"><i class="bi bi-check-circle-fill me-1"></i>LOCALIZADO</span>'
+                  : `<span class="badge bg-warning fs-6 p-2"><i class="bi bi-clock-history me-1"></i>${dados.situacao}</span>`
+                }
               </p>
             </div>
           </div>
-          
+
           <div class="col-12">
             <div class="border rounded-3 p-3">
               <h6 class="text-primary fw-semibold mb-2">
                 <i class="bi bi-geo-alt me-2"></i>Localização
               </h6>
               <p class="fs-5 mb-0">
-                ${dados.localizacao ?
-          `<span class="text-success"><i class="bi bi-geo-alt-fill me-1"></i>${dados.localizacao}</span>` :
-          '<span class="text-muted"><i class="bi bi-geo-alt me-1"></i>Localização não informada</span>'
-        }
+                ${dados.localizacao
+                  ? `<span class="text-success"><i class="bi bi-geo-alt-fill me-1"></i>${dados.localizacao}</span>`
+                  : '<span class="text-muted"><i class="bi bi-geo-alt me-1"></i>Localização não informada</span>'
+                }
               </p>
             </div>
           </div>
-          
+
           <div class="col-12">
             <div class="bg-light rounded-3 p-3">
               <h6 class="text-muted mb-2">
@@ -739,13 +759,12 @@
                 <div class="col-md-6">
                   <small class="text-muted">Última localização:</small>
                   <div>${new Date(dados.data_localizacao).toLocaleDateString('pt-BR')}</div>
-                </div>
-                ` : ''}
+                </div>` : ''}
               </div>
             </div>
           </div>
         </div>
-    `;
+      `;
 
       document.getElementById('detalhesBem').innerHTML = detalhesHTML;
       document.getElementById('botoesVisualizacao').style.display = 'flex';
@@ -754,32 +773,23 @@
       document.getElementById('formEdicao').style.display = 'none';
     }
 
-    // Funções do CRUD
     function habilitarEdicao() {
       debug('habilitarEdicao chamada');
-      console.log('bemAtual disponível:', bemAtual);
-
       if (!bemAtual) {
         alert('Erro: Dados do bem não carregados. Por favor, recarregue a página e tente novamente.');
-        console.error('bemAtual é null ou undefined');
         return;
       }
-
       try {
-        // Preencher formulário
         document.getElementById('bem_id').value = bemAtual.id;
         document.getElementById('edt_numero').value = bemAtual.numero;
         document.getElementById('edt_nome').value = bemAtual.nome;
         document.getElementById('edt_localizacao').value = bemAtual.localizacao || '';
         document.getElementById('edt_situacao').value = bemAtual.situacao;
 
-        // Alternar visibilidade
         document.getElementById('detalhesBem').style.display = 'none';
         document.getElementById('formEdicao').style.display = 'block';
         document.getElementById('botoesVisualizacao').style.display = 'none';
         document.getElementById('botoesEdicao').style.display = 'flex';
-
-        debug('Edição habilitada com sucesso');
       } catch (error) {
         console.error('Erro ao habilitar edição:', error);
         alert('Erro ao carregar formulário de edição.');
@@ -787,7 +797,6 @@
     }
 
     function cancelarEdicao() {
-      debug('cancelarEdicao chamada');
       document.getElementById('detalhesBem').style.display = 'block';
       document.getElementById('formEdicao').style.display = 'none';
       document.getElementById('botoesVisualizacao').style.display = 'flex';
@@ -795,8 +804,6 @@
     }
 
     function salvarEdicao() {
-      debug('salvarEdicao chamada');
-
       try {
         const formData = {
           bem_id: parseInt(document.getElementById('bem_id').value),
@@ -806,26 +813,18 @@
           situacao: document.getElementById('edt_situacao').value
         };
 
-        debug('Dados do formulário para enviar:', formData);
-
         fetch('/api/bem/editar', {
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
+          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(formData)
         })
           .then(response => {
-            if (!response.ok) {
-              throw new Error(`HTTP error! status: ${response.status}`);
-            }
+            if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
             return response.json();
           })
           .then(data => {
-            debug('Resposta da API:', data);
             if (data.success) {
               alert(data.message);
-              // Redirecionar em vez de recarregar
               window.location.href = "/";
             } else {
               alert('Erro: ' + data.message);
@@ -842,7 +841,6 @@
     }
 
     function confirmarExclusao() {
-      debug('confirmarExclusao chamada');
       if (!bemAtual) {
         alert('Dados do bem não disponíveis para exclusão.');
         return;
@@ -851,16 +849,12 @@
     }
 
     function excluirBem() {
-      debug('excluirBem chamada', bemAtual);
-
       if (!bemAtual || !bemAtual.id) {
         alert('Erro: ID do bem não disponível.');
         return;
       }
 
-      fetch(`/api/bem/excluir/${bemAtual.id}`, {
-        method: 'DELETE'
-      })
+      fetch(`/api/bem/excluir/${bemAtual.id}`, { method: 'DELETE' })
         .then(response => response.json())
         .then(data => {
           bootstrap.Modal.getInstance(document.getElementById('confirmacaoExclusaoModal')).hide();
@@ -879,67 +873,19 @@
         });
     }
 
-    // Inicialização
+    // Preenchimento inicial do bem no modal (se existir)
+    {% if bem_detalhes %}
     document.addEventListener('DOMContentLoaded', function () {
-      debug('Página carregada');
-
-      // Verificar se temos dados do bem na template
-      {% if bem_detalhes %}
       bemAtual = {{ bem_detalhes | tojson | safe }};
       debug('bemAtual carregado da template', bemAtual);
-      
-      // Mostrar o modal de resultado se houver dados do bem
-      const resultadoModal = new bootstrap.Modal(document.getElementById('resultadoModal'));
-      resultadoModal.show();
-      {% endif %}
-
-      // Configurar evento do modal
       const modal = document.getElementById('resultadoModal');
       if (modal) {
         modal.addEventListener('show.bs.modal', function () {
-          debug('Modal aberto');
-          if (bemAtual) {
-            preencherModalDetalhes(bemAtual);
-          }
+          if (bemAtual) preencherModalDetalhes(bemAtual);
         });
       }
-
-      // Debug: Expor funções globalmente para teste
-      window.habilitarEdicao = habilitarEdicao;
-      window.bemAtual = bemAtual;
     });
-
-    // Foco automático no campo de número do bem - Solução Completa
-    function aplicarFocoCampoBusca() {
-      const campoBusca = document.getElementById('numero_bem');
-      
-      if (!campoBusca) return;
-      
-      // Verificar se há algum modal aberto
-      const modaisAbertos = document.querySelectorAll('.modal.show');
-      
-      // Só aplicar foco se não houver modal aberto
-      if (modaisAbertos.length === 0) {
-        // Forçar o foco e selecionar o texto
-        campoBusca.focus();
-        campoBusca.select();
-        
-        // Rolagem suave até o campo (caso necessário)
-        campoBusca.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      }
-    }
-
-    // Executar quando o DOM estiver pronto
-    document.addEventListener('DOMContentLoaded', function() {
-      // Executar após um pequeno delay para garantir que todos os elementos estejam renderizados
-      setTimeout(aplicarFocoCampoBusca, 100);
-    });
-
-    // Reaplicar foco quando modais forem fechados
-    document.addEventListener('hidden.bs.modal', function() {
-      setTimeout(aplicarFocoCampoBusca, 50);
-    });
-
+    {% endif %}
   </script>
 </body>
 
