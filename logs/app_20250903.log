@@ -1,0 +1,103 @@
+2025-09-03 00:29:31,582 - utils.logger - INFO - Iniciando aplicação Flask
+2025-09-03 00:29:31,641 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-09-03 00:29:31,641 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-09-03 00:29:31,642 - werkzeug - INFO -  * Restarting with stat
+2025-09-03 00:29:32,175 - utils.logger - INFO - Iniciando aplicação Flask
+2025-09-03 00:29:32,185 - werkzeug - WARNING -  * Debugger is active!
+2025-09-03 00:29:32,187 - werkzeug - INFO -  * Debugger PIN: 425-947-988
+2025-09-03 00:29:33,782 - werkzeug - INFO - 127.0.0.1 - - [03/Sep/2025 00:29:33] "GET / HTTP/1.1" 200 -
+2025-09-03 00:29:33,860 - werkzeug - INFO - 127.0.0.1 - - [03/Sep/2025 00:29:33] "GET /static/style.css HTTP/1.1" 200 -
+2025-09-03 00:29:33,889 - werkzeug - INFO - 127.0.0.1 - - [03/Sep/2025 00:29:33] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2025-09-03 00:29:47,592 - werkzeug - INFO - 127.0.0.1 - - [03/Sep/2025 00:29:47] "GET /visualizar/localizados HTTP/1.1" 200 -
+2025-09-03 00:29:47,614 - werkzeug - INFO - 127.0.0.1 - - [03/Sep/2025 00:29:47] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-09-03 00:29:59,453 - werkzeug - INFO - 127.0.0.1 - - [03/Sep/2025 00:29:59] "GET / HTTP/1.1" 200 -
+2025-09-03 00:29:59,476 - werkzeug - INFO - 127.0.0.1 - - [03/Sep/2025 00:29:59] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-09-03 00:30:05,215 - werkzeug - INFO - 127.0.0.1 - - [03/Sep/2025 00:30:05] "GET /visualizar/nao-localizados HTTP/1.1" 200 -
+2025-09-03 00:30:05,235 - werkzeug - INFO - 127.0.0.1 - - [03/Sep/2025 00:30:05] "GET /static/style.css HTTP/1.1" 200 -
+2025-09-03 00:30:12,608 - werkzeug - INFO - 127.0.0.1 - - [03/Sep/2025 00:30:12] "GET / HTTP/1.1" 200 -
+2025-09-03 00:30:12,632 - werkzeug - INFO - 127.0.0.1 - - [03/Sep/2025 00:30:12] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-09-03 00:30:16,769 - utils.logger - INFO - Localização do bem 404612: Sala da Direção
+2025-09-03 00:30:16,770 - utils.logger - INFO - Verificação do bem 404612: Encontrado
+2025-09-03 00:30:17,057 - werkzeug - INFO - 127.0.0.1 - - [03/Sep/2025 00:30:17] "POST / HTTP/1.1" 200 -
+2025-09-03 00:30:17,080 - werkzeug - INFO - 127.0.0.1 - - [03/Sep/2025 00:30:17] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-09-03 00:30:57,344 - utils.logger - INFO - Verificação do bem 404612: Encontrado
+2025-09-03 00:30:57,478 - werkzeug - INFO - 127.0.0.1 - - [03/Sep/2025 00:30:57] "POST / HTTP/1.1" 200 -
+2025-09-03 00:30:57,498 - werkzeug - INFO - 127.0.0.1 - - [03/Sep/2025 00:30:57] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-09-03 00:31:12,365 - werkzeug - INFO - 127.0.0.1 - - [03/Sep/2025 00:31:12] "GET /visualizar/localizados HTTP/1.1" 200 -
+2025-09-03 00:31:12,387 - werkzeug - INFO - 127.0.0.1 - - [03/Sep/2025 00:31:12] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-09-03 00:31:22,475 - werkzeug - INFO - 127.0.0.1 - - [03/Sep/2025 00:31:22] "GET / HTTP/1.1" 200 -
+2025-09-03 00:31:22,497 - werkzeug - INFO - 127.0.0.1 - - [03/Sep/2025 00:31:22] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-09-03 00:31:24,651 - utils.logger - INFO - Relatório exportado: D:\controle_estoque_db\relatorios\bens_localizados_20250903-003124.xlsx (4 registros)
+2025-09-03 00:31:24,662 - werkzeug - INFO - 127.0.0.1 - - [03/Sep/2025 00:31:24] "GET /exportar/localizados HTTP/1.1" 200 -
+2025-09-03 00:31:47,618 - werkzeug - INFO - 127.0.0.1 - - [03/Sep/2025 00:31:47] "GET /visualizar/localizados HTTP/1.1" 200 -
+2025-09-03 00:31:47,641 - werkzeug - INFO - 127.0.0.1 - - [03/Sep/2025 00:31:47] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-09-03 00:31:49,853 - werkzeug - INFO - 127.0.0.1 - - [03/Sep/2025 00:31:49] "GET / HTTP/1.1" 200 -
+2025-09-03 00:31:49,874 - werkzeug - INFO - 127.0.0.1 - - [03/Sep/2025 00:31:49] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-09-03 00:31:51,324 - werkzeug - INFO - 127.0.0.1 - - [03/Sep/2025 00:31:51] "GET /visualizar/nao-localizados HTTP/1.1" 200 -
+2025-09-03 00:31:51,344 - werkzeug - INFO - 127.0.0.1 - - [03/Sep/2025 00:31:51] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-09-03 00:31:57,182 - werkzeug - INFO - 127.0.0.1 - - [03/Sep/2025 00:31:57] "GET /visualizar/nao-localizados?pagina=1&por_pagina=50 HTTP/1.1" 200 -
+2025-09-03 00:31:57,203 - werkzeug - INFO - 127.0.0.1 - - [03/Sep/2025 00:31:57] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-09-03 00:32:00,758 - werkzeug - INFO - 127.0.0.1 - - [03/Sep/2025 00:32:00] "GET /visualizar/nao-localizados?pagina=2&por_pagina=50 HTTP/1.1" 200 -
+2025-09-03 00:32:00,775 - werkzeug - INFO - 127.0.0.1 - - [03/Sep/2025 00:32:00] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-09-03 00:32:05,202 - werkzeug - INFO - 127.0.0.1 - - [03/Sep/2025 00:32:05] "GET /visualizar/nao-localizados?pagina=3&por_pagina=50 HTTP/1.1" 200 -
+2025-09-03 00:32:05,224 - werkzeug - INFO - 127.0.0.1 - - [03/Sep/2025 00:32:05] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-09-03 00:32:08,666 - werkzeug - INFO - 127.0.0.1 - - [03/Sep/2025 00:32:08] "GET /visualizar/nao-localizados?pagina=4&por_pagina=50 HTTP/1.1" 200 -
+2025-09-03 00:32:08,686 - werkzeug - INFO - 127.0.0.1 - - [03/Sep/2025 00:32:08] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-09-03 00:32:23,449 - werkzeug - INFO - 127.0.0.1 - - [03/Sep/2025 00:32:23] "GET / HTTP/1.1" 200 -
+2025-09-03 00:32:23,474 - werkzeug - INFO - 127.0.0.1 - - [03/Sep/2025 00:32:23] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-09-03 00:32:28,580 - werkzeug - INFO - 127.0.0.1 - - [03/Sep/2025 00:32:28] "GET /novo-bem HTTP/1.1" 200 -
+2025-09-03 00:32:28,601 - werkzeug - INFO - 127.0.0.1 - - [03/Sep/2025 00:32:28] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-09-03 00:33:36,733 - utils.logger - INFO - Novo bem criado: 003 - TV 50 Samsung 45khlg
+2025-09-03 00:33:36,734 - werkzeug - INFO - 127.0.0.1 - - [03/Sep/2025 00:33:36] "[32mPOST /criar-bem HTTP/1.1[0m" 302 -
+2025-09-03 00:33:36,804 - werkzeug - INFO - 127.0.0.1 - - [03/Sep/2025 00:33:36] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-09-03 00:33:43,832 - utils.logger - INFO - Localização do bem 003: Sala teste 03
+2025-09-03 00:33:43,833 - utils.logger - INFO - Verificação do bem 003: Encontrado
+2025-09-03 00:33:43,941 - werkzeug - INFO - 127.0.0.1 - - [03/Sep/2025 00:33:43] "POST / HTTP/1.1" 200 -
+2025-09-03 00:33:43,966 - werkzeug - INFO - 127.0.0.1 - - [03/Sep/2025 00:33:43] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-09-03 00:33:56,405 - werkzeug - INFO - 127.0.0.1 - - [03/Sep/2025 00:33:56] "GET /visualizar/nao-localizados HTTP/1.1" 200 -
+2025-09-03 00:33:56,426 - werkzeug - INFO - 127.0.0.1 - - [03/Sep/2025 00:33:56] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-09-03 00:34:03,137 - werkzeug - INFO - 127.0.0.1 - - [03/Sep/2025 00:34:03] "GET / HTTP/1.1" 200 -
+2025-09-03 00:34:03,159 - werkzeug - INFO - 127.0.0.1 - - [03/Sep/2025 00:34:03] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-09-03 00:34:07,563 - utils.logger - INFO - Localização do bem 414816: Sala da Direção
+2025-09-03 00:34:07,563 - utils.logger - INFO - Verificação do bem 414816: Encontrado
+2025-09-03 00:34:07,691 - werkzeug - INFO - 127.0.0.1 - - [03/Sep/2025 00:34:07] "POST / HTTP/1.1" 200 -
+2025-09-03 00:34:07,710 - werkzeug - INFO - 127.0.0.1 - - [03/Sep/2025 00:34:07] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-09-03 00:34:17,223 - werkzeug - INFO - 127.0.0.1 - - [03/Sep/2025 00:34:17] "GET /visualizar/localizados HTTP/1.1" 200 -
+2025-09-03 00:34:17,244 - werkzeug - INFO - 127.0.0.1 - - [03/Sep/2025 00:34:17] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-09-03 00:34:33,177 - werkzeug - INFO - 127.0.0.1 - - [03/Sep/2025 00:34:33] "GET / HTTP/1.1" 200 -
+2025-09-03 00:34:33,201 - werkzeug - INFO - 127.0.0.1 - - [03/Sep/2025 00:34:33] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-09-03 00:34:38,558 - utils.logger - INFO - Localização do bem 003: Sala teste 03
+2025-09-03 00:34:38,558 - utils.logger - INFO - Verificação do bem 003: Encontrado
+2025-09-03 00:34:38,686 - werkzeug - INFO - 127.0.0.1 - - [03/Sep/2025 00:34:38] "POST / HTTP/1.1" 200 -
+2025-09-03 00:34:38,707 - werkzeug - INFO - 127.0.0.1 - - [03/Sep/2025 00:34:38] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-09-03 00:34:56,675 - utils.logger - INFO - Bem 003 excluído
+2025-09-03 00:34:56,676 - werkzeug - INFO - 127.0.0.1 - - [03/Sep/2025 00:34:56] "DELETE /api/bem/excluir/320179 HTTP/1.1" 200 -
+2025-09-03 00:34:58,800 - werkzeug - INFO - 127.0.0.1 - - [03/Sep/2025 00:34:58] "GET / HTTP/1.1" 200 -
+2025-09-03 00:34:58,818 - werkzeug - INFO - 127.0.0.1 - - [03/Sep/2025 00:34:58] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-09-03 00:35:04,460 - werkzeug - INFO - 127.0.0.1 - - [03/Sep/2025 00:35:04] "GET /visualizar/nao-localizados HTTP/1.1" 200 -
+2025-09-03 00:35:04,481 - werkzeug - INFO - 127.0.0.1 - - [03/Sep/2025 00:35:04] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-09-03 00:35:06,280 - werkzeug - INFO - 127.0.0.1 - - [03/Sep/2025 00:35:06] "GET / HTTP/1.1" 200 -
+2025-09-03 00:35:06,306 - werkzeug - INFO - 127.0.0.1 - - [03/Sep/2025 00:35:06] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-09-03 00:35:12,232 - utils.logger - INFO - Relatório exportado: D:\controle_estoque_db\relatorios\bens_nao_localizados_20250903-003512.xlsx (197 registros)
+2025-09-03 00:35:12,241 - werkzeug - INFO - 127.0.0.1 - - [03/Sep/2025 00:35:12] "GET /exportar/nao-localizados HTTP/1.1" 200 -
+2025-09-03 00:36:02,060 - utils.logger - INFO - Colunas encontradas no Excel: ['nome', 'numero do bem', 'situação', 'localização']
+2025-09-03 00:36:02,061 - utils.logger - INFO - Coluna 'numero' detectada como: 'NUMERO DO BEM'
+2025-09-03 00:36:02,061 - utils.logger - INFO - Coluna 'nome' detectada como: 'NOME '
+2025-09-03 00:36:02,061 - utils.logger - INFO - Coluna 'localizacao' detectada como: 'LOCALIZAÇÃO'
+2025-09-03 00:36:02,061 - utils.logger - INFO - Coluna 'situacao' detectada como: 'SITUAÇÃO'
+2025-09-03 00:36:02,483 - utils.logger - INFO - Backup criado: relatorios/backup_controle_20250903_003602.db
+2025-09-03 00:36:02,483 - utils.logger - INFO - Iniciando importação do arquivo: temp\controle_patrimonial.xlsx
+2025-09-03 00:36:02,510 - utils.logger - INFO - Colunas encontradas no Excel: ['nome', 'numero do bem', 'situação', 'localização']
+2025-09-03 00:36:02,510 - utils.logger - INFO - Coluna 'numero' detectada como: 'NUMERO DO BEM'
+2025-09-03 00:36:02,510 - utils.logger - INFO - Coluna 'nome' detectada como: 'NOME '
+2025-09-03 00:36:02,510 - utils.logger - INFO - Coluna 'localizacao' detectada como: 'LOCALIZAÇÃO'
+2025-09-03 00:36:02,510 - utils.logger - INFO - Coluna 'situacao' detectada como: 'SITUAÇÃO'
+2025-09-03 00:36:02,510 - utils.logger - INFO - Mapeamento de colunas detectado: {'numero': 'NUMERO DO BEM', 'nome': 'NOME ', 'localizacao': 'LOCALIZAÇÃO', 'situacao': 'SITUAÇÃO'}
+2025-09-03 00:36:02,523 - utils.logger - INFO - Tabela limpa para nova importação
+2025-09-03 00:36:02,531 - utils.logger - INFO - Registros processados: 100
+2025-09-03 00:36:02,541 - utils.logger - INFO - Registros processados: 200
+2025-09-03 00:36:02,707 - werkzeug - INFO - 127.0.0.1 - - [03/Sep/2025 00:36:02] "POST /importar-excel HTTP/1.1" 200 -
+2025-09-03 00:36:02,729 - werkzeug - INFO - 127.0.0.1 - - [03/Sep/2025 00:36:02] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-09-03 00:36:35,609 - werkzeug - INFO - 127.0.0.1 - - [03/Sep/2025 00:36:35] "GET /sair HTTP/1.1" 200 -
+2025-09-03 00:36:35,634 - werkzeug - INFO - 127.0.0.1 - - [03/Sep/2025 00:36:35] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
