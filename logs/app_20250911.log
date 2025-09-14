@@ -1,0 +1,24 @@
+2025-09-11 11:58:35,308 - utils.logger - INFO - Iniciando aplicação Flask
+2025-09-11 11:58:35,355 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-09-11 11:58:35,356 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-09-11 11:58:35,359 - werkzeug - INFO -  * Restarting with stat
+2025-09-11 11:58:36,372 - utils.logger - INFO - Iniciando aplicação Flask
+2025-09-11 11:58:36,388 - werkzeug - WARNING -  * Debugger is active!
+2025-09-11 11:58:36,392 - werkzeug - INFO -  * Debugger PIN: 584-108-485
+2025-09-11 11:58:44,296 - werkzeug - INFO - 127.0.0.1 - - [11/Sep/2025 11:58:44] "GET / HTTP/1.1" 200 -
+2025-09-11 11:58:44,311 - werkzeug - INFO - 127.0.0.1 - - [11/Sep/2025 11:58:44] "GET /static/style.css HTTP/1.1" 200 -
+2025-09-11 11:59:29,358 - werkzeug - INFO - 127.0.0.1 - - [11/Sep/2025 11:59:29] "GET /visualizar/nao-localizados HTTP/1.1" 200 -
+2025-09-11 11:59:29,367 - werkzeug - INFO - 127.0.0.1 - - [11/Sep/2025 11:59:29] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-09-11 11:59:39,296 - utils.logger - INFO - Localização do bem 404500: Sala da Direção
+2025-09-11 11:59:39,297 - utils.logger - INFO - Verificação do bem 404500: Encontrado
+2025-09-11 11:59:39,405 - werkzeug - INFO - 127.0.0.1 - - [11/Sep/2025 11:59:39] "POST / HTTP/1.1" 200 -
+2025-09-11 11:59:39,414 - werkzeug - INFO - 127.0.0.1 - - [11/Sep/2025 11:59:39] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-09-11 11:59:52,082 - utils.logger - INFO - Bem 320181 atualizado com sucesso
+2025-09-11 11:59:52,085 - werkzeug - INFO - 127.0.0.1 - - [11/Sep/2025 11:59:52] "POST /api/bem/editar HTTP/1.1" 200 -
+2025-09-11 11:59:53,680 - werkzeug - INFO - 127.0.0.1 - - [11/Sep/2025 11:59:53] "GET / HTTP/1.1" 200 -
+2025-09-11 11:59:53,691 - werkzeug - INFO - 127.0.0.1 - - [11/Sep/2025 11:59:53] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-09-11 14:26:29,704 - werkzeug - INFO - 127.0.0.1 - - [11/Sep/2025 14:26:29] "GET / HTTP/1.1" 200 -
+2025-09-11 14:26:29,733 - werkzeug - INFO - 127.0.0.1 - - [11/Sep/2025 14:26:29] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-09-11 14:26:29,738 - werkzeug - INFO - 127.0.0.1 - - [11/Sep/2025 14:26:29] "GET / HTTP/1.1" 200 -
+2025-09-11 14:26:29,870 - werkzeug - INFO - 127.0.0.1 - - [11/Sep/2025 14:26:29] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
