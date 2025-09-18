@@ -1,0 +1,16 @@
+2025-09-18 13:42:04,626 - utils.logger - INFO - Iniciando aplicação Flask
+2025-09-18 13:42:04,687 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-09-18 13:42:04,687 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-09-18 13:42:04,689 - werkzeug - INFO -  * Restarting with stat
+2025-09-18 13:42:05,695 - utils.logger - INFO - Iniciando aplicação Flask
+2025-09-18 13:42:05,711 - werkzeug - WARNING -  * Debugger is active!
+2025-09-18 13:42:05,716 - werkzeug - INFO -  * Debugger PIN: 584-108-485
+2025-09-18 13:44:13,783 - utils.logger - INFO - Iniciando aplicação Flask
+2025-09-18 13:44:13,810 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-09-18 13:44:13,810 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-09-18 13:44:13,811 - werkzeug - INFO -  * Restarting with stat
+2025-09-18 13:44:14,745 - utils.logger - INFO - Iniciando aplicação Flask
+2025-09-18 13:44:14,760 - werkzeug - WARNING -  * Debugger is active!
+2025-09-18 13:44:14,764 - werkzeug - INFO -  * Debugger PIN: 584-108-485
