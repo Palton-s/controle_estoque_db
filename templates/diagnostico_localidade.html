@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Diagnóstico Localidade</title>
+    <style>
+        table { border-collapse: collapse; width: 100%; margin: 10px 0; }
+        th, td { border: 1px solid #ddd; padding: 8px; }
+        th { background-color: #f2f2f2; }
+        .success { background-color: #d4edda; }
+        .warning { background-color: #fff3cd; }
+        .danger { background-color: #f8d7da; }
+    </style>
+</head>
+<body>
+    <h1>Diagnóstico para Localidade: "{{ localidade }}"</h1>
+    
+    {% if resultado.error %}
+        <div class="danger">
+            <h2>Erro</h2>
+            <p>{{ resultado.error }}</p>
+        </div>
+    {% else %}
+        <h2>Busca Exata</h2>
+        <table>
+            <tr>
+                <th>Registros Encontrados</th>
+                <th>Números dos Bens</th>
+            </tr>
+            <tr class="{% if resultado.busca_exata.count > 0 %}success{% else %}danger{% endif %}">
+                <td>{{ resultado.busca_exata.count }}</td>
+                <td>
+                    {% if resultado.busca_exata.numeros %}
+                        {{ resultado.busca_exata.numeros|join(', ') }}
+                    {% else %}
+                        Nenhum
+                    {% endif %}
+                </td>
+            </tr>
+        </table>
+
+        <h2>Busca Case-Insensitive</h2>
+        <table>
+            <tr>
+                <th>Registros Encontrados</th>
+                <th>Números dos Bens</th>
+            </tr>
+            <tr class="{% if resultado.busca_case_insensitive.count > 0 %}success{% else %}danger{% endif %}">
+                <td>{{ resultado.busca_case_insensitive.count }}</td>
+                <td>
+                    {% if resultado.busca_case_insensitive.numeros %}
+                        {{ resultado.busca_case_insensitive.numeros|join(', ') }}
+                    {% else %}
+                        Nenhum
+                    {% endif %}
+                </td>
+            </tr>
+        </table>
+
+        <h2>Variações Encontradas</h2>
+        <table>
+            <tr>
+                <th>Variações da Localidade</th>
+            </tr>
+            {% for variacao in resultado.variacoes %}
+            <tr>
+                <td>{{ variacao }}</td>
+            </tr>
+            {% else %}
+            <tr class="danger">
+                <td>Nenhuma variação encontrada</td>
+            </tr>
+            {% endfor %}
+        </table>
+
+        {% if resultado.exemplos %}
+        <h2>Exemplos de Registros</h2>
+        <table>
+            <tr>
+                <th>Número</th>
+                <th>Nome</th>
+                <th>Localização</th>
+            </tr>
+            {% for exemplo in resultado.exemplos %}
+            <tr>
+                <td>{{ exemplo[0] }}</td>
+                <td>{{ exemplo[1] }}</td>
+                <td>{{ exemplo[2] }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+        {% endif %}
+    {% endif %}
+
+    <a href="/relatorio-localidades">Voltar ao Relatório</a>
+</body>
+</html>

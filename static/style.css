@@ -767,3 +767,32 @@ footer {
 #searchForm .btn {
   height: 46px;
 }
+
+/* Estilos para a tabela do relatório */
+.table-responsive {
+    max-height: 600px;
+    overflow-y: auto;
+}
+
+.table th {
+    position: sticky;
+    top: 0;
+    background-color: #f8f9fa;
+    z-index: 10;
+}
+
+/* Melhorias na paginação */
+.pagination {
+    margin-bottom: 0;
+}
+
+/* Badges personalizados */
+.badge-localizado {
+    background-color: #198754;
+    color: white;
+}
+
+.badge-pendente {
+    background-color: #ffc107;
+    color: black;
+}

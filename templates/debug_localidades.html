@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Debug Localidades</title>
+</head>
+<body>
+    <h1>Debug Localidades</h1>
+    <table border="1">
+        <tr>
+            <th>Localidade</th>
+            <th>Existe</th>
+            <th>Quantidade</th>
+        </tr>
+        {% for resultado in resultados %}
+        <tr>
+            <td>{{ resultado.localidade }}</td>
+            <td>{{ resultado.existe }}</td>
+            <td>{{ resultado.quantidade }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>

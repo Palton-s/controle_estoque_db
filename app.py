@@ -20,7 +20,12 @@ from utils.db_handler import (
     criar_novo_bem,
     buscar_bens_por_nome,
     contar_bens,  # Certifique-se que esta função existe!
-    obter_bens_paginados
+    obter_bens_paginados,
+    obter_localidades,
+    obter_bens_por_localidade,
+    obter_todos_bens_por_localidade,
+     verificar_localidade_existe
+    
 )
 
 from utils.excel_importer import importar_excel_para_sqlite, verificar_estrutura_excel
@@ -49,6 +54,197 @@ def pluralize_filter(value, singular, plural):
         return singular if num == 1 else plural
     except (ValueError, TypeError):
         return plural
+
+@app.route('/relatorio-localidades')
+def relatorio_localidades():
+    """Página de relatório por localidades"""
+    if not os.path.exists(DB_PATH):
+        return render_template('relatorio_localidades.html', 
+                             localidades=[],
+                             paginacao=None,
+                             mensagem="Banco de dados não encontrado.")
+
+    try:
+        # Obter todas as localidades
+        localidades = obter_localidades(DB_PATH)
+        
+        # Obter parâmetros da requisição
+        localidade_selecionada = request.args.get('localidade', '')
+        pagina = request.args.get('pagina', 1, type=int)
+        por_pagina = request.args.get('por_pagina', 50, type=int)
+        
+        # Validar parâmetros
+        pagina = max(1, pagina)
+        por_pagina = max(10, min(por_pagina, 500))
+        
+        paginacao = None
+        if localidade_selecionada:
+            # Usar a função corrigida
+            paginacao = obter_bens_por_localidade(DB_PATH, localidade_selecionada, pagina, por_pagina)
+        
+        return render_template('relatorio_localidades.html', 
+                             localidades=localidades,
+                             localidade_selecionada=localidade_selecionada,
+                             paginacao=paginacao)
+            
+    except Exception as e:
+        logger.error(f"Erro em /relatorio-localidades: {str(e)}")
+        return render_template('relatorio_localidades.html', 
+                             localidades=[],
+                             paginacao=None,
+                             mensagem=f"Erro ao carregar dados: {str(e)}")
+        
+@app.route('/exportar-localidade/<localidade>')
+def exportar_localidade(localidade: str):
+    """Exporta relatório por localidade para Excel"""
+    if not os.path.exists(DB_PATH):
+        abort(404, description="Banco de dados não encontrado.")
+
+    try:
+        # Obter todos os bens da localidade
+        registros = obter_todos_bens_por_localidade(DB_PATH, localidade)
+        
+        if not registros:
+            abort(404, description=f"Nenhum bem encontrado para a localidade: {localidade}")
+            
+    except Exception as e:
+        logger.error(f"Falha ao preparar dados para exportação: {str(e)}")
+        abort(500, description="Erro ao preparar dados para exportação.")
+
+    # Exportar para Excel
+    try:
+        import pandas as pd
+        from urllib.parse import quote
+        
+        ts = datetime.now().strftime("%Y%m%d-%H%M%S")
+        out_dir = caminho_relativo("relatorios")
+        os.makedirs(out_dir, exist_ok=True)
+        
+        # Nome do arquivo seguro para a localidade
+        nome_localidade_seguro = re.sub(r'[^\w\s-]', '', localidade).strip().lower()
+        nome_localidade_seguro = re.sub(r'[-\s]+', '_', nome_localidade_seguro)
+        
+        out_path = os.path.join(out_dir, f"bens_localidade_{nome_localidade_seguro}_{ts}.xlsx")
+
+        df = pd.DataFrame(registros)
+        if 'numero' in df.columns:
+            df = df.sort_values(by='numero')
+        df.to_excel(out_path, index=False)
+        
+        logger.info(f"Relatório por localidade exportado: {out_path} ({len(registros)} registros)")
+        return send_file(out_path, as_attachment=True)
+        
+    except Exception as e:
+        logger.error(f"Falha ao exportar Excel: {str(e)}")
+        abort(500, description="Erro ao exportar Excel.")
+
+@app.route('/debug-localidades')
+def debug_localidades():
+    """Página de debug para verificar localidades"""
+    from utils.db_handler import debug_localidades_completas
+    
+    resultados = debug_localidades_completas(DB_PATH)
+    
+    return render_template('debug_localidades.html', resultados=resultados)
+
+@app.route('/teste-localidade/<localidade>')
+def teste_localidade(localidade):
+    """Teste direto de uma localidade"""
+    try:
+        # Testar a função diretamente
+        resultado = obter_bens_por_localidade(DB_PATH, localidade, 1, 10)
+        
+        return jsonify({
+            'localidade': localidade,
+            'resultado': resultado,
+            'existe': verificar_localidade_existe(DB_PATH, localidade)
+        })
+    except Exception as e:
+        return jsonify({'error': str(e)})
+    
+
+@app.route('/diagnostico-localidade/<localidade>')
+def diagnostico_localidade(localidade):
+    """Página de diagnóstico para uma localidade"""
+    from utils.db_handler import diagnosticar_localidade
+    
+    resultado = diagnosticar_localidade(DB_PATH, localidade)
+    
+    return render_template('diagnostico_localidade.html', 
+                         localidade=localidade,
+                         resultado=resultado)
+
+@app.route('/teste-localidade-simples/<localidade>')
+def teste_localidade_simples(localidade):
+    """Teste direto sem paginação"""
+    try:
+        conn = sqlite3.connect(DB_PATH)
+        cursor = conn.cursor()
+        
+        # Buscar todos os bens desta localidade
+        cursor.execute(
+            """
+            SELECT id, numero, nome, situacao, localizacao
+            FROM bens 
+            WHERE localizacao = ?
+            ORDER BY numero
+            """,
+            (localidade,)
+        )
+        
+        colunas = [desc[0] for desc in cursor.description]
+        registros = [dict(zip(colunas, row)) for row in cursor.fetchall()]
+        
+        conn.close()
+        
+        return render_template('teste_simples.html', 
+                             localidade=localidade,
+                             registros=registros,
+                             total=len(registros))
+            
+    except Exception as e:
+        return f"Erro: {str(e)}"
+
+
+@app.route('/teste-consulta-direta/<localidade>')
+def teste_consulta_direta(localidade):
+    """Teste de consulta direta no banco"""
+    try:
+        conn = sqlite3.connect(DB_PATH)
+        cursor = conn.cursor()
+        
+        # Teste 1: Consulta exata
+        cursor.execute(
+            "SELECT COUNT(*) as count_exato FROM bens WHERE localizacao = ?",
+            (localidade,)
+        )
+        count_exato = cursor.fetchone()[0]
+        
+        # Teste 2: Consulta LIKE
+        cursor.execute(
+            "SELECT COUNT(*) as count_like FROM bens WHERE localizacao LIKE ?",
+            (f"%{localidade}%",)
+        )
+        count_like = cursor.fetchone()[0]
+        
+        # Teste 3: Ver alguns registros
+        cursor.execute(
+            "SELECT numero, nome, localizacao FROM bens WHERE localizacao = ? LIMIT 5",
+            (localidade,)
+        )
+        exemplos = cursor.fetchall()
+        
+        conn.close()
+        
+        return jsonify({
+            'localidade': localidade,
+            'count_exato': count_exato,
+            'count_like': count_like,
+            'exemplos': exemplos
+        })
+        
+    except Exception as e:
+        return jsonify({'error': str(e)})
 
 # ==============================
 # Utilitário de caminho (PyInstaller)
