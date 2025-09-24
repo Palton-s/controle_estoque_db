@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,7 +8,6 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
-
 <body class="bg-light">
     <!-- Header -->
     <header class="bg-primary text-white shadow-sm">
@@ -43,8 +41,8 @@
                         <select class="form-select" id="localidade" name="localidade" required>
                             <option value="">Selecione uma localidade...</option>
                             {% for localidade in localidades %}
-                            <option value="{{ localidade }}" {% if localidade==localidade_selecionada %}selected{% endif
-                                %}>
+                            <option value="{{ localidade }}" 
+                                {% if localidade == localidade_selecionada %}selected{% endif %}>
                                 {{ localidade }}
                             </option>
                             {% endfor %}
@@ -53,14 +51,14 @@
                     <div class="col-md-2">
                         <label for="por_pagina" class="form-label">Itens por página</label>
                         <select class="form-select" id="por_pagina" name="por_pagina">
-                            <option value="20" {% if paginacao and paginacao.por_pagina==20 %}selected{% endif %}>20
-                            </option>
-                            <option value="50" {% if paginacao and paginacao.por_pagina==50 %}selected{% endif %}>50
-                            </option>
-                            <option value="100" {% if paginacao and paginacao.por_pagina==100 %}selected{% endif %}>100
-                            </option>
-                            <option value="200" {% if paginacao and paginacao.por_pagina==200 %}selected{% endif %}>200
-                            </option>
+                            <option value="20" 
+                                {% if paginacao and paginacao.por_pagina == 20 %}selected{% endif %}>20</option>
+                            <option value="50" 
+                                {% if paginacao and paginacao.por_pagina == 50 %}selected{% endif %}>50</option>
+                            <option value="100" 
+                                {% if paginacao and paginacao.por_pagina == 100 %}selected{% endif %}>100</option>
+                            <option value="200" 
+                                {% if paginacao and paginacao.por_pagina == 200 %}selected{% endif %}>200</option>
                         </select>
                     </div>
                     <div class="col-md-2 d-flex align-items-end">
@@ -82,27 +80,13 @@
                     <span class="badge bg-secondary ms-2">{{ paginacao.total_registros }} itens</span>
                 </h5>
                 {% if paginacao.dados %}
-                <a href="{{ url_for('exportar_localidade', localidade=localidade_selecionada) }}"
-                    class="btn btn-success btn-sm">
+                <a href="{{ url_for('exportar_localidade', localidade=localidade_selecionada) }}" 
+                   class="btn btn-success btn-sm">
                     <i class="bi bi-download me-1"></i>Exportar Excel
                 </a>
                 {% endif %}
             </div>
-
-            <!-- DEBUG: Mostrar informações da paginação -->
-            <div class="alert alert-info mt-3">
-                <h6>Informações de Debug:</h6>
-                <ul class="mb-0">
-                    <li>Localidade: <strong>{{ localidade_selecionada }}</strong></li>
-                    <li>Página: {{ paginacao.pagina_atual if paginacao else 'N/A' }}</li>
-                    <li>Itens por página: {{ paginacao.por_pagina if paginacao else 'N/A' }}</li>
-                    <li>Total de registros: {{ paginacao.total_registros if paginacao else 'N/A' }}</li>
-                    <li>Total de páginas: {{ paginacao.total_paginas if paginacao else 'N/A' }}</li>
-                    <li>Registros encontrados: {{ paginacao.dados|length if paginacao and paginacao.dados else '0' }}
-                    </li>
-                </ul>
-            </div>
-
+            
             {% if paginacao.dados %}
             <div class="card-body p-0">
                 <div class="table-responsive">
@@ -158,35 +142,36 @@
                     <ul class="pagination justify-content-center mb-0">
                         {% if paginacao.pagina_atual > 1 %}
                         <li class="page-item">
-                            <a class="page-link"
-                                href="{{ url_for('relatorio_localidades', localidade=localidade_selecionada, pagina=paginacao.pagina_atual-1, por_pagina=paginacao.por_pagina) }}">
+                            <a class="page-link" 
+                               href="{{ url_for('relatorio_localidades', localidade=localidade_selecionada, pagina=paginacao.pagina_atual-1, por_pagina=paginacao.por_pagina) }}">
                                 Anterior
                             </a>
                         </li>
                         {% endif %}
 
                         {% for page in range(1, paginacao.total_paginas + 1) %}
-                        {% if page >= paginacao.pagina_atual - 2 and page <= paginacao.pagina_atual + 2 %} <li
-                            class="page-item {% if page == paginacao.pagina_atual %}active{% endif %}">
-                            <a class="page-link"
-                                href="{{ url_for('relatorio_localidades', localidade=localidade_selecionada, pagina=page, por_pagina=paginacao.por_pagina) }}">
-                                {{ page }}
-                            </a>
+                            {% if page >= paginacao.pagina_atual - 2 and page <= paginacao.pagina_atual + 2 %}
+                            <li class="page-item {% if page == paginacao.pagina_atual %}active{% endif %}">
+                                <a class="page-link" 
+                                   href="{{ url_for('relatorio_localidades', localidade=localidade_selecionada, pagina=page, por_pagina=paginacao.por_pagina) }}">
+                                    {{ page }}
+                                </a>
                             </li>
                             {% endif %}
-                            {% endfor %}
+                        {% endfor %}
 
-                            {% if paginacao.pagina_atual < paginacao.total_paginas %} <li class="page-item">
-                                <a class="page-link"
-                                    href="{{ url_for('relatorio_localidades', localidade=localidade_selecionada, pagina=paginacao.pagina_atual+1, por_pagina=paginacao.por_pagina) }}">
-                                    Próxima
-                                </a>
-                                </li>
-                                {% endif %}
+                        {% if paginacao.pagina_atual < paginacao.total_paginas %}
+                        <li class="page-item">
+                            <a class="page-link" 
+                               href="{{ url_for('relatorio_localidades', localidade=localidade_selecionada, pagina=paginacao.pagina_atual+1, por_pagina=paginacao.por_pagina) }}">
+                                Próxima
+                            </a>
+                        </li>
+                        {% endif %}
                     </ul>
                 </nav>
                 <div class="text-center text-muted small mt-2">
-                    Página {{ paginacao.pagina_atual }} de {{ paginacao.total_paginas }} •
+                    Página {{ paginacao.pagina_atual }} de {{ paginacao.total_paginas }} • 
                     {{ paginacao.total_registros }} registro(s) no total
                 </div>
             </div>
@@ -233,12 +218,12 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         // Auto-submit quando mudar o número de itens por página
-        document.getElementById('por_pagina')?.addEventListener('change', function () {
+        document.getElementById('por_pagina')?.addEventListener('change', function() {
             this.form.submit();
         });
 
         // Foco no select de localidade
-        document.addEventListener('DOMContentLoaded', function () {
+        document.addEventListener('DOMContentLoaded', function() {
             const localidadeSelect = document.getElementById('localidade');
             if (localidadeSelect && !localidadeSelect.value) {
                 localidadeSelect.focus();
@@ -246,5 +231,4 @@
         });
     </script>
 </body>
-
 </html>
