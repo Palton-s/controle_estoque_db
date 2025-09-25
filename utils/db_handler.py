@@ -85,22 +85,15 @@ def buscar_localizacao_existente(numero_bem: str, db_path: str) -> Optional[str]
 def verificar_numero_existe(db_path, numero_bem):
     """Verifica se já existe um bem com o número informado"""
     try:
-        conn = sqlite3.connect(db_path)
-        cursor = conn.cursor()
+        with get_db_connection(db_path) as conn:
+            cursor = conn.cursor()
+            cursor.execute("SELECT COUNT(*) FROM bens WHERE numero = ?", (numero_bem,))
+            resultado = cursor.fetchone()
+            return resultado[0] > 0 if resultado else False
         
-        cursor.execute("SELECT COUNT(*) FROM bens WHERE numero = ?", (numero_bem,))
-        resultado = cursor.fetchone()
-        
-        return resultado[0] > 0 if resultado else False
-        
-    except sqlite3.Error as e:
+    except Exception as e:
         logger.error(f"Erro ao verificar número do bem: {str(e)}")
         return False
-    finally:
-        if conn:
-            conn.close()
-
-
 
 def gerar_planilhas_localizacao(db_path: str) -> Tuple[List[Dict], List[Dict]]:
     """Gera listas de bens localizados e não localizados a partir do banco"""
@@ -302,63 +295,58 @@ def buscar_bens_por_nome(db_path: str, termo_busca: str):
 def obter_localidades(db_path: str) -> list:
     """Obtém todas as localidades distintas do banco de dados"""
     try:
-        conn = sqlite3.connect(db_path)
-        cursor = conn.cursor()
-        
-        cursor.execute(
-            "SELECT DISTINCT localizacao FROM bens WHERE localizacao IS NOT NULL AND TRIM(localizacao) != '' ORDER BY localizacao"
-        )
-        
-        localidades = [row[0] for row in cursor.fetchall() if row[0] and row[0].strip()]
-        conn.close()
-        
-        return localidades
+        with get_db_connection(db_path) as conn:
+            cursor = conn.cursor()
+            
+            cursor.execute(
+                "SELECT DISTINCT localizacao FROM bens WHERE localizacao IS NOT NULL AND TRIM(localizacao) != '' ORDER BY localizacao"
+            )
+            
+            localidades = [row['localizacao'] for row in cursor.fetchall() if row['localizacao'] and row['localizacao'].strip()]
+            return localidades
     except Exception as e:
         logger.error(f"Erro ao obter localidades: {str(e)}")
         return []
 
 def obter_bens_por_localidade(db_path: str, localidade: str, pagina: int = 1, por_pagina: int = 200) -> dict:
-    """Obtém bens paginados por localidade (versão corrigida)"""
+    """Obtém bens paginados por localidade - VERSÃO CORRIGIDA"""
     try:
-        conn = sqlite3.connect(db_path)
-        cursor = conn.cursor()
-        
-        # Primeiro obter todos os registros
-        cursor.execute(
-            """
-            SELECT id, numero, nome, situacao, localizacao, observacoes, 
-                   data_criacao, data_localizacao 
-            FROM bens 
-            WHERE localizacao = ?
-            ORDER BY numero
-            """,
-            (localidade,)
-        )
-        
-        colunas = [desc[0] for desc in cursor.description]
-        todos_registros = [dict(zip(colunas, row)) for row in cursor.fetchall()]
-        
-        conn.close()
-        
-        # Fazer paginação manualmente no Python
-        total_registros = len(todos_registros)
-        
-        # Calcular offset e slice
-        offset = (pagina - 1) * por_pagina
-        registros = todos_registros[offset:offset + por_pagina]
-        
-        # Calcular total de páginas
-        total_paginas = (total_registros + por_pagina - 1) // por_pagina if por_pagina > 0 else 1
-        
-        return {
-            'dados': registros,
-            'pagina_atual': pagina,
-            'por_pagina': por_pagina,
-            'total_registros': total_registros,
-            'total_paginas': total_paginas,
-            'localidade': localidade
-        }
-        
+        with get_db_connection(db_path) as conn:
+            cursor = conn.cursor()
+            
+            # Calcular offset
+            offset = (pagina - 1) * por_pagina
+            
+            # Query principal com paginação
+            cursor.execute("""
+                SELECT id, numero, nome, situacao, localizacao, observacoes,
+                       data_criacao, data_localizacao 
+                FROM bens 
+                WHERE localizacao = ?
+                ORDER BY numero
+                LIMIT ? OFFSET ?
+            """, (localidade, por_pagina, offset))
+            
+            # Obter colunas
+            colunas = [desc[0] for desc in cursor.description]
+            dados = [dict(zip(colunas, row)) for row in cursor.fetchall()]
+            
+            # Obter total de registros
+            cursor.execute("SELECT COUNT(*) FROM bens WHERE localizacao = ?", (localidade,))
+            total_registros = cursor.fetchone()[0]
+            
+            # Calcular total de páginas
+            total_paginas = (total_registros + por_pagina - 1) // por_pagina if por_pagina > 0 else 1
+            
+            return {
+                'dados': dados,
+                'pagina_atual': pagina,
+                'por_pagina': por_pagina,
+                'total_registros': total_registros,
+                'total_paginas': total_paginas,
+                'localidade': localidade
+            }
+            
     except Exception as e:
         logger.error(f"Erro ao obter bens por localidade: {str(e)}")
         return {
@@ -369,198 +357,98 @@ def obter_bens_por_localidade(db_path: str, localidade: str, pagina: int = 1, po
             'total_paginas': 1,
             'localidade': localidade
         }
-        
+
 def obter_todos_bens_por_localidade(db_path: str, localidade: str) -> list:
     """Obtém todos os bens de uma localidade"""
     try:
-        conn = sqlite3.connect(db_path)
-        cursor = conn.cursor()
-        
-        cursor.execute(
-            """
-            SELECT id, numero, nome, situacao, localizacao, observacoes, 
-                   data_criacao, data_localizacao 
-            FROM bens 
-            WHERE localizacao = ?
-            ORDER BY numero
-            """,
-            (localidade,)
-        )
-        
-        colunas = [desc[0] for desc in cursor.description]
-        registros = [dict(zip(colunas, row)) for row in cursor.fetchall()]
-        
-        conn.close()
-        return registros
+        with get_db_connection(db_path) as conn:
+            cursor = conn.cursor()
+            
+            cursor.execute("""
+                SELECT id, numero, nome, situacao, localizacao, observacoes, 
+                       data_criacao, data_localizacao 
+                FROM bens 
+                WHERE localizacao = ?
+                ORDER BY numero
+            """, (localidade,))
+            
+            colunas = [desc[0] for desc in cursor.description]
+            registros = [dict(zip(colunas, row)) for row in cursor.fetchall()]
+            
+            return registros
         
     except Exception as e:
         logger.error(f"Erro ao obter todos os bens por localidade: {str(e)}")
         return []
 
 def verificar_localidade_existe(db_path: str, localidade: str) -> bool:
-    """Verifica se uma localidade existe no banco (usando a mesma lógica da consulta principal)"""
+    """Verifica se uma localidade existe no banco - VERSÃO CORRIGIDA"""
     try:
-        conn = sqlite3.connect(db_path)
-        cursor = conn.cursor()
-        
-        # Usar EXATAMENTE a mesma condição da consulta principal
-        cursor.execute(
-            "SELECT COUNT(*) FROM bens WHERE localizacao = ?",
-            (localidade,)
-        )
-        
-        count = cursor.fetchone()[0]
-        conn.close()
-        
-        return count > 0
+        with get_db_connection(db_path) as conn:
+            cursor = conn.cursor()
+            
+            cursor.execute(
+                "SELECT COUNT(*) FROM bens WHERE localizacao = ?",
+                (localidade,)
+            )
+            
+            count = cursor.fetchone()[0]
+            return count > 0
     except Exception as e:
         logger.error(f"Erro ao verificar localidade: {str(e)}")
         return False
 
-
+# Funções de debug (mantidas para compatibilidade)
 def debug_localidades_completas(db_path: str) -> list:
     """Debug completo das localidades"""
     try:
-        conn = sqlite3.connect(db_path)
-        cursor = conn.cursor()
-        
-        # Obter todas as localidades com contagem
-        cursor.execute(
-            """
-            SELECT localizacao, COUNT(*) as quantidade 
-            FROM bens 
-            WHERE localizacao IS NOT NULL AND TRIM(localizacao) != ''
-            GROUP BY localizacao 
-            ORDER BY localizacao
-            """
-        )
-        
-        resultados = []
-        for row in cursor.fetchall():
-            localidade, quantidade = row
-            if localidade and localidade.strip():
-                # Verificar bens específicos desta localidade
-                cursor2 = conn.cursor()
-                cursor2.execute(
-                    "SELECT numero, nome FROM bens WHERE localizacao = ? LIMIT 5",
-                    (localidade,)
-                )
-                exemplos = cursor2.fetchall()
-                
-                resultados.append({
-                    'localidade': localidade,
-                    'quantidade': quantidade,
-                    'exemplos': exemplos
-                })
-        
-        conn.close()
-        return resultados
+        with get_db_connection(db_path) as conn:
+            cursor = conn.cursor()
+            
+            cursor.execute("""
+                SELECT localizacao, COUNT(*) as quantidade 
+                FROM bens 
+                WHERE localizacao IS NOT NULL AND TRIM(localizacao) != ''
+                GROUP BY localizacao 
+                ORDER BY localizacao
+            """)
+            
+            resultados = []
+            for row in cursor.fetchall():
+                localidade, quantidade = row['localizacao'], row['quantidade']
+                if localidade and localidade.strip():
+                    resultados.append({
+                        'localidade': localidade,
+                        'quantidade': quantidade
+                    })
+            
+            return resultados
         
     except Exception as e:
         logger.error(f"Erro no debug de localidades: {str(e)}")
         return []
-    
+
 def diagnosticar_localidade(db_path: str, localidade: str):
     """Faz diagnóstico completo de uma localidade"""
     try:
-        conn = sqlite3.connect(db_path)
-        cursor = conn.cursor()
-        
-        resultados = {}
-        
-        # 1. Busca exata
-        cursor.execute(
-            "SELECT COUNT(*), GROUP_CONCAT(numero) FROM bens WHERE localizacao = ?",
-            (localidade,)
-        )
-        count_exato, numeros_exato = cursor.fetchone()
-        resultados['busca_exata'] = {
-            'count': count_exato,
-            'numeros': numeros_exato.split(',') if numeros_exato else []
-        }
-        
-        # 2. Busca case-insensitive
-        cursor.execute(
-            "SELECT COUNT(*), GROUP_CONCAT(numero) FROM bens WHERE LOWER(localizacao) = LOWER(?)",
-            (localidade,)
-        )
-        count_ci, numeros_ci = cursor.fetchone()
-        resultados['busca_case_insensitive'] = {
-            'count': count_ci,
-            'numeros': numeros_ci.split(',') if numeros_ci else []
-        }
-        
-        # 3. Ver todas as variações desta localidade
-        cursor.execute(
-            "SELECT DISTINCT localizacao FROM bens WHERE LOWER(localizacao) = LOWER(?)",
-            (localidade,)
-        )
-        variacoes = [row[0] for row in cursor.fetchall()]
-        resultados['variacoes'] = variacoes
-        
-        # 4. Ver exemplos de registros
-        if variacoes:
+        with get_db_connection(db_path) as conn:
+            cursor = conn.cursor()
+            
+            resultados = {}
+            
+            # 1. Busca exata
             cursor.execute(
-                "SELECT numero, nome, localizacao FROM bens WHERE localizacao = ? LIMIT 5",
-                (variacoes[0],)
+                "SELECT COUNT(*), GROUP_CONCAT(numero) FROM bens WHERE localizacao = ?",
+                (localidade,)
             )
-            exemplos = cursor.fetchall()
-            resultados['exemplos'] = exemplos
-        
-        conn.close()
-        return resultados
+            count_exato, numeros_exato = cursor.fetchone()
+            resultados['busca_exata'] = {
+                'count': count_exato,
+                'numeros': numeros_exato.split(',') if numeros_exato else []
+            }
+            
+            return resultados
         
     except Exception as e:
         logger.error(f"Erro no diagnóstico: {str(e)}")
         return {'error': str(e)}
-    
-
-def obter_bens_por_localidade_alternativa(db_path: str, localidade: str, pagina: int = 1, por_pagina: int = 200) -> dict:
-    """Versão alternativa para debug"""
-    try:
-        # Primeiro usar a função simples que sabemos que funciona
-        conn = sqlite3.connect(db_path)
-        cursor = conn.cursor()
-        
-        cursor.execute(
-            """
-            SELECT id, numero, nome, situacao, localizacao, observacoes, 
-                   data_criacao, data_localizacao 
-            FROM bens 
-            WHERE localizacao = ?
-            ORDER BY numero
-            """,
-            (localidade,)
-        )
-        
-        colunas = [desc[0] for desc in cursor.description]
-        todos_registros = [dict(zip(colunas, row)) for row in cursor.fetchall()]
-        
-        conn.close()
-        
-        # Fazer paginação manualmente
-        total_registros = len(todos_registros)
-        offset = (pagina - 1) * por_pagina
-        registros = todos_registros[offset:offset + por_pagina]
-        
-        total_paginas = (total_registros + por_pagina - 1) // por_pagina if por_pagina > 0 else 1
-        
-        return {
-            'dados': registros,
-            'pagina_atual': pagina,
-            'por_pagina': por_pagina,
-            'total_registros': total_registros,
-            'total_paginas': total_paginas,
-            'localidade': localidade
-        }
-        
-    except Exception as e:
-        logger.error(f"Erro na versão alternativa: {str(e)}")
-        return {
-            'dados': [],
-            'pagina_atual': 1,
-            'por_pagina': por_pagina,
-            'total_registros': 0,
-            'total_paginas': 1,
-            'localidade': localidade
-        }

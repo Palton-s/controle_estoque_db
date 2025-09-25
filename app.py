@@ -80,8 +80,9 @@ class BemService:
     def __init__(self, db_path: str):
         self.db_path = db_path
     
+   
     def processar_localizacao(self, numero_bem: str, localizacao: str = None) -> Dict[str, Any]:
-        """Processa a localização de um bem"""
+        """Processa a localização de um bem - VERSÃO CORRIGIDA"""
         try:
             # Se localização não foi informada, tenta completar do banco
             if not localizacao:
@@ -91,10 +92,10 @@ class BemService:
             encontrado, erro = verificar_bem(numero_bem, self.db_path)
             if not encontrado:
                 return {
-                    'sucesso': False,
                     'mensagem': erro or 'Bem não encontrado.',
                     'bem_detalhes': None,
-                    'show_modal': True
+                    'localizacao_informada': localizacao,
+                    'show_modal': True  # ← CORREÇÃO: Manter show_modal
                 }
             
             # Marca como localizado
@@ -102,20 +103,19 @@ class BemService:
             bem_detalhes = self._obter_detalhes_bem(numero_bem, localizacao)
             
             return {
-                'sucesso': True,
                 'mensagem': mensagem,
                 'bem_detalhes': bem_detalhes,
                 'localizacao_informada': localizacao,
-                'show_modal': True
+                'show_modal': True  # ← CORREÇÃO: Manter show_modal
             }
             
         except Exception as e:
             logger.error(f"Erro ao processar bem {numero_bem}: {str(e)}")
             return {
-                'sucesso': False,
                 'mensagem': 'Erro interno ao processar o bem.',
                 'bem_detalhes': None,
-                'show_modal': True
+                'localizacao_informada': localizacao,
+                'show_modal': True  # ← CORREÇÃO: Manter show_modal
             }
     
     def _obter_detalhes_bem(self, numero_bem: str, localizacao: str = None) -> Dict[str, Any]:
