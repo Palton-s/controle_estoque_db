@@ -615,44 +615,88 @@ def novo_bem():
     """Página para cadastrar novo bem"""
     return render_template('novo_bem.html')
 
-@app.route('/relatorio-localidades')
+@app.route('/relatorio/localidades')
 def relatorio_localidades():
-    """Página de relatório por localidades"""
-    if not os.path.exists(DB_PATH):
-        return render_template('relatorio_localidades.html', 
-                             localidades=[],
-                             paginacao=None,
-                             mensagem="Banco de dados não encontrado.")
-
+    """Relatório de bens por localidade - COM FILTROS AVANÇADOS"""
     try:
-        localidades = obter_localidades(DB_PATH)
-        localidade_selecionada = request.args.get('localidade', '')
-        pagina = max(1, request.args.get('pagina', 1, type=int))
-        por_pagina = max(10, min(request.args.get('por_pagina', 50, type=int), 500))
+        localidade_selecionada = request.args.get('localidade', '').strip()
+        situacao_filtro = request.args.get('situacao', 'OK')  # Novo filtro
+        pagina = request.args.get('pagina', 1, type=int)
+        por_pagina = request.args.get('por_pagina', 20, type=int)
+        
+        conn = sqlite3.connect(DB_PATH)
+        cursor = conn.cursor()
+        
+        # Buscar localidades distintas (com filtro de situação)
+        cursor.execute(f'''
+            SELECT DISTINCT localizacao 
+            FROM bens 
+            WHERE localizacao IS NOT NULL 
+            AND localizacao != '' 
+            AND localizacao != 'Não informada'
+            AND situacao = ?
+            ORDER BY localizacao
+        ''', (situacao_filtro,))
+        localidades = [row[0] for row in cursor.fetchall()]
         
         paginacao = None
-        if localidade_selecionada:
-            if not verificar_localidade_existe(DB_PATH, localidade_selecionada):
-                return render_template('relatorio_localidades.html', 
-                                     localidades=localidades,
-                                     localidade_selecionada=localidade_selecionada,
-                                     paginacao=None,
-                                     mensagem=f"Localidade '{localidade_selecionada}' não encontrada.")
-            
-            paginacao = obter_bens_por_localidade(DB_PATH, localidade_selecionada, pagina, por_pagina)
         
-        return render_template('relatorio_localidades.html', 
+        if localidade_selecionada:
+            # Query com filtro de situação
+            cursor.execute('''
+                SELECT COUNT(*) FROM bens 
+                WHERE localizacao = ? AND situacao = ?
+            ''', (localidade_selecionada, situacao_filtro))
+            total_registros = cursor.fetchone()[0]
+            
+            offset = (pagina - 1) * por_pagina
+            total_paginas = (total_registros + por_pagina - 1) // por_pagina
+            
+            cursor.execute('''
+                SELECT 
+                    numero, nome, situacao, localizacao,
+                    data_criacao, data_localizacao
+                FROM bens 
+                WHERE localizacao = ? AND situacao = ?
+                ORDER BY numero
+                LIMIT ? OFFSET ?
+            ''', (localidade_selecionada, situacao_filtro, por_pagina, offset))
+            
+            bens = []
+            for row in cursor.fetchall():
+                bens.append({
+                    'numero': row[0],
+                    'nome': row[1],
+                    'situacao': row[2],
+                    'localizacao': row[3],
+                    'data_criacao': row[4],
+                    'data_localizacao': row[5]
+                })
+            
+            paginacao = {
+                'dados': bens,
+                'pagina_atual': pagina,
+                'por_pagina': por_pagina,
+                'total_registros': total_registros,
+                'total_paginas': total_paginas,
+                'situacao_filtro': situacao_filtro  # Para usar no template
+            }
+        
+        conn.close()
+        
+        return render_template('relatorio_localidades.html',
                              localidades=localidades,
                              localidade_selecionada=localidade_selecionada,
                              paginacao=paginacao)
-            
+        
     except Exception as e:
-        logger.error(f"Erro em /relatorio-localidades: {str(e)}")
-        return render_template('relatorio_localidades.html', 
+        logger.error(f"Erro no relatório de localidades: {str(e)}")
+        return render_template('relatorio_localidades.html',
+                             mensagem=f"Erro ao gerar relatório: {str(e)}",
                              localidades=[],
-                             paginacao=None,
-                             mensagem=f"Erro ao carregar dados: {str(e)}")
-
+                             localidade_selecionada='',
+                             paginacao=None)
+        
 @app.route('/sair')
 def sair():
     """Página de encerramento do aplicativo"""

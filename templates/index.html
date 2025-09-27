@@ -532,6 +532,14 @@
     let usingFrontCamera = false;
     let scanningInterval = null;
 
+    // Variável global para o bem atual
+    let bemAtual = null;
+
+    // Função de debug
+    function debug(message, data = null) { 
+      console.log(`[DEBUG] ${message}`, data || ''); 
+    }
+
     // Inicialização quando o DOM estiver carregado
     document.addEventListener('DOMContentLoaded', function () {
       // Inicializar o modal do scanner
@@ -551,12 +559,6 @@
 
       // Spinner no submit de busca
       document.getElementById('searchForm')?.addEventListener('submit', handleFormSubmit);
-
-      // Mostrar o modal de resultado se houver dados do bem
-      {% if bem_detalhes %}
-      const resultadoModal = new bootstrap.Modal(document.getElementById('resultadoModal'));
-      resultadoModal.show();
-      {% endif %}
 
       // Foco no campo de busca
       setTimeout(aplicarFocoCampoBusca, 100);
@@ -593,8 +595,37 @@
             if (statusMessage) statusMessage.innerHTML = '<i class="bi bi-database me-1"></i>Processando...';
           }
         }, 200);
-        // Não usamos preventDefault: deixa enviar normalmente para o backend.
       });
+
+      // ===== ABERTURA AUTOMÁTICA DO MODAL - CORRIGIDA =====
+      {% if bem_detalhes %}
+      console.log('Bem encontrado, preparando para abrir modal...');
+      
+      // Preencher os dados do bem
+      bemAtual = {{ bem_detalhes | tojson | safe }};
+      console.log('Dados do bem carregados:', bemAtual);
+      
+      // Aguardar um pouco para garantir que o DOM esteja totalmente carregado
+      setTimeout(function() {
+        const modalElement = document.getElementById('resultadoModal');
+        if (modalElement) {
+          console.log('Elemento do modal encontrado, abrindo...');
+          
+          // Preencher os detalhes primeiro
+          if (bemAtual) {
+            preencherModalDetalhes(bemAtual);
+          }
+          
+          // Abrir o modal usando Bootstrap
+          const modal = new bootstrap.Modal(modalElement);
+          modal.show();
+          
+          console.log('Modal aberto com sucesso');
+        } else {
+          console.error('Elemento do modal não encontrado no DOM');
+        }
+      }, 300);
+      {% endif %}
     });
 
     // ===== Scanner (QR) =====
@@ -707,9 +738,6 @@
     });
 
     // ===== CRUD (Modal de resultados) =====
-    let bemAtual = null;
-    function debug(message, data = null) { console.log(`[DEBUG] ${message}`, data || ''); }
-
     function preencherModalDetalhes(dados) {
       debug('Preenchendo modal com dados:', dados);
       bemAtual = dados;
@@ -754,7 +782,7 @@
                 <i class="bi bi-geo-alt me-2"></i>Localização
               </h6>
               <p class="fs-5 mb-0">
-                ${dados.localizacao
+                ${dados.localizacao && dados.localizacao !== 'Não informada'
           ? `<span class="text-success"><i class="bi bi-geo-alt-fill me-1"></i>${dados.localizacao}</span>`
           : '<span class="text-muted"><i class="bi bi-geo-alt me-1"></i>Localização não informada</span>'
         }
@@ -765,19 +793,14 @@
           <div class="col-12">
             <div class="bg-light rounded-3 p-3">
               <h6 class="text-muted mb-2">
-                <i class="bi bi-calendar me-2"></i>Datas
+                <i class="bi bi-lightbulb me-2"></i>Informações
               </h6>
-              <div class="row">
-                <div class="col-md-6">
-                  <small class="text-muted">Cadastro:</small>
-                  <div>${new Date(dados.data_criacao).toLocaleDateString('pt-BR')}</div>
-                </div>
-                ${dados.data_localizacao ? `
-                <div class="col-md-6">
-                  <small class="text-muted">Última localização:</small>
-                  <div>${new Date(dados.data_localizacao).toLocaleDateString('pt-BR')}</div>
-                </div>` : ''}
-              </div>
+              <p class="small text-muted mb-0">
+                ${dados.situacao === 'OK'
+          ? '✅ Este bem já foi localizado e está devidamente registrado no sistema.'
+          : '⏳ Este bem ainda não foi localizado. Utilize o campo de localização para atualizar.'
+        }
+              </p>
             </div>
           </div>
         </div>
@@ -821,41 +844,116 @@
     }
 
     function salvarEdicao() {
-      try {
-        const formData = {
-          bem_id: parseInt(document.getElementById('bem_id').value),
-          numero: document.getElementById('edt_numero').value,
-          nome: document.getElementById('edt_nome').value,
-          localizacao: document.getElementById('edt_localizacao').value,
-          situacao: document.getElementById('edt_situacao').value
+    try {
+        // Obter dados do formulário
+        const bem_id = parseInt(document.getElementById('bem_id').value);
+        const numero = document.getElementById('edt_numero').value.trim();
+        const nome = document.getElementById('edt_nome').value.trim();
+        const localizacao = document.getElementById('edt_localizacao').value.trim();
+        const situacao = document.getElementById('edt_situacao').value;
+
+        // Validações client-side
+        if (isNaN(bem_id) || bem_id <= 0) {
+            alert('ID do bem inválido');
+            return;
+        }
+
+        if (!numero) {
+            alert('Número do bem é obrigatório');
+            document.getElementById('edt_numero').focus();
+            return;
+        }
+
+        if (!nome) {
+            alert('Nome do item é obrigatório');
+            document.getElementById('edt_nome').focus();
+            return;
+        }
+
+        if (!situacao) {
+            alert('Situação é obrigatória');
+            document.getElementById('edt_situacao').focus();
+            return;
+        }
+
+        // Preparar dados para a API
+        const dadosAtualizacao = {
+            numero: numero,
+            nome: nome,
+            localizacao: localizacao,
+            situacao: situacao
         };
 
-        fetch('/api/bem/editar', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(formData)
+        console.log('Enviando para API:', { bem_id, dados: dadosAtualizacao });
+
+        // Fazer requisição para a rota existente
+        fetch(`/api/bens/${bem_id}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(dadosAtualizacao)
         })
-          .then(response => {
-            if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-            return response.json();
-          })
-          .then(data => {
-            if (data.success) {
-              alert(data.message);
-              window.location.href = "/";
-            } else {
-              alert('Erro: ' + data.message);
+        .then(response => {
+            console.log('Status da resposta:', response.status);
+            
+            if (!response.ok) {
+                // Tentar ler a resposta de erro
+                return response.text().then(text => {
+                    let errorMessage = `Erro HTTP ${response.status}`;
+                    try {
+                        const errorData = JSON.parse(text);
+                        errorMessage = errorData.message || text;
+                    } catch {
+                        errorMessage = text || errorMessage;
+                    }
+                    throw new Error(errorMessage);
+                });
             }
-          })
-          .catch(error => {
+            return response.json();
+        })
+        .then(data => {
+            console.log('Resposta da API:', data);
+            
+            if (data.success) {
+                // Sucesso - mostrar mensagem e recarregar
+                alert(data.message || 'Bem atualizado com sucesso!');
+                
+                // Fechar o modal
+                const modal = bootstrap.Modal.getInstance(document.getElementById('resultadoModal'));
+                if (modal) {
+                    modal.hide();
+                }
+                
+                // Recarregar a página após um breve delay
+                setTimeout(() => {
+                    window.location.href = "/";
+                }, 1000);
+                
+            } else {
+                // Erro da API
+                alert('Erro: ' + (data.message || 'Erro desconhecido ao atualizar bem'));
+            }
+        })
+        .catch(error => {
             console.error('Erro na requisição:', error);
-            alert('Erro de conexão. Verifique o console para detalhes.');
-          });
-      } catch (error) {
-        console.error('Erro ao salvar edição:', error);
-        alert('Erro ao processar formulário.');
-      }
+            
+            if (error.name === 'TypeError' && error.message.includes('fetch')) {
+                alert('Erro de conexão: Não foi possível conectar ao servidor. Verifique sua conexão.');
+            } else if (error.message.includes('404')) {
+                alert('Erro: Rota não encontrada. A API pode não estar disponível.');
+            } else if (error.message.includes('500')) {
+                alert('Erro interno do servidor. Tente novamente mais tarde.');
+            } else {
+                alert('Erro: ' + error.message);
+            }
+        });
+
+    } catch (error) {
+        console.error('Erro ao processar edição:', error);
+        alert('Erro inesperado: ' + error.message);
     }
+}
 
     function confirmarExclusao() {
       if (!bemAtual) {
@@ -889,21 +987,6 @@
           alert('Erro de conexão ao excluir.');
         });
     }
-
-    // Preenchimento inicial do bem no modal (se existir)
-    {% if bem_detalhes %}
-    document.addEventListener('DOMContentLoaded', function () {
-      bemAtual = {{ bem_detalhes | tojson | safe }};
-    };
-    debug('bemAtual carregado da template', bemAtual);
-    const modal = document.getElementById('resultadoModal');
-    if (modal) {
-      modal.addEventListener('show.bs.modal', function () {
-        if (bemAtual) preencherModalDetalhes(bemAtual);
-      });
-    }
-    });
-    {% endif %}
   </script>
 </body>
 
