@@ -696,7 +696,6 @@ def relatorio_localidades():
                              localidades=[],
                              localidade_selecionada='',
                              paginacao=None)
-        
 @app.route('/sair')
 def sair():
     """Página de encerramento do aplicativo"""
