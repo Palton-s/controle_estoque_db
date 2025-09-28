@@ -3,328 +3,435 @@ import pandas as pd
 from openpyxl import load_workbook
 import os
 import shutil
-from datetime import datetime
-from utils.logger import logger
+from typing import Tuple, List, Dict, Any, Optional
+from datetime import datetime, date
+import logging
 
-def detectar_colunas(df):
+# Configurar logger
+logger = logging.getLogger(__name__)
+
+# ==============================
+# FUNÇÕES AUXILIARES
+# ==============================
+
+def get_db_connection(db_path: str) -> sqlite3.Connection:
+    """Conexão simples com o banco SQLite"""
+    conn = sqlite3.connect(db_path)
+    conn.row_factory = sqlite3.Row
+    return conn
+
+def criar_tabela_atualizada(db_path: str) -> None:
+    """Cria a tabela bens com a nova estrutura completa"""
+    try:
+        conn = get_db_connection(db_path)
+        cursor = conn.cursor()
+        
+        # Criar tabela principal
+        cursor.execute('''
+            CREATE TABLE IF NOT EXISTS bens (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                numero TEXT UNIQUE NOT NULL,
+                nome TEXT NOT NULL,
+                situacao TEXT DEFAULT 'Pendente',
+                localizacao TEXT,
+                responsavel TEXT,
+                data_ultima_vistoria DATE,
+                data_vistoria_atual DATE,
+                auditor TEXT,
+                observacoes TEXT,
+                data_criacao DATETIME DEFAULT CURRENT_TIMESTAMP,
+                data_localizacao DATETIME
+            )
+        ''')
+        
+        # Verificar colunas existentes
+        cursor.execute("PRAGMA table_info(bens)")
+        colunas_existentes = [col[1] for col in cursor.fetchall()]
+        
+        # Colunas novas para adicionar se não existirem
+        novas_colunas = [
+            ('responsavel', 'TEXT'),
+            ('data_ultima_vistoria', 'DATE'),
+            ('data_vistoria_atual', 'DATE'),
+            ('auditor', 'TEXT')
+        ]
+        
+        for coluna, tipo in novas_colunas:
+            if coluna not in colunas_existentes:
+                try:
+                    cursor.execute(f"ALTER TABLE bens ADD COLUMN {coluna} {tipo}")
+                    print(f"Coluna {coluna} adicionada à tabela bens")
+                except sqlite3.OperationalError:
+                    # Coluna já existe, ignorar erro
+                    pass
+        
+        conn.commit()
+        conn.close()
+        print("Tabela bens criada/atualizada com sucesso")
+        
+    except Exception as e:
+        print(f"Erro ao criar/atualizar tabela: {str(e)}")
+        raise
+
+def processar_data_excel(valor: Any) -> date:
+    """Processa datas do Excel para formato Python"""
+    try:
+        if valor is None or pd.isna(valor):
+            return datetime.now().date()
+        
+        if isinstance(valor, datetime):
+            return valor.date()
+        elif isinstance(valor, date):
+            return valor
+        elif isinstance(valor, str) and valor.strip():
+            # Tentar diferentes formatos de data
+            formatos = ['%d/%m/%Y', '%d-%m-%Y', '%Y-%m-%d', '%d/%m/%y', '%Y/%m/%d']
+            for formato in formatos:
+                try:
+                    return datetime.strptime(valor.strip(), formato).date()
+                except ValueError:
+                    continue
+            return datetime.now().date()
+        else:
+            return datetime.now().date()
+    except Exception:
+        return datetime.now().date()
+
+def normalizar_valor(valor: Any) -> Optional[str]:
+    """Normaliza valores para evitar problemas de tipo e formato"""
+    if pd.isna(valor) or valor is None:
+        return None
+    
+    try:
+        valor_str = str(valor).strip()
+        return valor_str if valor_str else None
+    except Exception:
+        return None
+
+# ==============================
+# FUNÇÃO DE DETECÇÃO DE COLUNAS
+# ==============================
+
+def detectar_colunas(df: pd.DataFrame) -> Dict[str, Any]:
     """
     Detecta automaticamente as colunas relevantes no DataFrame
-    Retorna um dicionário com os mapeamentos encontrados
     """
+    # CORREÇÃO: Remover espaços extras dos nomes das colunas
+    df.columns = [str(col).strip() for col in df.columns]
+    
     mapeamento_colunas = {
         'numero': None,
         'nome': None,
+        'situacao': None,
         'localizacao': None,
-        'situacao': None
+        'responsavel': None,
+        'data_ultima_vistoria': None,
+        'data_vistoria_atual': None,
+        'auditor': None
     }
     
-    # Mapeamento de possíveis nomes para cada coluna (em minúsculas)
+    # Mapeamento de possíveis nomes para cada coluna
     possiveis_nomes = {
-        'numero': [
-            'número do bem', 'numero do bem', 'nº do bem', 'n° do bem',
-            'patrimonio', 'patrimônio', 'numero', 'número', 'código', 
-            'codigo', 'id', 'número patrimonial', 'numero patrimonial',
-            'número do patrimônio', 'numero do patrimonio', 'asset number',
-            'patrimônio', 'código do bem', 'codigo do bem'
-        ],
-        'nome': [
-            'nome', 'descrição', 'descricao', 'item', 'equipamento', 
-            'bem', 'denominação', 'denominacao', 'designação', 'designacao',
-            'especificação', 'especificacao', 'produto', 'material',
-            'nome do item', 'nome do equipamento', 'nome do bem',
-            'description', 'item name', 'equipment name'
-        ],
-        'localizacao': [
-            'localização', 'localizacao', 'local', 'setor', 'departamento',
-            'área', 'area', 'sala', 'ambiente', 'prédio', 'predio', 'bloco',
-            'unidade', 'centro de custo', 'departamento', 'division',
-            'location', 'setor', 'department', 'area'
-        ],
-        'situacao': [
-            'situação', 'situacao', 'status', 'estado', 'condição',
-            'condicao', 'estado de conservação', 'estado de conservacao',
-            'status do bem', 'situação do bem', 'situacao do bem',
-            'status', 'state', 'condition', 'situation'
-        ]
+        'numero': ['número do bem', 'numero do bem', 'nº do bem', 'patrimonio', 'patrimônio', 'numero', 'número'],
+        'nome': ['nome', 'descrição', 'descricao', 'item', 'equipamento', 'bem'],
+        'situacao': ['situação', 'situacao', 'status', 'estado', 'condição'],
+        'localizacao': ['localização', 'localizacao', 'local', 'setor', 'departamento'],
+        'responsavel': ['responsavel', 'responsável', 'encarregado', 'curador'],
+        'data_ultima_vistoria': ['data da ultima vistoria', 'última vistoria', 'data ultima vistoria'],
+        'data_vistoria_atual': ['data da vistoria atual', 'vistoria atual', 'data vistoria atual'],
+        'auditor': ['auditor', 'auditor responsavel', 'inspetor']
     }
     
-    # Converter nomes das colunas para minúsculas e remover espaços extras
+    # Converter nomes das colunas para minúsculas
     colunas_df = [str(col).strip().lower() for col in df.columns]
     
-    logger.info(f"Colunas encontradas no Excel: {colunas_df}")
+    print(f"🔍 Colunas encontradas no Excel: {df.columns.tolist()}")
     
-    # Procurar correspondências para cada coluna
+    # Procurar correspondências
     for coluna_alvo, possibilidades in possiveis_nomes.items():
         for possibilidade in possibilidades:
-            # Verificar correspondência exata ou parcial
-            for coluna_df in colunas_df:
-                if possibilidade == coluna_df or possibilidade in coluna_df:
-                    indice = colunas_df.index(coluna_df)
-                    mapeamento_colunas[coluna_alvo] = df.columns[indice]
-                    logger.info(f"Coluna '{coluna_alvo}' detectada como: '{df.columns[indice]}'")
+            for idx, coluna_df in enumerate(colunas_df):
+                if possibilidade in coluna_df:
+                    mapeamento_colunas[coluna_alvo] = df.columns[idx]
+                    print(f"✅ Coluna '{coluna_alvo}' detectada como: '{df.columns[idx]}'")
                     break
             if mapeamento_colunas[coluna_alvo]:
                 break
     
     return mapeamento_colunas
 
-def normalizar_valor(valor):
-    """
-    Normaliza valores para evitar problemas de tipo e formato
-    """
-    if pd.isna(valor) or valor is None:
-        return None
-    
-    # Converter para string e remover espaços extras
-    valor_str = str(valor).strip()
-    
-    # Se for string vazia, retornar None
-    if not valor_str:
-        return None
-    
-    return valor_str
+# ==============================
+# FUNÇÃO PRINCIPAL DE IMPORTAÇÃO
+# ==============================
 
-def importar_excel_para_sqlite(arquivo_excel, aba_nome='Estoque', caminho_sqlite=None, criar_backup=True):
+def importar_excel_para_sqlite(caminho_excel: str, aba_nome: str, db_path: str, criar_backup: bool = True) -> Tuple[bool, str]:
     """
-    Importa dados de um arquivo Excel para o banco SQLite com detecção automática de colunas
+    Importa dados do Excel para SQLite com nova estrutura completa
     """
-    if caminho_sqlite is None:
-        caminho_sqlite = "relatorios/controle_patrimonial.db"
-    
-    # Criar pasta se não existir
-    os.makedirs(os.path.dirname(caminho_sqlite), exist_ok=True)
-    
     try:
-        # Fazer backup se solicitado e se o banco existir
-        if criar_backup and os.path.exists(caminho_sqlite):
-            backup_path = f"relatorios/backup_controle_{datetime.now().strftime('%Y%m%d_%H%M%S')}.db"
-            shutil.copy2(caminho_sqlite, backup_path)
-            logger.info(f"Backup criado: {backup_path}")
-            mensagem_backup = f"📦 Backup criado: {os.path.basename(backup_path)}"
+        print(f"📁 Iniciando importação do arquivo: {caminho_excel}")
+        
+        # Verificar se arquivo existe
+        if not os.path.exists(caminho_excel):
+            return False, f"❌ Arquivo Excel não encontrado: {caminho_excel}"
+        
+        # Criar/atualizar tabela primeiro
+        criar_tabela_atualizada(db_path)
+        
+        # Fazer backup se necessário
+        backup_path = ""
+        if criar_backup and os.path.exists(db_path):
+            backup_dir = os.path.join(os.path.dirname(db_path), 'backups')
+            os.makedirs(backup_dir, exist_ok=True)
+            backup_path = os.path.join(backup_dir, f"backup_controle_{datetime.now().strftime('%Y%m%d_%H%M%S')}.db")
+            shutil.copy2(db_path, backup_path)
+            mensagem_backup = f"Backup criado: {os.path.basename(backup_path)}"
+            print(f"📦 {mensagem_backup}")
         else:
             mensagem_backup = ""
         
-        # Ler o arquivo Excel
-        logger.info(f"Iniciando importação do arquivo: {arquivo_excel}")
+        # Carregar arquivo Excel
+        try:
+            wb = load_workbook(caminho_excel, read_only=True)
+        except Exception as e:
+            return False, f"❌ Erro ao abrir arquivo Excel: {str(e)}"
         
-        # Verificar se o arquivo existe
-        if not os.path.exists(arquivo_excel):
-            raise FileNotFoundError(f"Arquivo Excel não encontrado: {arquivo_excel}")
-        
-        # Verificar abas disponíveis
-        wb = load_workbook(arquivo_excel, read_only=True)
         if aba_nome not in wb.sheetnames:
             abas_disponiveis = ", ".join(wb.sheetnames)
-            raise ValueError(f"Aba '{aba_nome}' não encontrada. Abas disponíveis: {abas_disponiveis}")
+            wb.close()
+            return False, f"❌ Aba '{aba_nome}' não encontrada. Abas disponíveis: {abas_disponiveis}"
         
-        # Ler dados do Excel usando pandas
-        df = pd.read_excel(arquivo_excel, sheet_name=aba_nome)
+        wb.close()
         
-        # Verificar se há dados
+        # Ler dados com pandas
+        try:
+            df = pd.read_excel(caminho_excel, sheet_name=aba_nome)
+        except Exception as e:
+            return False, f"❌ Erro ao ler dados do Excel: {str(e)}"
+        
         if df.empty:
-            raise ValueError("O arquivo Excel está vazio ou não contém dados")
+            return False, "❌ O arquivo Excel está vazio ou não contém dados"
         
-        # Detectar colunas automaticamente
+        print(f"📊 Total de linhas no Excel: {len(df)}")
+        
+        # Detectar mapeamento de colunas
         mapeamento = detectar_colunas(df)
-        logger.info(f"Mapeamento de colunas detectado: {mapeamento}")
         
         # Verificar colunas obrigatórias
         if not mapeamento['numero']:
-            colunas_disponiveis = list(df.columns)
-            raise ValueError(f"""
-            Não foi possível detectar a coluna do número do bem.
-            Colunas disponíveis: {colunas_disponiveis}
-            Nomes esperados: Número do Bem, Patrimonio, Código, etc.
-            """)
-        
+            return False, "❌ Coluna do número do bem não detectada"
         if not mapeamento['nome']:
-            colunas_disponiveis = list(df.columns)
-            raise ValueError(f"""
-            Não foi possível detectar a coluna do nome.
-            Colunas disponíveis: {colunas_disponiveis}
-            Nomes esperados: Nome, Descrição, Item, etc.
-            """)
+            return False, "❌ Coluna do nome não detectada"
         
-        # Conectar ao SQLite
-        conn = sqlite3.connect(caminho_sqlite)
+        # Processar e importar dados
+        conn = get_db_connection(db_path)
         cursor = conn.cursor()
         
-        # Criar tabela se não existir
-        cursor.execute("""
-            CREATE TABLE IF NOT EXISTS bens (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                numero TEXT NOT NULL UNIQUE,
-                nome TEXT NOT NULL,
-                localizacao TEXT DEFAULT '',
-                situacao TEXT DEFAULT 'Pendente',
-                data_criacao DATETIME DEFAULT CURRENT_TIMESTAMP,
-                data_localizacao DATETIME
-            )
-        """)
-        
-        # Limpar tabela existente
-        cursor.execute("DELETE FROM bens")
-        logger.info("Tabela limpa para nova importação")
-        
-        # Inserir dados
         registros_inseridos = 0
+        registros_atualizados = 0
         registros_erro = 0
-        registros_ignorados = 0
         
         for index, row in df.iterrows():
             try:
-                # Pular linhas completamente vazias
+                # Pular linhas vazias
                 if row.isnull().all():
-                    registros_ignorados += 1
                     continue
                 
-                # Obter valores
-                numero_bem = normalizar_valor(row[mapeamento['numero']])
+                # Extrair dados básicos
+                numero = normalizar_valor(row[mapeamento['numero']])
                 nome = normalizar_valor(row[mapeamento['nome']])
                 
-                # Pular linhas com dados obrigatórios faltantes
-                if not numero_bem or not nome:
-                    registros_ignorados += 1
+                if not numero or not nome:
+                    registros_erro += 1
                     continue
                 
-                # Obter valores opcionais
-                localizacao = ''
-                if mapeamento['localizacao']:
-                    localizacao_valor = normalizar_valor(row[mapeamento['localizacao']])
-                    localizacao = localizacao_valor if localizacao_valor else ''
+                # Extrair dados opcionais
+                situacao_val = row.get(mapeamento.get('situacao'), 'Pendente')
+                situacao = normalizar_valor(situacao_val) or 'Pendente'
                 
-                situacao = 'Pendente'
-                if mapeamento['situacao']:
-                    situacao_valor = normalizar_valor(row[mapeamento['situacao']])
-                    if situacao_valor:
-                        # Tentar detectar automaticamente se está localizado
-                        situacao_lower = situacao_valor.lower()
-                        if any(termo in situacao_lower for termo in ['ok', 'localizado', 'encontrado', 'sim', 'yes', 'concluído']):
-                            situacao = 'OK'
-                        else:
-                            situacao = situacao_valor
+                localizacao_val = row.get(mapeamento.get('localizacao'))
+                localizacao = normalizar_valor(localizacao_val) or ''
                 
-                # Inserir no banco
-                cursor.execute("""
-                    INSERT OR REPLACE INTO bens (numero, nome, localizacao, situacao)
-                    VALUES (?, ?, ?, ?)
-                """, (numero_bem, nome, localizacao, situacao))
+                responsavel_val = row.get(mapeamento.get('responsavel'))
+                responsavel = normalizar_valor(responsavel_val) or ''
                 
-                registros_inseridos += 1
+                auditor_val = row.get(mapeamento.get('auditor'))
+                auditor = normalizar_valor(auditor_val) or ''
                 
-                # Log a cada 100 registros
-                if registros_inseridos % 100 == 0:
-                    logger.info(f"Registros processados: {registros_inseridos}")
+                # Processar datas
+                data_ultima_val = row.get(mapeamento.get('data_ultima_vistoria'))
+                data_ultima_vistoria = processar_data_excel(data_ultima_val)
+                
+                data_atual_val = row.get(mapeamento.get('data_vistoria_atual'))
+                data_vistoria_atual = processar_data_excel(data_atual_val)
+                
+                # Verificar se registro já existe
+                cursor.execute("SELECT id FROM bens WHERE numero = ?", (numero,))
+                existe = cursor.fetchone()
+                
+                if existe:
+                    # Atualizar registro existente
+                    cursor.execute('''
+                        UPDATE bens SET 
+                        nome = ?, situacao = ?, localizacao = ?, responsavel = ?,
+                        data_ultima_vistoria = ?, data_vistoria_atual = ?, auditor = ?
+                        WHERE numero = ?
+                    ''', (nome, situacao, localizacao, responsavel, 
+                         data_ultima_vistoria, data_vistoria_atual, auditor, numero))
+                    registros_atualizados += 1
+                else:
+                    # Inserir novo registro
+                    cursor.execute('''
+                        INSERT INTO bens 
+                        (numero, nome, situacao, localizacao, responsavel, 
+                         data_ultima_vistoria, data_vistoria_atual, auditor)
+                        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+                    ''', (numero, nome, situacao, localizacao, responsavel,
+                         data_ultima_vistoria, data_vistoria_atual, auditor))
+                    registros_inseridos += 1
+                
+                # Log a cada 50 registros
+                if (registros_inseridos + registros_atualizados) % 50 == 0:
+                    print(f"📈 Processados: {registros_inseridos + registros_atualizados} registros")
                 
             except Exception as e:
                 registros_erro += 1
-                logger.warning(f"Erro na linha {index + 2}: {str(e)}")
+                if registros_erro <= 5:  # Mostrar apenas os primeiros 5 erros
+                    print(f"⚠️  Erro na linha {index + 2}: {str(e)}")
                 continue
         
         conn.commit()
         conn.close()
         
-        # Mensagem de sucesso detalhada
-        mensagem = f"✅ Importação concluída com sucesso!"
-        mensagem += f"\n• 📊 Registros inseridos: {registros_inseridos}"
+        # Mensagem de resultado
+        mensagem_log = f"✅ Importação concluída! Novos: {registros_inseridos}, Atualizados: {registros_atualizados}"
+        if registros_erro > 0:
+            mensagem_log += f", Erros: {registros_erro}"
+        if mensagem_backup:
+            mensagem_log += f" | {mensagem_backup}"
+        
+        print(mensagem_log)
+        
+        # Mensagem para usuário
+        mensagem_user = f"✅ Importação concluída com sucesso!"
+        mensagem_user += f"\n• 📊 Novos registros: {registros_inseridos}"
+        mensagem_user += f"\n• 🔄 Registros atualizados: {registros_atualizados}"
         
         if registros_erro > 0:
-            mensagem += f"\n• ⚠️  Registros com erro: {registros_erro}"
-        
-        if registros_ignorados > 0:
-            mensagem += f"\n• 🔄 Registros ignorados (vazios): {registros_ignorados}"
+            mensagem_user += f"\n• ⚠️  Registros com erro: {registros_erro}"
         
         if mensagem_backup:
-            mensagem += f"\n• {mensagem_backup}"
+            mensagem_user += f"\n• 📦 {mensagem_backup}"
         
-        logger.info(mensagem)
-        return True, mensagem
+        return True, mensagem_user
         
     except Exception as e:
         error_msg = f"❌ Erro na importação: {str(e)}"
-        logger.error(error_msg)
+        print(error_msg)
+        import traceback
+        traceback.print_exc()
         return False, error_msg
 
-def verificar_estrutura_excel(arquivo_excel, aba_nome='Estoque'):
-    """
-    Verifica a estrutura do arquivo Excel antes da importação
-    """
+# ==============================
+# FUNÇÕES DE VERIFICAÇÃO
+# ==============================
+
+def verificar_estrutura_excel(caminho_arquivo: str, aba_nome: str = 'Estoque') -> Tuple[bool, str]:
+    """Verifica se a planilha tem a estrutura esperada"""
     try:
-        wb = load_workbook(arquivo_excel, read_only=True)
+        if not os.path.exists(caminho_arquivo):
+            return False, f"Arquivo não encontrado: {caminho_arquivo}"
+        
+        wb = load_workbook(caminho_arquivo, read_only=True)
         
         if aba_nome not in wb.sheetnames:
-            return False, f"Aba '{aba_nome}' não encontrada"
+            abas_disponiveis = ", ".join(wb.sheetnames)
+            wb.close()
+            return False, f"Aba '{aba_nome}' não encontrada. Abas disponíveis: {abas_disponiveis}"
         
-        # Ler algumas linhas para verificar estrutura
-        df = pd.read_excel(arquivo_excel, sheet_name=aba_nome, nrows=10)
+        ws = wb[aba_nome]
         
-        if df.empty:
-            return False, "O arquivo Excel está vazio"
+        # Obter cabeçalhos
+        cabecalhos = []
+        for cell in ws[1]:
+            if cell.value:
+                cabecalhos.append(str(cell.value).strip().upper())
         
-        # Detectar colunas automaticamente
-        mapeamento = detectar_colunas(df)
+        wb.close()
         
-        # Verificar colunas mínimas
-        if not mapeamento['numero']:
-            return False, "Coluna do número do bem não encontrada"
+        # Campos obrigatórios
+        obrigatorios = ['NOME', 'NUMERO DO BEM', 'SITUAÇÃO', 'LOCALIZAÇÃO']
         
-        if not mapeamento['nome']:
-            return False, "Coluna do nome não encontrada"
+        for campo in obrigatorios:
+            if campo not in cabecalhos:
+                return False, f"Campo obrigatório '{campo}' não encontrado"
         
-        # Preparar mensagem detalhada
-        colunas_detectadas = []
-        for chave, valor in mapeamento.items():
-            if valor:
-                colunas_detectadas.append(f"{chave}: '{valor}'")
-        
-        return True, f"Estrutura válida. Colunas detectadas: {', '.join(colunas_detectadas)}"
+        return True, f"Estrutura válida. Campos encontrados: {len(cabecalhos)}"
         
     except Exception as e:
-        return False, f"Erro na verificação: {str(e)}"
+        return False, f"Erro ao verificar estrutura: {str(e)}"
 
-def obter_colunas_excel(arquivo_excel, aba_nome='Estoque'):
-    """
-    Retorna as colunas disponíveis no arquivo Excel
-    """
+def obter_colunas_excel(arquivo_excel: str, aba_nome: str = 'Estoque') -> List[str]:
+    """Retorna as colunas disponíveis no arquivo Excel"""
     try:
         df = pd.read_excel(arquivo_excel, sheet_name=aba_nome, nrows=1)
-        colunas = list(df.columns)
-        
-        # Adicionar informações de tipo
-        df_sample = pd.read_excel(arquivo_excel, sheet_name=aba_nome, nrows=5)
-        info_colunas = []
-        
-        for coluna in colunas:
-            tipo = str(df_sample[coluna].dtype)
-            valores_exemplo = df_sample[coluna].head(3).tolist()
-            info_colunas.append(f"'{coluna}' (Tipo: {tipo}, Exemplo: {valores_exemplo})")
-        
-        return info_colunas
-        
+        return df.columns.tolist()
     except Exception as e:
-        logger.error(f"Erro ao obter colunas: {str(e)}")
-        return [f"Erro: {str(e)}"]
+        print(f"Erro ao obter colunas: {str(e)}")
+        return []
 
-def criar_template_excel(caminho_saida):
-    """
-    Cria um template de Excel com a estrutura esperada
-    """
+# ==============================
+# FUNÇÃO PARA TESTE/DEBUG
+# ==============================
+
+def testar_importacao():
+    """Função para testar a importação diretamente"""
     try:
-        # Dados de exemplo
-        dados = [
-            ['Computador Dell', '1001', 'Sala 101', 'OK'],
-            ['Monitor LG', '1002', 'Sala 102', 'Pendente'],
-            ['Impressora HP', '1003', 'Recepção', 'OK'],
-            ['Telefone IP', '1004', 'Escritório', 'Pendente']
-        ]
+        print("=== TESTANDO IMPORTAÇÃO EXCEL ===")
         
-        # Criar DataFrame
-        df = pd.DataFrame(dados, columns=['Nome', 'Número do Bem', 'Localização', 'Situação'])
+        # Caminho correto para o arquivo Excel
+        excel_path = "relatorios/controle_patrimonial.xlsx"
+        db_path = "relatorios/controle_patrimonial.db"
         
-        # Salvar como Excel
-        df.to_excel(caminho_saida, index=False)
+        print(f"📁 Procurando arquivo: {excel_path}")
         
-        return True, f"Template criado: {caminho_saida}"
+        if not os.path.exists(excel_path):
+            print(f"❌ Arquivo não encontrado: {excel_path}")
+            print("📂 Conteúdo da pasta relatorios:")
+            if os.path.exists("relatorios"):
+                for item in os.listdir("relatorios"):
+                    print(f"   - {item}")
+            return
         
+        print("✅ Arquivo Excel encontrado!")
+        
+        # Criar pasta do banco se não existir
+        os.makedirs(os.path.dirname(db_path), exist_ok=True)
+        
+        # Testar verificação de estrutura
+        print("\n1. Verificando estrutura do Excel...")
+        resultado, mensagem = verificar_estrutura_excel(excel_path)
+        print(f"📋 {mensagem}")
+        
+        if resultado:
+            # Testar obtenção de colunas
+            print("\n2. Obtendo colunas do Excel...")
+            colunas = obter_colunas_excel(excel_path)
+            print(f"📊 Colunas encontradas: {colunas}")
+            
+            # Testar importação
+            print("\n3. Iniciando importação...")
+            sucesso, mensagem = importar_excel_para_sqlite(excel_path, 'Estoque', db_path)
+            print(f"🎯 Resultado: {'SUCESSO' if sucesso else 'FALHA'}")
+            print(f"💬 {mensagem}")
+        else:
+            print("❌ Estrutura inválida, importação cancelada.")
+            
     except Exception as e:
-        return False, f"Erro ao criar template: {str(e)}"
+        print(f"💥 Erro no teste: {e}")
+        import traceback
+        traceback.print_exc()
+
+# Executar teste se o arquivo for executado diretamente
+if __name__ == "__main__":
+    testar_importacao()

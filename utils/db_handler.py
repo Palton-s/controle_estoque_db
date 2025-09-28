@@ -3,6 +3,34 @@ from typing import List, Dict, Tuple, Optional
 from contextlib import contextmanager
 from utils.logger import logger
 
+# Adicionar após as importações
+def criar_tabela_atualizada(db_path: str):
+    """Cria a tabela bens com a nova estrutura"""
+    try:
+        with get_db_connection(db_path) as conn:
+            cursor = conn.cursor()
+            cursor.execute('''
+                CREATE TABLE IF NOT EXISTS bens (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    numero TEXT UNIQUE NOT NULL,
+                    nome TEXT NOT NULL,
+                    situacao TEXT DEFAULT 'Pendente',
+                    localizacao TEXT,
+                    responsavel TEXT,
+                    data_ultima_vistoria DATE,
+                    data_vistoria_atual DATE,
+                    auditor TEXT,
+                    observacoes TEXT,
+                    data_criacao DATETIME DEFAULT CURRENT_TIMESTAMP,
+                    data_localizacao DATETIME
+                )
+            ''')
+            conn.commit()
+            logger.info("Tabela bens criada/atualizada com sucesso")
+    except Exception as e:
+        logger.error(f"Erro ao criar tabela: {str(e)}")
+
+
 @contextmanager
 def get_db_connection(db_path: str):
     """

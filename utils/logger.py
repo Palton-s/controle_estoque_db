@@ -1,29 +1,41 @@
 import logging
+import sys
 import os
-from datetime import datetime
 
 def setup_logger():
-    """
-    Configura o sistema de logs da aplicação
-    Cria arquivos de log diários na pasta logs/
-    """
-    # Criar pasta de logs se não existir
-    log_dir = "logs"
-    os.makedirs(log_dir, exist_ok=True)
+    """Configura o logger para lidar com Unicode no Windows"""
+    logger = logging.getLogger('controle_patrimonial')
+    logger.setLevel(logging.INFO)
     
-    # Configurar o logging
-    logging.basicConfig(
-        level=logging.INFO,
-        format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-        handlers=[
-            # Log para arquivo (diário)
-            logging.FileHandler(os.path.join(log_dir, f'app_{datetime.now().strftime("%Y%m%d")}.log')),
-            # Log para console
-            logging.StreamHandler()
-        ]
+    # Evitar múltiplos handlers
+    if logger.handlers:
+        return logger
+    
+    # Formatter sem emojis para evitar problemas de encoding
+    formatter = logging.Formatter(
+        '%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+        datefmt='%Y-%m-%d %H:%M:%S'
     )
     
-    return logging.getLogger(__name__)
+    # Handler para console
+    console_handler = logging.StreamHandler(sys.stdout)
+    console_handler.setLevel(logging.INFO)
+    console_handler.setFormatter(formatter)
+    
+    # Handler para arquivo (sem problemas de encoding)
+    os.makedirs('logs', exist_ok=True)
+    file_handler = logging.FileHandler(
+        'logs/controle_patrimonial.log', 
+        encoding='utf-8'
+    )
+    file_handler.setLevel(logging.INFO)
+    file_handler.setFormatter(formatter)
+    
+    # Adicionar handlers
+    logger.addHandler(console_handler)
+    logger.addHandler(file_handler)
+    
+    return logger
 
-# Criar instância do logger para importação
+# Criar logger
 logger = setup_logger()
