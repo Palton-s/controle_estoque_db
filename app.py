@@ -97,7 +97,7 @@ class BemService:
                     'mensagem': erro or 'Bem não encontrado.',
                     'bem_detalhes': None,
                     'localizacao_informada': localizacao,
-                    'show_modal': True
+                    'show_modal': False
                 }
             
             # Marca como localizado
@@ -117,7 +117,7 @@ class BemService:
                 'mensagem': 'Erro interno ao processar o bem.',
                 'bem_detalhes': None,
                 'localizacao_informada': localizacao,
-                'show_modal': True
+                'show_modal': False
             }
     
     def _obter_detalhes_bem(self, numero_bem: str, localizacao: str = None) -> Dict[str, Any] | None:
@@ -556,7 +556,7 @@ def api_criar_bem():
 
 @app.route('/api/bens/<numero_bem>')
 def api_obter_bem(numero_bem):
-    """API para obter dados de um bem"""
+    """API para obter dados de um bem pelo número"""
     try:
         bem = obter_bem_por_numero(DB_PATH, numero_bem)
         
@@ -568,7 +568,7 @@ def api_obter_bem(numero_bem):
     except Exception as e:
         logger.error(f"Erro ao obter bem {numero_bem}: {str(e)}")
         return jsonify({'success': False, 'message': str(e)})
-
+    
 @app.route('/api/bens/<int:bem_id>', methods=['PUT'])
 def api_editar_bem(bem_id):
     """API para editar um bem existente"""
@@ -606,6 +606,24 @@ def api_verificar_numero():
     except Exception as e:
         logger.error(f"Erro ao verificar número: {str(e)}")
         return jsonify({'exists': False})
+    
+    
+def obter_estatisticas_crud():
+    """Obtém estatísticas para a página CRUD com fallback seguro"""
+    try:
+        contagens = contar_bens(DB_PATH)
+        return {
+            'total_count': contagens.get('total', 0),
+            'localizados_count': contagens.get('localizados', 0),
+            'nao_localizados_count': contagens.get('nao_localizados', 0)
+        }
+    except Exception as e:
+        logger.error(f"Erro ao obter estatísticas: {str(e)}")
+        return {
+            'total_count': 0,
+            'localizados_count': 0,
+            'nao_localizados_count': 0
+        }
 
 # ==============================
 # Rotas de Interface
@@ -707,6 +725,82 @@ def relatorio_localidades():
                              localidades=[],
                              localidade_selecionada='',
                              paginacao=None)
+
+@app.route('/sistema-crud')
+def sistema_crud():
+    """Página completa de CRUD para gerenciamento de bens"""
+    try:
+        # Parâmetros de paginação
+        pagina = request.args.get('pagina', 1, type=int)
+        por_pagina = request.args.get('por_pagina', 50, type=int)
+        termo_busca = request.args.get('q', '').strip()
+        
+        # Obter dados paginados
+        if termo_busca:
+            resultados = buscar_bens_por_nome(DB_PATH, termo_busca)
+            paginacao = {
+                'dados': resultados,
+                'pagina_atual': 1,
+                'por_pagina': len(resultados),
+                'total_registros': len(resultados),
+                'total_paginas': 1
+            }
+        else:
+            paginacao = obter_bens_paginados(DB_PATH, 'todos', pagina, por_pagina)
+        
+        # Obter estatísticas
+        estatisticas = obter_estatisticas_crud()
+        
+        return render_template('sistema_crud.html',
+                            paginacao=paginacao,
+                            termo_busca=termo_busca,
+                            **estatisticas,  # ✅ DESEMPACOTA TODAS AS ESTATÍSTICAS
+                            mensagem=None)
+        
+    except Exception as e:
+        logger.error(f"Erro na página CRUD: {str(e)}")
+        return render_template('sistema_crud.html',
+                            paginacao={
+                                'dados': [],
+                                'pagina_atual': 1,
+                                'por_pagina': 50,
+                                'total_registros': 0,
+                                'total_paginas': 0
+                            },
+                            termo_busca='',
+                            total_count=0,
+                            localizados_count=0,
+                            nao_localizados_count=0,
+                            mensagem=f"Erro ao carregar dados: {str(e)}")
+        
+@app.route('/api/bens/id/<int:bem_id>')
+def api_obter_bem_por_id(bem_id):
+    """API para obter dados de um bem pelo ID"""
+    try:
+        conn = sqlite3.connect(DB_PATH)
+        cursor = conn.cursor()
+        
+        cursor.execute('''
+            SELECT id, numero, nome, situacao, localizacao, responsavel,
+                   data_ultima_vistoria, data_vistoria_atual, auditor,
+                   data_criacao, data_localizacao
+            FROM bens WHERE id = ?
+        ''', (bem_id,))
+        
+        row = cursor.fetchone()
+        conn.close()
+        
+        if row:
+            colunas = [desc[0] for desc in cursor.description]
+            bem = dict(zip(colunas, row))
+            return jsonify({'success': True, 'data': bem})
+        else:
+            return jsonify({'success': False, 'message': 'Bem não encontrado'})
+            
+    except Exception as e:
+        logger.error(f"Erro ao obter bem por ID {bem_id}: {str(e)}")
+        return jsonify({'success': False, 'message': str(e)})
+
 @app.route('/sair')
 def sair():
     """Página de encerramento do aplicativo"""
