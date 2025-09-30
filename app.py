@@ -74,13 +74,15 @@ class BemValidator:
         
         return BemValidator.validar_numero(dados['numero'])
 
+
+    """Serviço centralizado para operações com bens"""
+   
 class BemService:
     """Serviço centralizado para operações com bens"""
     
     def __init__(self, db_path: str):
         self.db_path = db_path
     
-   
     def processar_localizacao(self, numero_bem: str, localizacao: str = None) -> Dict[str, Any]:
         """Processa a localização de um bem - VERSÃO CORRIGIDA"""
         try:
@@ -95,7 +97,7 @@ class BemService:
                     'mensagem': erro or 'Bem não encontrado.',
                     'bem_detalhes': None,
                     'localizacao_informada': localizacao,
-                    'show_modal': True  # ← CORREÇÃO: Manter show_modal
+                    'show_modal': True
                 }
             
             # Marca como localizado
@@ -106,7 +108,7 @@ class BemService:
                 'mensagem': mensagem,
                 'bem_detalhes': bem_detalhes,
                 'localizacao_informada': localizacao,
-                'show_modal': True  # ← CORREÇÃO: Manter show_modal
+                'show_modal': True
             }
             
         except Exception as e:
@@ -115,14 +117,9 @@ class BemService:
                 'mensagem': 'Erro interno ao processar o bem.',
                 'bem_detalhes': None,
                 'localizacao_informada': localizacao,
-                'show_modal': True  # ← CORREÇÃO: Manter show_modal
+                'show_modal': True
             }
     
- 
-class BemService:
-    def __init__(self, db_path: str):
-        self.db_path = db_path
-
     def _obter_detalhes_bem(self, numero_bem: str, localizacao: str = None) -> Dict[str, Any] | None:
         """Busca detalhes de um bem específico com todos os campos"""
         try:
@@ -270,11 +267,11 @@ def caminho_relativo(pasta: str) -> str:
     if hasattr(sys, '_MEIPASS'):
         return os.path.join(sys._MEIPASS, pasta)
     return os.path.join(os.path.abspath("."), pasta)
-
 # Configurar caminho do banco
 DB_PATH = app.config['DB_PATH']
 bem_service = BemService(DB_PATH)
-export_service = ExportService(DB_PATH)
+export_service = bem_service  # Corrigido: usar bem_service para exportação
+
 
 # ==============================
 # Middleware e Validações Globais
