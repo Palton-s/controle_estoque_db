@@ -336,6 +336,112 @@
                 </div>
               </div>
 
+              <!-- NOVOS CAMPOS ADICIONADOS AQUI -->
+              <!-- Responsável -->
+              <div class="col-md-6">
+                <div class="border rounded-3 p-3 h-100">
+                  <h6 class="text-primary fw-semibold mb-2">
+                    <i class="bi bi-person me-2"></i>Responsável
+                  </h6>
+                  <p class="mb-0">
+                    {% if bem_detalhes.responsavel and bem_detalhes.responsavel != 'Não informado' %}
+                    <span class="text-success">
+                      <i class="bi bi-person-check me-1"></i>{{ bem_detalhes.responsavel }}
+                    </span>
+                    {% else %}
+                    <span class="text-muted">
+                      <i class="bi bi-person me-1"></i>Não informado
+                    </span>
+                    {% endif %}
+                  </p>
+                </div>
+              </div>
+
+              <!-- Auditor -->
+              <div class="col-md-6">
+                <div class="border rounded-3 p-3 h-100">
+                  <h6 class="text-primary fw-semibold mb-2">
+                    <i class="bi bi-person-badge me-2"></i>Auditor
+                  </h6>
+                  <p class="mb-0">
+                    {% if bem_detalhes.auditor and bem_detalhes.auditor != 'Não informado' %}
+                    <span class="text-info">
+                      <i class="bi bi-person-check me-1"></i>{{ bem_detalhes.auditor }}
+                    </span>
+                    {% else %}
+                    <span class="text-muted">
+                      <i class="bi bi-person me-1"></i>Não informado
+                    </span>
+                    {% endif %}
+                  </p>
+                </div>
+              </div>
+
+              <!-- Data Última Vistoria -->
+              <div class="col-md-6">
+                <div class="border rounded-3 p-3 h-100">
+                  <h6 class="text-primary fw-semibold mb-2">
+                    <i class="bi bi-calendar-check me-2"></i>Data Última Vistoria
+                  </h6>
+                  <p class="mb-0">
+                    {% if bem_detalhes.data_ultima_vistoria and bem_detalhes.data_ultima_vistoria != 'Não informada' %}
+                    <span class="text-dark">
+                      <i class="bi bi-calendar-event me-1"></i>{{ bem_detalhes.data_ultima_vistoria }}
+                    </span>
+                    {% else %}
+                    <span class="text-muted">
+                      <i class="bi bi-calendar me-1"></i>Não informada
+                    </span>
+                    {% endif %}
+                  </p>
+                </div>
+              </div>
+
+              <!-- Data Vistoria Atual -->
+              <div class="col-md-6">
+                <div class="border rounded-3 p-3 h-100">
+                  <h6 class="text-primary fw-semibold mb-2">
+                    <i class="bi bi-calendar-event me-2"></i>Data Vistoria Atual
+                  </h6>
+                  <p class="mb-0">
+                    {% if bem_detalhes.data_vistoria_atual and bem_detalhes.data_vistoria_atual != 'Não informada' %}
+                    <span class="text-dark">
+                      <i class="bi bi-calendar-check me-1"></i>{{ bem_detalhes.data_vistoria_atual }}
+                    </span>
+                    {% else %}
+                    <span class="text-muted">
+                      <i class="bi bi-calendar me-1"></i>Não informada
+                    </span>
+                    {% endif %}
+                  </p>
+                </div>
+              </div>
+
+              <!-- Datas do Sistema -->
+              <div class="col-md-6">
+                <div class="border rounded-3 p-3 h-100">
+                  <h6 class="text-primary fw-semibold mb-2">
+                    <i class="bi bi-calendar-plus me-2"></i>Data de Criação
+                  </h6>
+                  <p class="mb-0 text-muted">
+                    <i class="bi bi-clock me-1"></i>
+                    {{ bem_detalhes.data_criacao[:10] if bem_detalhes.data_criacao else 'N/A' }}
+                  </p>
+                </div>
+              </div>
+
+              <div class="col-md-6">
+                <div class="border rounded-3 p-3 h-100">
+                  <h6 class="text-primary fw-semibold mb-2">
+                    <i class="bi bi-calendar-event me-2"></i>Última Localização
+                  </h6>
+                  <p class="mb-0 text-muted">
+                    <i class="bi bi-clock me-1"></i>
+                    {{ bem_detalhes.data_localizacao[:10] if bem_detalhes.data_localizacao else 'Nunca localizado' }}
+                  </p>
+                </div>
+              </div>
+
               <!-- Informações Adicionais -->
               <div class="col-12">
                 <div class="bg-light rounded-3 p-3">
@@ -400,6 +506,29 @@
                   <label class="form-label fw-semibold">Localização</label>
                   <textarea class="form-control" id="edt_localizacao" name="localizacao" rows="2"
                     placeholder="Ex: Almoxarifado Central, Prateleira B2"></textarea>
+                </div>
+
+                <!-- NOVOS CAMPOS NO FORMULÁRIO DE EDIÇÃO -->
+                <div class="col-md-6">
+                  <label class="form-label fw-semibold">Responsável</label>
+                  <input type="text" class="form-control" id="edt_responsavel" name="responsavel"
+                    placeholder="Nome do responsável">
+                </div>
+
+                <div class="col-md-6">
+                  <label class="form-label fw-semibold">Auditor</label>
+                  <input type="text" class="form-control" id="edt_auditor" name="auditor"
+                    placeholder="Nome do auditor">
+                </div>
+
+                <div class="col-md-6">
+                  <label class="form-label fw-semibold">Data Última Vistoria</label>
+                  <input type="date" class="form-control" id="edt_data_ultima_vistoria" name="data_ultima_vistoria">
+                </div>
+
+                <div class="col-md-6">
+                  <label class="form-label fw-semibold">Data Vistoria Atual</label>
+                  <input type="date" class="form-control" id="edt_data_vistoria_atual" name="data_vistoria_atual">
                 </div>
 
                 <div class="col-12">
@@ -790,6 +919,63 @@
             </div>
           </div>
 
+          <!-- NOVOS CAMPOS NO JAVASCRIPT -->
+          <div class="col-md-6">
+            <div class="border rounded-3 p-3 h-100">
+              <h6 class="text-primary fw-semibold mb-2">
+                <i class="bi bi-person me-2"></i>Responsável
+              </h6>
+              <p class="mb-0">
+                ${dados.responsavel && dados.responsavel !== 'Não informado'
+          ? `<span class="text-success"><i class="bi bi-person-check me-1"></i>${dados.responsavel}</span>`
+          : '<span class="text-muted"><i class="bi bi-person me-1"></i>Não informado</span>'
+        }
+              </p>
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <div class="border rounded-3 p-3 h-100">
+              <h6 class="text-primary fw-semibold mb-2">
+                <i class="bi bi-person-badge me-2"></i>Auditor
+              </h6>
+              <p class="mb-0">
+                ${dados.auditor && dados.auditor !== 'Não informado'
+          ? `<span class="text-info"><i class="bi bi-person-check me-1"></i>${dados.auditor}</span>`
+          : '<span class="text-muted"><i class="bi bi-person me-1"></i>Não informado</span>'
+        }
+              </p>
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <div class="border rounded-3 p-3 h-100">
+              <h6 class="text-primary fw-semibold mb-2">
+                <i class="bi bi-calendar-check me-2"></i>Data Última Vistoria
+              </h6>
+              <p class="mb-0">
+                ${dados.data_ultima_vistoria && dados.data_ultima_vistoria !== 'Não informada'
+          ? `<span class="text-dark"><i class="bi bi-calendar-event me-1"></i>${dados.data_ultima_vistoria}</span>`
+          : '<span class="text-muted"><i class="bi bi-calendar me-1"></i>Não informada</span>'
+        }
+              </p>
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <div class="border rounded-3 p-3 h-100">
+              <h6 class="text-primary fw-semibold mb-2">
+                <i class="bi bi-calendar-event me-2"></i>Data Vistoria Atual
+              </h6>
+              <p class="mb-0">
+                ${dados.data_vistoria_atual && dados.data_vistoria_atual !== 'Não informada'
+          ? `<span class="text-dark"><i class="bi bi-calendar-check me-1"></i>${dados.data_vistoria_atual}</span>`
+          : '<span class="text-muted"><i class="bi bi-calendar me-1"></i>Não informada</span>'
+        }
+              </p>
+            </div>
+          </div>
+
           <div class="col-12">
             <div class="bg-light rounded-3 p-3">
               <h6 class="text-muted mb-2">
@@ -825,6 +1011,12 @@
         document.getElementById('edt_nome').value = bemAtual.nome;
         document.getElementById('edt_localizacao').value = bemAtual.localizacao || '';
         document.getElementById('edt_situacao').value = bemAtual.situacao;
+        
+        // NOVOS CAMPOS NO FORMULÁRIO DE EDIÇÃO
+        document.getElementById('edt_responsavel').value = bemAtual.responsavel || '';
+        document.getElementById('edt_auditor').value = bemAtual.auditor || '';
+        document.getElementById('edt_data_ultima_vistoria').value = bemAtual.data_ultima_vistoria || '';
+        document.getElementById('edt_data_vistoria_atual').value = bemAtual.data_vistoria_atual || '';
 
         document.getElementById('detalhesBem').style.display = 'none';
         document.getElementById('formEdicao').style.display = 'block';
@@ -851,6 +1043,12 @@
         const nome = document.getElementById('edt_nome').value.trim();
         const localizacao = document.getElementById('edt_localizacao').value.trim();
         const situacao = document.getElementById('edt_situacao').value;
+        
+        // NOVOS CAMPOS
+        const responsavel = document.getElementById('edt_responsavel').value.trim();
+        const auditor = document.getElementById('edt_auditor').value.trim();
+        const data_ultima_vistoria = document.getElementById('edt_data_ultima_vistoria').value;
+        const data_vistoria_atual = document.getElementById('edt_data_vistoria_atual').value;
 
         // Validações client-side
         if (isNaN(bem_id) || bem_id <= 0) {
@@ -881,7 +1079,11 @@
             numero: numero,
             nome: nome,
             localizacao: localizacao,
-            situacao: situacao
+            situacao: situacao,
+            responsavel: responsavel,
+            auditor: auditor,
+            data_ultima_vistoria: data_ultima_vistoria,
+            data_vistoria_atual: data_vistoria_atual
         };
 
         console.log('Enviando para API:', { bem_id, dados: dadosAtualizacao });

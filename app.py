@@ -118,104 +118,118 @@ class BemService:
                 'show_modal': True  # ← CORREÇÃO: Manter show_modal
             }
     
-    def _obter_detalhes_bem(self, numero_bem: str, localizacao: str = None) -> Dict[str, Any]:
-        """Busca detalhes de um bem específico"""
+ 
+class BemService:
+    def __init__(self, db_path: str):
+        self.db_path = db_path
+
+    def _obter_detalhes_bem(self, numero_bem: str, localizacao: str = None) -> Dict[str, Any] | None:
+        """Busca detalhes de um bem específico com todos os campos"""
         try:
             bem = obter_bem_por_numero(self.db_path, numero_bem)
-            
+
             if bem:
-                localizacao_final = localizacao or bem['localizacao'] or 'Não informada'
-                
+                localizacao_final = localizacao or bem.get('localizacao') or 'Não informada'
+
                 return {
-                    'id': bem['id'],
-                    'nome': bem['nome'] or 'Não informado',
-                    'numero': bem['numero'] or 'Não informado',
-                    'situacao': bem['situacao'] or 'Pendente',
+                    'id': bem.get('id'),
+                    'nome': bem.get('nome') or 'Não informado',
+                    'numero': bem.get('numero') or 'Não informado',
+                    'situacao': bem.get('situacao') or 'Pendente',
                     'localizacao': localizacao_final,
-                    'data_criacao': bem['data_criacao'],
-                    'data_localizacao': bem['data_localizacao']
+                    'responsavel': bem.get('responsavel') or 'Não informado',
+                    'data_ultima_vistoria': bem.get('data_ultima_vistoria') or 'Não informada',
+                    'data_vistoria_atual': bem.get('data_vistoria_atual') or 'Não informada',
+                    'auditor': bem.get('auditor') or 'Não informado',
+                    'data_criacao': bem.get('data_criacao'),
+                    'data_localizacao': bem.get('data_localizacao')
                 }
-            
+
             return None
-            
+
         except Exception as e:
             logger.error(f"Erro ao buscar detalhes do bem {numero_bem}: {str(e)}")
             return None
-    
+
     def criar_bem(self, dados: Dict[str, Any]) -> Tuple[bool, str]:
-        """Cria um novo bem no sistema"""
+        """Cria um novo bem no sistema com todos os campos"""
         try:
-            # Validação básica
             valido, mensagem = BemValidator.validar_dados_criacao(dados)
             if not valido:
                 return False, mensagem
-            
-            # Verificar duplicidade
+
             if verificar_numero_existe(self.db_path, dados['numero']):
                 return False, "Já existe um bem com este número!"
-            
-            # Dados padrão
+
             dados_completos = {
                 'numero': dados['numero'].strip(),
                 'nome': dados['nome'].strip(),
                 'situacao': dados.get('situacao', 'Pendente'),
                 'localizacao': dados.get('localizacao', '').strip(),
+                'responsavel': dados.get('responsavel', '').strip(),
+                'data_ultima_vistoria': dados.get('data_ultima_vistoria', ''),
+                'data_vistoria_atual': dados.get('data_vistoria_atual', ''),
+                'auditor': dados.get('auditor', '').strip(),
                 'observacoes': dados.get('observacoes', '').strip()
             }
-            
+
             return criar_novo_bem(self.db_path, dados_completos)
-            
+
         except Exception as e:
             logger.error(f"Erro ao criar bem: {str(e)}")
             return False, f"Erro interno: {str(e)}"
 
-class ExportService:
-    """Serviço para exportação de dados"""
-    
-    def __init__(self, db_path: str):
-        self.db_path = db_path
-    
     def exportar_bens_por_tipo(self, tipo: str) -> Response:
-        """Exporta bens por tipo com streaming para grandes volumes"""
+        """Exporta bens por tipo incluindo novos campos"""
         try:
             import pandas as pd
-            
-            # Obter todos os dados de uma vez (otimizado para volumes razoáveis)
+
             if tipo == 'localizados':
-                resultado = obter_bens_paginados(self.db_path, tipo, 1, 100000)
+                query = """
+                    SELECT numero, nome, situacao, localizacao, responsavel, 
+                           data_ultima_vistoria, data_vistoria_atual, auditor 
+                    FROM bens 
+                    WHERE situacao = 'OK'
+                """
                 nome_arquivo = 'bens_localizados'
             elif tipo == 'nao-localizados':
-                resultado = obter_bens_paginados(self.db_path, tipo, 1, 100000)
+                query = """
+                    SELECT numero, nome, situacao, localizacao, responsavel, 
+                           data_ultima_vistoria, data_vistoria_atual, auditor 
+                    FROM bens 
+                    WHERE situacao != 'OK' OR situacao IS NULL
+                """
                 nome_arquivo = 'bens_nao_localizados'
             else:
                 abort(400, description="Tipo inválido")
-            
-            registros = resultado['dados']
-            if not registros:
+
+            conn = sqlite3.connect(self.db_path)
+            df = pd.read_sql_query(query, conn)
+            conn.close()
+
+            if df.empty:
                 abort(404, description="Nenhum dado encontrado para exportação")
-            
-            # Criar arquivo Excel
-            df = pd.DataFrame(registros)
+
             if 'numero' in df.columns:
                 df = df.sort_values(by='numero')
-            
+
             timestamp = datetime.now().strftime("%Y%m%d-%H%M%S")
             caminho_arquivo = os.path.join(
-                os.path.dirname(self.db_path), 
+                os.path.dirname(self.db_path),
                 f"{nome_arquivo}_{timestamp}.xlsx"
             )
-            
+
             df.to_excel(caminho_arquivo, index=False)
-            logger.info(f"Relatório exportado: {caminho_arquivo} ({len(registros)} registros)")
-            
+            logger.info(f"Relatório exportado: {caminho_arquivo} ({len(df)} registros)")
+
             return send_file(caminho_arquivo, as_attachment=True)
-            
+
         except ImportError:
             abort(500, description="Pandas não está instalado")
         except Exception as e:
             logger.error(f"Erro na exportação: {str(e)}")
             abort(500, description="Erro ao exportar dados")
-    
+
     def exportar_localidade(self, localidade: str) -> Any:
         """Exporta bens por localidade"""
         try:

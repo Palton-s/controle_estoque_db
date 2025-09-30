@@ -145,7 +145,7 @@ def gerar_planilhas_localizacao(db_path: str) -> Tuple[List[Dict], List[Dict]]:
         return [], []
 
 def obter_bens_paginados(db_path: str, tipo: str, pagina: int = 1, por_pagina: int = 200):
-    """Obtém bens com paginação"""
+    """Obtém bens com paginação incluindo novos campos"""
     try:
         with get_db_connection(db_path) as conn:
             cursor = conn.cursor()
@@ -153,13 +153,25 @@ def obter_bens_paginados(db_path: str, tipo: str, pagina: int = 1, por_pagina: i
             # Calcular offset
             offset = (pagina - 1) * por_pagina
             
-            # Query base
+            # Query base atualizada
             if tipo == 'localizados':
-                query = "SELECT nome, numero, situacao, localizacao FROM bens WHERE situacao = 'OK'"
+                query = """
+                    SELECT numero, nome, situacao, localizacao, responsavel,
+                           data_ultima_vistoria, data_vistoria_atual, auditor
+                    FROM bens WHERE situacao = 'OK'
+                """
             elif tipo == 'nao-localizados':
-                query = "SELECT nome, numero, situacao, localizacao FROM bens WHERE situacao != 'OK' OR situacao IS NULL"
+                query = """
+                    SELECT numero, nome, situacao, localizacao, responsavel,
+                           data_ultima_vistoria, data_vistoria_atual, auditor
+                    FROM bens WHERE situacao != 'OK' OR situacao IS NULL
+                """
             else:
-                query = "SELECT nome, numero, situacao, localizacao FROM bens"
+                query = """
+                    SELECT numero, nome, situacao, localizacao, responsavel,
+                           data_ultima_vistoria, data_vistoria_atual, auditor
+                    FROM bens
+                """
             
             # Query com paginação
             query_paginada = f"{query} LIMIT {por_pagina} OFFSET {offset}"
@@ -191,7 +203,6 @@ def obter_bens_paginados(db_path: str, tipo: str, pagina: int = 1, por_pagina: i
             'total_registros': 0,
             'total_paginas': 0
         }
-
 def contar_bens(db_path: str):
     """Retorna contagem total de bens por situação"""
     try:
@@ -220,13 +231,14 @@ def contar_bens(db_path: str):
     
     
 def obter_bem_por_numero(db_path: str, numero_bem: str):
-    """Obtém todos os dados de um bem específico"""
+    """Obtém todos os dados de um bem específico com nova estrutura"""
     try:
         with get_db_connection(db_path) as conn:
             cursor = conn.cursor()
             cursor.execute("""
-                SELECT id, numero, nome, localizacao, situacao, 
-                       data_criacao, data_localizacao 
+                SELECT id, numero, nome, localizacao, situacao, responsavel,
+                       data_ultima_vistoria, data_vistoria_atual, auditor,
+                       data_criacao, data_localizacao, observacoes
                 FROM bens WHERE numero = ?
             """, (numero_bem,))
             
