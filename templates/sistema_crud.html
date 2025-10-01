@@ -30,6 +30,19 @@
             align-items: center;
             flex-wrap: wrap;
         }
+
+        .id-indisponivel {
+            color: #dc3545;
+            font-style: italic;
+        }
+
+        .debug-panel {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 20px;
+            border-left: 4px solid #007bff;
+        }
     </style>
 </head>
 
@@ -47,6 +60,29 @@
                 <a href="{{ url_for('index') }}" class="btn btn-outline-primary">
                     <i class="fas fa-home me-1"></i>Início
                 </a>
+            </div>
+        </div>
+
+        <!-- DEBUG PANEL - TEMPORÁRIO -->
+        <div class="debug-panel">
+            <h6><i class="fas fa-bug me-2"></i>🔍 DEBUG - Diagnóstico do Problema</h6>
+            <div class="mb-2">
+                <button class="btn btn-sm btn-info" onclick="investigarDados()">
+                    <i class="fas fa-search me-1"></i>Investigar Dados
+                </button>
+                <button class="btn btn-sm btn-warning" onclick="testarRotasAPI()">
+                    <i class="fas fa-plug me-1"></i>Testar Rotas API
+                </button>
+                <button class="btn btn-sm btn-success" onclick="criarBemTeste()">
+                    <i class="fas fa-plus me-1"></i>Criar Bem Teste
+                </button>
+            </div>
+            <div id="debugInfo">
+                <div class="alert alert-warning">
+                    <strong>Problema Identificado:</strong> Os IDs não estão sendo retornados corretamente da consulta
+                    SQL.
+                    <br><strong>Solução:</strong> Precisamos corrigir a rota <code>sistema_crud</code> no Flask.
+                </div>
             </div>
         </div>
 
@@ -173,7 +209,15 @@
                         <tbody>
                             {% for bem in paginacao.dados %}
                             <tr>
-                                <td><strong>#{{ bem.id }}</strong></td>
+                                <td>
+                                    {% if bem.id and bem.id != 'None' and bem.id != 'null' and bem.id != '' %}
+                                    <strong>#{{ bem.id }}</strong>
+                                    {% else %}
+                                    <span class="id-indisponivel" title="ID não disponível - Problema na consulta SQL">
+                                        #---<br><small>Sem ID</small>
+                                    </span>
+                                    {% endif %}
+                                </td>
                                 <td>
                                     <span class="font-monospace">{{ bem.numero }}</span>
                                 </td>
@@ -207,6 +251,8 @@
                                     {% endif %}
                                 </td>
                                 <td class="action-buttons">
+                                    <!-- SOLUÇÃO SIMPLES E FUNCIONAL -->
+                                    {% if bem.id %}
                                     <button class="btn btn-sm btn-outline-primary" onclick="editarBem({{ bem.id }})"
                                         title="Editar">
                                         <i class="fas fa-edit"></i>
@@ -216,10 +262,14 @@
                                         <i class="fas fa-eye"></i>
                                     </button>
                                     <button class="btn btn-sm btn-outline-danger"
-                                        onclick="confirmarExclusao({{ bem.id }}, '{{ bem.nome }}')" title="Excluir">
+                                        onclick="confirmarExclusao({{ bem.id }}, `{{ bem.nome }}`)" title="Excluir">
                                         <i class="fas fa-trash"></i>
                                     </button>
-                                </td>
+                                    {% else %}
+                                    <span class="text-muted" title="ID não disponível">
+                                        <i class="fas fa-ban"></i> N/D
+                                    </span>
+                                    {% endif %}
                                 </td>
                             </tr>
                             {% else %}
@@ -306,12 +356,14 @@
                 <div class="modal-body">
                     <form id="formBem">
                         <input type="hidden" id="bemId" name="id">
+                        <input type="hidden" id="bemNumero" name="numero">
 
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label for="numero" class="form-label">Número do Bem *</label>
-                                    <input type="text" class="form-control" id="numero" name="numero" required>
+                                    <label for="numeroDisplay" class="form-label">Número do Bem *</label>
+                                    <input type="text" class="form-control" id="numeroDisplay" name="numero_display"
+                                        required readonly>
                                 </div>
                             </div>
                             <div class="col-md-6">
@@ -372,10 +424,7 @@
                             </div>
                         </div>
 
-                        <div class="mb-3">
-                            <label for="observacoes" class="form-label">Observações</label>
-                            <textarea class="form-control" id="observacoes" name="observacoes" rows="3"></textarea>
-                        </div>
+
                     </form>
                 </div>
                 <div class="modal-footer">
@@ -414,93 +463,116 @@
         // VARIÁVEIS GLOBAIS
         let bemIdParaExcluir = null;
 
-        // FUNÇÃO PRINCIPAL PARA EDITAR - VERSÃO SUPER SIMPLIFICADA
+        // FUNÇÕES DE DEBUG
+        function investigarDados() {
+            const bens = {{ paginacao.dados | tojson | safe
+        }};
+        console.log("📊 Dados completos da página:", bens);
+
+        let debugHTML = `<div class="alert alert-info">
+            <h6>🔍 Diagnóstico dos Dados</h6>
+            <p><strong>Total de registros:</strong> ${bens.length}</p>
+            <p><strong>Termo de busca:</strong> "${'{{ termo_busca }}' || 'Nenhum'}"</p>
+        </div>`;
+
+        debugHTML += `<div class="table-responsive"><table class='table table-sm table-bordered'>`;
+        debugHTML += `<thead><tr>
+            <th>#</th>
+            <th>ID</th>
+            <th>Número</th>
+            <th>Nome</th>
+            <th>Situação</th>
+            <th>ID Válido?</th>
+        </tr></thead><tbody>`;
+
+        bens.forEach((bem, index) => {
+            const idValido = bem.id && bem.id != 'None' && bem.id != 'null' && bem.id != '';
+
+            debugHTML += `<tr>
+                <td>${index + 1}</td>
+                <td class="${idValido ? 'table-success' : 'table-danger'}">
+                    ${bem.id || '<em class="text-muted">NULL</em>'}
+                </td>
+                <td>${bem.numero || '<em class="text-muted">NULL</em>'}</td>
+                <td>${bem.nome || 'Sem nome'}</td>
+                <td>${bem.situacao || 'N/A'}</td>
+                <td>${idValido ? '✅ Sim' : '❌ Não'}</td>
+            </tr>`;
+        });
+
+        debugHTML += `</tbody></table></div>`;
+
+        document.getElementById('debugInfo').innerHTML = debugHTML;
+    }
+
+        // FUNÇÃO PRINCIPAL PARA EDITAR POR ID
         function editarBem(bemId) {
-            console.log("🎯 EDITAR BEM CHAMADO - ID:", bemId);
+            console.log("🎯 EDITAR BEM - ID:", bemId);
 
-            // Verificação EXTRA segura
-            if (bemId === undefined || bemId === null || bemId === "undefined") {
-                console.error("❌ ID É UNDEFINED!");
-                alert("ERRO: ID não recebido. Contate o suporte.");
+            if (!bemId || bemId === "None" || bemId === "null" || bemId === "") {
+                alert("ERRO: ID do bem inválido.");
                 return;
             }
 
-            // Forçar conversão para número
-            const id = parseInt(bemId);
-            if (isNaN(id)) {
-                console.error("❌ ID NÃO É NÚMERO:", bemId);
-                alert("ERRO: ID inválido: " + bemId);
-                return;
-            }
+            // Mostrar loading
+            const btnSalvar = document.getElementById('btnSalvar');
+            const originalText = btnSalvar.innerHTML;
+            btnSalvar.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Carregando...';
+            btnSalvar.disabled = true;
 
-            console.log("🔍 Buscando bem ID:", id);
-
-            // Fazer requisição DIRETA
-            fetch(`/api/bens/id/${id}`)
+            // Buscar bem pelo ID
+            fetch(`/api/bens/id/${bemId}`)
                 .then(response => {
                     console.log("📡 Status:", response.status);
+                    if (!response.ok) {
+                        throw new Error(`Erro HTTP: ${response.status}`);
+                    }
                     return response.json();
                 })
                 .then(data => {
                     console.log("📊 Dados recebidos:", data);
 
-                    if (data.success) {
+                    // Restaurar botão
+                    btnSalvar.innerHTML = originalText;
+                    btnSalvar.disabled = false;
+
+                    if (data.success && data.data) {
                         preencherModalEdicao(data.data);
                     } else {
-                        alert("Erro: " + data.message);
+                        console.error("❌ Erro na resposta:", data);
+                        alert("Erro: " + (data.message || "Não foi possível carregar os dados do bem."));
                     }
                 })
                 .catch(error => {
-                    console.error("💥 Erro:", error);
-                    alert("Erro de conexão: " + error.message);
+                    console.error("💥 Erro na requisição:", error);
+
+                    // Restaurar botão
+                    btnSalvar.innerHTML = originalText;
+                    btnSalvar.disabled = false;
+
+                    alert("Erro ao carregar dados do bem: " + error.message);
                 });
         }
 
-        // FUNÇÃO PARA PREENCHER MODAL
-        function preencherModalEdicao(bem) {
-            console.log("📝 Preenchendo modal com:", bem);
-
-            document.getElementById('modalBemTitle').textContent = `Editar Bem: ${bem.nome}`;
-            document.getElementById('bemId').value = bem.id;
-            document.getElementById('numero').value = bem.numero || '';
-            document.getElementById('nome').value = bem.nome || '';
-            document.getElementById('situacao').value = bem.situacao || 'Pendente';
-            document.getElementById('localizacao').value = bem.localizacao || '';
-            document.getElementById('responsavel').value = bem.responsavel || '';
-            document.getElementById('auditor').value = bem.auditor || '';
-
-            // Datas
-            if (bem.data_ultima_vistoria) {
-                document.getElementById('data_ultima_vistoria').value = bem.data_ultima_vistoria.split('T')[0];
-            }
-            if (bem.data_vistoria_atual) {
-                document.getElementById('data_vistoria_atual').value = bem.data_vistoria_atual.split('T')[0];
-            }
-
-            document.getElementById('observacoes').value = bem.observacoes || '';
-
-            // Abrir modal
-            const modal = new bootstrap.Modal(document.getElementById('modalBem'));
-            modal.show();
-        }
-
-        // FUNÇÃO PARA VISUALIZAR
+        // FUNÇÃO PARA VISUALIZAR POR ID
         function visualizarBem(bemId) {
             console.log("👁️ VISUALIZAR BEM - ID:", bemId);
 
-            const id = parseInt(bemId);
-            if (isNaN(id)) {
-                alert("ID inválido");
+            if (!bemId || bemId === "None" || bemId === "null" || bemId === "") {
+                alert("ID do bem inválido.");
                 return;
             }
 
-            fetch(`/api/bens/id/${id}`)
-                .then(response => response.json())
+            fetch(`/api/bens/id/${bemId}`)
+                .then(response => {
+                    if (!response.ok) throw new Error(`Erro HTTP: ${response.status}`);
+                    return response.json();
+                })
                 .then(data => {
-                    if (data.success) {
+                    if (data.success && data.data) {
                         preencherModalVisualizacao(data.data);
                     } else {
-                        alert("Erro: " + data.message);
+                        alert("Erro: " + (data.message || "Não foi possível carregar os dados para visualização."));
                     }
                 })
                 .catch(error => {
@@ -508,63 +580,103 @@
                 });
         }
 
-        function preencherModalVisualizacao(bem) {
-            document.getElementById('modalBemTitle').textContent = `Visualizar Bem: ${bem.nome}`;
-            document.getElementById('bemId').value = bem.id;
-            document.getElementById('numero').value = bem.numero || '';
-            document.getElementById('nome').value = bem.nome || '';
-            document.getElementById('situacao').value = bem.situacao || 'Pendente';
-            document.getElementById('localizacao').value = bem.localizacao || '';
-            document.getElementById('responsavel').value = bem.responsavel || '';
-            document.getElementById('auditor').value = bem.auditor || '';
+     // FUNÇÃO PARA PREENCHER MODAL DE EDIÇÃO
+function preencherModalEdicao(bem) {
+    console.log("📝 Preenchendo modal de EDIÇÃO com:", bem);
 
-            if (bem.data_ultima_vistoria) {
-                document.getElementById('data_ultima_vistoria').value = bem.data_ultima_vistoria.split('T')[0];
-            }
-            if (bem.data_vistoria_atual) {
-                document.getElementById('data_vistoria_atual').value = bem.data_vistoria_atual.split('T')[0];
-            }
+    if (!bem) {
+        alert("Dados do bem não recebidos");
+        return;
+    }
 
-            document.getElementById('observacoes').value = bem.observacoes || '';
+    document.getElementById('modalBemTitle').textContent = `Editar Bem: ${bem.nome || 'Sem nome'}`;
+    document.getElementById('bemId').value = bem.id || '';
+    document.getElementById('bemNumero').value = bem.numero || '';
+    document.getElementById('numeroDisplay').value = bem.numero || '';
+    document.getElementById('nome').value = bem.nome || '';
+    document.getElementById('situacao').value = bem.situacao || 'Pendente';
+    document.getElementById('localizacao').value = bem.localizacao || '';
+    document.getElementById('responsavel').value = bem.responsavel || '';
+    document.getElementById('auditor').value = bem.auditor || '';
+    document.getElementById('observacoes').value = bem.observacoes || '';
 
-            // Desabilitar campos para visualização
-            const inputs = document.querySelectorAll('#formBem input, #formBem select, #formBem textarea');
-            inputs.forEach(input => input.disabled = true);
-            document.getElementById('btnSalvar').style.display = 'none';
+    // Datas - tratamento seguro
+    if (bem.data_ultima_vistoria) {
+        const dataUltima = bem.data_ultima_vistoria.split('T')[0];
+        document.getElementById('data_ultima_vistoria').value = dataUltima;
+    } else {
+        document.getElementById('data_ultima_vistoria').value = '';
+    }
 
-            const modal = new bootstrap.Modal(document.getElementById('modalBem'));
-            modal.show();
+    if (bem.data_vistoria_atual) {
+        const dataAtual = bem.data_vistoria_atual.split('T')[0];
+        document.getElementById('data_vistoria_atual').value = dataAtual;
+    } else {
+        document.getElementById('data_vistoria_atual').value = '';
+    }
+
+    // REMOVA esta parte das observações
+        document.getElementById('observacoes').value = bem.observacoes || '';
+
+    // Habilitar campos para edição (exceto número)
+    const inputs = document.querySelectorAll('#formBem input, #formBem select, #formBem textarea');
+    inputs.forEach(input => {
+        if (input.id !== 'numeroDisplay') {
+            input.disabled = false;
         }
+    });
+    document.getElementById('btnSalvar').style.display = 'block';
 
+    // Abrir modal
+    const modal = new bootstrap.Modal(document.getElementById('modalBem'));
+    modal.show();
+}
         // FUNÇÃO PARA NOVO BEM
         function abrirModalNovoBem() {
             document.getElementById('modalBemTitle').textContent = 'Novo Bem';
             document.getElementById('formBem').reset();
             document.getElementById('bemId').value = '';
+            document.getElementById('bemNumero').value = '';
+            document.getElementById('numeroDisplay').readOnly = false;
+
+            // Habilitar campos
+            const inputs = document.querySelectorAll('#formBem input, #formBem select, #formBem textarea');
+            inputs.forEach(input => input.disabled = false);
+            document.getElementById('btnSalvar').style.display = 'block';
 
             const modal = new bootstrap.Modal(document.getElementById('modalBem'));
             modal.show();
         }
 
-        // FUNÇÃO PARA SALVAR
+        // FUNÇÃO PARA SALVAR (EDITAR OU CRIAR)
         async function salvarBem() {
             const formData = new FormData(document.getElementById('formBem'));
             const bemId = document.getElementById('bemId').value;
+            const bemNumero = document.getElementById('bemNumero').value;
 
             const dados = {};
             formData.forEach((value, key) => {
-                dados[key] = value;
+                if (key !== 'numero_display') { // Ignorar o campo display
+                    dados[key] = value;
+                }
             });
+
+            console.log("💾 Salvando dados:", dados);
+            console.log("💾 ID do bem:", bemId);
 
             try {
                 let response;
-                if (bemId) {
+                if (bemId && bemId !== '') {
+                    // EDIÇÃO - usar ID
+                    console.log(`📤 Enviando PUT para /api/bens/${bemId}`);
                     response = await fetch(`/api/bens/${bemId}`, {
                         method: 'PUT',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify(dados)
                     });
                 } else {
+                    // NOVO BEM
+                    console.log("📤 Enviando POST para /api/bens");
                     response = await fetch('/api/bens', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
@@ -573,24 +685,27 @@
                 }
 
                 const result = await response.json();
+                console.log("📥 Resposta do servidor:", result);
 
                 if (result.success) {
-                    alert(result.message);
+                    alert("✅ " + result.message);
                     bootstrap.Modal.getInstance(document.getElementById('modalBem')).hide();
-                    location.reload();
+                    location.reload(); // Recarregar a página para ver as mudanças
                 } else {
-                    alert('Erro: ' + result.message);
+                    alert("❌ Erro: " + result.message);
                 }
             } catch (error) {
-                alert('Erro: ' + error.message);
+                console.error("💥 Erro ao salvar:", error);
+                alert("❌ Erro de conexão: " + error.message);
             }
         }
 
         // FUNÇÕES DE EXCLUSÃO
+        // FUNÇÕES DE EXCLUSÃO
         function confirmarExclusao(bemId, nomeBem) {
-            console.log("🗑️ EXCLUIR BEM - ID:", bemId);
+            console.log("🗑️ EXCLUIR BEM - ID:", bemId, "Nome:", nomeBem);
             bemIdParaExcluir = bemId;
-            document.getElementById('nomeBemExcluir').textContent = nomeBem;
+            document.getElementById('nomeBemExcluir').textContent = nomeBem || 'Este bem';
             new bootstrap.Modal(document.getElementById('modalConfirmacao')).show();
         }
 
@@ -598,29 +713,43 @@
             if (!bemIdParaExcluir) return;
 
             try {
-                const response = await fetch(`/api/bens/${bemIdParaExcluir}`, { method: 'DELETE' });
+                console.log(`🗑️ Enviando DELETE para /api/bens/${bemIdParaExcluir}`);
+                const response = await fetch(`/api/bens/${bemIdParaExcluir}`, {
+                    method: 'DELETE'
+                });
                 const result = await response.json();
+                console.log("📥 Resposta da exclusão:", result);
 
                 if (result.success) {
-                    alert(result.message);
+                    alert("✅ " + result.message);
                     bootstrap.Modal.getInstance(document.getElementById('modalConfirmacao')).hide();
                     location.reload();
                 } else {
-                    alert('Erro: ' + result.message);
+                    alert("❌ Erro: " + result.message);
                 }
             } catch (error) {
-                alert('Erro: ' + error.message);
+                console.error("💥 Erro ao excluir:", error);
+                alert("❌ Erro: " + error.message);
             }
         });
 
         // Reativar campos quando modal fechar
         document.getElementById('modalBem').addEventListener('hidden.bs.modal', function () {
             const inputs = document.querySelectorAll('#formBem input, #formBem select, #formBem textarea');
-            inputs.forEach(input => input.disabled = false);
+            inputs.forEach(input => {
+                input.disabled = false;
+                if (input.id === 'numeroDisplay') {
+                    input.readOnly = true;
+                }
+            });
             document.getElementById('btnSalvar').style.display = 'block';
         });
 
-        console.log("✅ JavaScript carregado com sucesso!");
+        // Executar investigação automaticamente
+        document.addEventListener('DOMContentLoaded', function () {
+            console.log("✅ Sistema CRUD carregado com sucesso!");
+            // investigarDados(); // Descomente se quiser debug automático
+        });
     </script>
 </body>
 

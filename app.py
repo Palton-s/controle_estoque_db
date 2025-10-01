@@ -5,7 +5,7 @@ import sqlite3
 import shutil
 import io
 from datetime import datetime
-from typing import Tuple, Dict, Any
+from typing import Tuple, Dict, Any, List  # ← Adicione List aqui
 from werkzeug.utils import secure_filename
 from flask import Flask, render_template, request, send_file, abort, jsonify, redirect, url_for, Response
 
@@ -259,7 +259,50 @@ class BemService:
         except Exception as e:
             logger.error(f"Erro ao exportar localidade: {str(e)}")
             abort(500, description="Erro ao exportar dados da localidade")
-
+            
+def buscar_bens_por_nome_com_id(db_path: str, termo: str) -> list:  # ← Use 'list' em vez de 'List'
+    """Busca bens por nome INCLUINDO ID - VERSÃO CORRIGIDA"""
+    try:
+        conn = sqlite3.connect(db_path)
+        cursor = conn.cursor()
+        
+        query = """
+            SELECT 
+                id,  -- ← AGORA INCLUINDO O ID
+                numero, 
+                nome, 
+                situacao, 
+                localizacao, 
+                responsavel, 
+                data_ultima_vistoria,
+                data_vistoria_atual,
+                auditor,
+                observacoes
+            FROM bens 
+            WHERE nome LIKE ? OR numero LIKE ?
+            ORDER BY numero
+        """
+        
+        termo_like = f"%{termo}%"
+        cursor.execute(query, (termo_like, termo_like))
+        
+        colunas = [desc[0] for desc in cursor.description]
+        resultados = []
+        
+        for row in cursor.fetchall():
+            bem = dict(zip(colunas, row))
+            # Garantir que o ID seja um inteiro
+            if bem.get('id'):
+                bem['id'] = int(bem['id'])
+            resultados.append(bem)
+        
+        conn.close()
+        return resultados
+        
+    except Exception as e:
+        logger.error(f"Erro na busca por nome: {str(e)}")
+        return []
+    
 # ==============================
 # Inicialização de Serviços
 # ==============================
@@ -573,14 +616,47 @@ def api_obter_bem(numero_bem):
     
 @app.route('/api/bens/<int:bem_id>', methods=['PUT'])
 def api_editar_bem(bem_id):
-    """API para editar um bem existente"""
+    """API para editar um bem existente - COM OBSERVAÇÕES"""
     try:
         dados = request.get_json()
-        sucesso, mensagem = atualizar_bem(DB_PATH, bem_id, dados)
-        return jsonify({'success': sucesso, 'message': mensagem})
+        print(f"✏️ Editando bem ID {bem_id} com dados:", dados)
+        
+        conn = sqlite3.connect(DB_PATH)
+        cursor = conn.cursor()
+        
+        # Primeiro verificar se o bem existe
+        cursor.execute("SELECT id FROM bens WHERE id = ?", (bem_id,))
+        if not cursor.fetchone():
+            conn.close()
+            return jsonify({'success': False, 'message': 'Bem não encontrado'})
+        
+        # Atualizar o bem (com observacoes)
+        cursor.execute('''
+            UPDATE bens SET 
+                nome = ?, situacao = ?, localizacao = ?, responsavel = ?,
+                data_ultima_vistoria = ?, data_vistoria_atual = ?, auditor = ?,
+                observacoes = ?
+            WHERE id = ?
+        ''', (
+            dados.get('nome'),
+            dados.get('situacao'),
+            dados.get('localizacao'),
+            dados.get('responsavel'),
+            dados.get('data_ultima_vistoria'),
+            dados.get('data_vistoria_atual'),
+            dados.get('auditor'),
+            dados.get('observacoes'),  # Nova coluna
+            bem_id
+        ))
+        
+        conn.commit()
+        conn.close()
+        
+        print(f"✅ Bem {bem_id} atualizado com sucesso")
+        return jsonify({'success': True, 'message': 'Bem atualizado com sucesso!'})
         
     except Exception as e:
-        logger.error(f"Erro ao editar bem: {str(e)}")
+        print(f"💥 Erro ao editar bem {bem_id}: {str(e)}")
         return jsonify({'success': False, 'message': str(e)})
 
 @app.route('/api/bens/<int:bem_id>', methods=['DELETE'])
@@ -613,11 +689,34 @@ def api_verificar_numero():
 def obter_estatisticas_crud():
     """Obtém estatísticas para a página CRUD com fallback seguro"""
     try:
-        contagens = contar_bens(DB_PATH)
+        conn = sqlite3.connect(DB_PATH)
+        cursor = conn.cursor()
+        
+        # Verificar se a tabela existe
+        cursor.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='bens'")
+        if not cursor.fetchone():
+            return {
+                'total_count': 0,
+                'localizados_count': 0,
+                'nao_localizados_count': 0
+            }
+        
+        # Contar totais
+        cursor.execute("SELECT COUNT(*) FROM bens")
+        total_count = cursor.fetchone()[0]
+        
+        cursor.execute("SELECT COUNT(*) FROM bens WHERE situacao = 'OK'")
+        localizados_count = cursor.fetchone()[0]
+        
+        cursor.execute("SELECT COUNT(*) FROM bens WHERE situacao != 'OK' OR situacao IS NULL OR situacao = ''")
+        nao_localizados_count = cursor.fetchone()[0]
+        
+        conn.close()
+        
         return {
-            'total_count': contagens.get('total', 0),
-            'localizados_count': contagens.get('localizados', 0),
-            'nao_localizados_count': contagens.get('nao_localizados', 0)
+            'total_count': total_count,
+            'localizados_count': localizados_count,
+            'nao_localizados_count': nao_localizados_count
         }
     except Exception as e:
         logger.error(f"Erro ao obter estatísticas: {str(e)}")
@@ -626,7 +725,6 @@ def obter_estatisticas_crud():
             'localizados_count': 0,
             'nao_localizados_count': 0
         }
-
 # ==============================
 # Rotas de Interface
 # ==============================
@@ -727,28 +825,179 @@ def relatorio_localidades():
                              localidades=[],
                              localidade_selecionada='',
                              paginacao=None)
-
+        
+def obter_bens_paginados_com_id(db_path: str, tipo: str, pagina: int = 1, por_pagina: int = 50, situacao: str = '') -> Dict[str, Any]:
+    """Obtém bens paginados INCLUINDO ID - VERSÃO CORRIGIDA"""
+    try:
+        conn = sqlite3.connect(db_path)
+        cursor = conn.cursor()
+        
+        # Construir query base
+        query_base = "FROM bens WHERE 1=1"
+        params = []
+        
+        # Aplicar filtro de situação se especificado
+        if situacao and situacao != 'todos':
+            if situacao == 'OK':
+                query_base += " AND situacao = 'OK'"
+            elif situacao == 'Pendente':
+                query_base += " AND (situacao != 'OK' OR situacao IS NULL)"
+        
+        # Contar total
+        cursor.execute(f"SELECT COUNT(*) {query_base}", params)
+        total_registros = cursor.fetchone()[0]
+        
+        # Calcular paginação
+        offset = (pagina - 1) * por_pagina
+        total_paginas = (total_registros + por_pagina - 1) // por_pagina if por_pagina > 0 else 1
+        
+        # Query principal COM ID
+        query = f"""
+            SELECT 
+                id,  -- ← AGORA INCLUINDO O ID
+                numero, 
+                nome, 
+                situacao, 
+                localizacao, 
+                responsavel, 
+                data_ultima_vistoria,
+                data_vistoria_atual,
+                auditor,
+                observacoes,
+                data_criacao,
+                data_localizacao
+            {query_base}
+            ORDER BY numero
+            LIMIT ? OFFSET ?
+        """
+        
+        params.extend([por_pagina, offset])
+        cursor.execute(query, params)
+        
+        colunas = [desc[0] for desc in cursor.description]
+        bens = []
+        
+        for row in cursor.fetchall():
+            bem = dict(zip(colunas, row))
+            # Garantir que o ID seja um inteiro
+            if bem.get('id'):
+                bem['id'] = int(bem['id'])
+            bens.append(bem)
+        
+        conn.close()
+        
+        return {
+            'dados': bens,
+            'pagina_atual': pagina,
+            'por_pagina': por_pagina,
+            'total_registros': total_registros,
+            'total_paginas': total_paginas
+        }
+        
+    except Exception as e:
+        logger.error(f"Erro ao obter bens paginados: {str(e)}")
+        return {
+            'dados': [],
+            'pagina_atual': 1,
+            'por_pagina': por_pagina,
+            'total_registros': 0,
+            'total_paginas': 0
+        }
 @app.route('/sistema-crud')
 def sistema_crud():
-    """Página completa de CRUD para gerenciamento de bens"""
+    """Página completa de CRUD para gerenciamento de bens - VERSÃO DEFINITIVA CORRIGIDA"""
     try:
-        # Parâmetros de paginação
+        # Parâmetros de paginação e filtros
         pagina = request.args.get('pagina', 1, type=int)
         por_pagina = request.args.get('por_pagina', 50, type=int)
         termo_busca = request.args.get('q', '').strip()
+        situacao_filtro = request.args.get('situacao', '')
         
-        # Obter dados paginados
+        print(f"🔍 DEBUG - Parâmetros recebidos:")
+        print(f"  Página: {pagina}")
+        print(f"  Por página: {por_pagina}")
+        print(f"  Termo busca: '{termo_busca}'")
+        print(f"  Situação: '{situacao_filtro}'")
+        
+        # CONEXÃO DIRETA COM O BANCO - CONSULTA SIMPLIFICADA
+        conn = sqlite3.connect(DB_PATH)
+        cursor = conn.cursor()
+        
+        # Construir query base - VERSÃO SIMPLIFICADA
+        query_where = "WHERE 1=1"
+        params = []
+        
+        # Aplicar filtro de situação
+        if situacao_filtro:
+            if situacao_filtro == 'OK':
+                query_where += " AND situacao = 'OK'"
+            elif situacao_filtro == 'Pendente':
+                query_where += " AND (situacao != 'OK' OR situacao IS NULL OR situacao = '')"
+        
+        # Aplicar filtro de busca
         if termo_busca:
-            resultados = buscar_bens_por_nome(DB_PATH, termo_busca)
-            paginacao = {
-                'dados': resultados,
-                'pagina_atual': 1,
-                'por_pagina': len(resultados),
-                'total_registros': len(resultados),
-                'total_paginas': 1
-            }
-        else:
-            paginacao = obter_bens_paginados(DB_PATH, 'todos', pagina, por_pagina)
+            query_where += " AND (nome LIKE ? OR numero LIKE ?)"
+            termo_like = f"%{termo_busca}%"
+            params.extend([termo_like, termo_like])
+        
+        # Contar total de registros
+        count_query = f"SELECT COUNT(*) FROM bens {query_where}"
+        cursor.execute(count_query, params)
+        total_registros = cursor.fetchone()[0]
+        print(f"📊 Total de registros encontrados: {total_registros}")
+        
+        # Calcular paginação
+        offset = (pagina - 1) * por_pagina
+        total_paginas = (total_registros + por_pagina - 1) // por_pagina if por_pagina > 0 else 1
+        
+        # Query principal - VERSÃO SIMPLIFICADA E FUNCIONAL
+        query = f"""
+            SELECT 
+                id,
+                numero, 
+                nome, 
+                situacao, 
+                localizacao, 
+                responsavel, 
+                data_ultima_vistoria
+            FROM bens 
+            {query_where}
+            ORDER BY numero
+            LIMIT ? OFFSET ?
+        """
+        
+        params.extend([por_pagina, offset])
+        
+        print(f"🚀 Executando query: {query}")
+        print(f"🚀 Com parâmetros: {params}")
+        
+        cursor.execute(query, params)
+        
+        # Processar resultados
+        colunas = [desc[0] for desc in cursor.description]
+        bens = []
+        
+        for row in cursor.fetchall():
+            bem = dict(zip(colunas, row))
+            # Garantir que o ID seja um inteiro
+            if bem.get('id') is not None:
+                bem['id'] = int(bem['id'])
+            bens.append(bem)
+        
+        print(f"✅ Dados processados: {len(bens)} registros")
+        if bens:
+            print(f"📝 Primeiro registro: ID={bens[0].get('id')}, Número={bens[0].get('numero')}, Nome={bens[0].get('nome')}")
+        
+        conn.close()
+        
+        # Criar objeto de paginação
+        paginacao = {
+            'dados': bens,
+            'pagina_atual': pagina,
+            'por_pagina': por_pagina,
+            'total_registros': total_registros,
+            'total_paginas': total_paginas
+        }
         
         # Obter estatísticas
         estatisticas = obter_estatisticas_crud()
@@ -756,11 +1005,14 @@ def sistema_crud():
         return render_template('sistema_crud.html',
                             paginacao=paginacao,
                             termo_busca=termo_busca,
-                            **estatisticas,  # ✅ DESEMPACOTA TODAS AS ESTATÍSTICAS
+                            **estatisticas,
                             mensagem=None)
         
     except Exception as e:
         logger.error(f"Erro na página CRUD: {str(e)}")
+        import traceback
+        traceback.print_exc()
+        
         return render_template('sistema_crud.html',
                             paginacao={
                                 'dados': [],
@@ -775,27 +1027,50 @@ def sistema_crud():
                             nao_localizados_count=0,
                             mensagem=f"Erro ao carregar dados: {str(e)}")
         
+
 @app.route('/api/bens/id/<int:bem_id>')
 def api_obter_bem_por_id(bem_id):
-    """API para obter dados de um bem pelo ID"""
+    """API para obter dados de um bem pelo ID - COM OBSERVAÇÕES"""
     try:
-        bem = obter_bem_por_id(DB_PATH, bem_id)  # ← AGORA USA A FUNÇÃO DO db_handler
+        print(f"🔍 API - Buscando bem por ID: {bem_id}")
         
-        if bem:
+        conn = sqlite3.connect(DB_PATH)
+        cursor = conn.cursor()
+        
+        # Query com colunas existentes (incluindo observacoes)
+        cursor.execute('''
+            SELECT 
+                id, numero, nome, situacao, localizacao, responsavel,
+                data_ultima_vistoria, data_vistoria_atual, auditor,
+                data_criacao, data_localizacao, observacoes
+            FROM bens 
+            WHERE id = ?
+        ''', (bem_id,))
+        
+        row = cursor.fetchone()
+        conn.close()
+        
+        if row:
+            # Mapear para dicionário
+            colunas = ['id', 'numero', 'nome', 'situacao', 'localizacao', 'responsavel', 'data_ultima_vistoria', 'data_vistoria_atual', 'auditor', 'data_criacao', 'data_localizacao', 'observacoes']
+            
+            bem = dict(zip(colunas, row))
+            print(f"✅ Bem encontrado: ID={bem['id']}, Número={bem['numero']}, Nome={bem['nome']}")
+            
             return jsonify({'success': True, 'data': bem})
         else:
+            print(f"❌ Bem não encontrado para ID: {bem_id}")
             return jsonify({'success': False, 'message': 'Bem não encontrado'})
             
     except Exception as e:
-        logger.error(f"Erro ao obter bem por ID {bem_id}: {str(e)}")
+        print(f"💥 Erro ao obter bem por ID {bem_id}: {str(e)}")
         return jsonify({'success': False, 'message': str(e)})
 
+    
 @app.route('/sair')
 def sair():
     """Página de encerramento do aplicativo"""
-    return render_template('sair.html', 
-                         total_count=carregar_dados_bancos().get('total_count', 0),
-                         session_time="5min")
+    return render_template('sair.html', total_count=carregar_dados_bancos().get('total_count', 0), session_time="5min")
 
 # ==============================
 # Handlers de Erro Globais
