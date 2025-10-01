@@ -422,7 +422,11 @@
                                         name="data_vistoria_atual">
                                 </div>
                             </div>
-                        </div>
+
+                            <div class="mb-3">
+                                <label for="observacoes" class="form-label">Observações</label>
+                                <textarea class="form-control" id="observacoes" name="observacoes" rows="3"></textarea>
+                            </div>
 
 
                     </form>
@@ -580,57 +584,57 @@
                 });
         }
 
-     // FUNÇÃO PARA PREENCHER MODAL DE EDIÇÃO
-function preencherModalEdicao(bem) {
-    console.log("📝 Preenchendo modal de EDIÇÃO com:", bem);
+        // FUNÇÃO PARA PREENCHER MODAL DE EDIÇÃO
+        function preencherModalEdicao(bem) {
+            console.log("📝 Preenchendo modal de EDIÇÃO com:", bem);
 
-    if (!bem) {
-        alert("Dados do bem não recebidos");
-        return;
-    }
+            if (!bem) {
+                alert("Dados do bem não recebidos");
+                return;
+            }
 
-    document.getElementById('modalBemTitle').textContent = `Editar Bem: ${bem.nome || 'Sem nome'}`;
-    document.getElementById('bemId').value = bem.id || '';
-    document.getElementById('bemNumero').value = bem.numero || '';
-    document.getElementById('numeroDisplay').value = bem.numero || '';
-    document.getElementById('nome').value = bem.nome || '';
-    document.getElementById('situacao').value = bem.situacao || 'Pendente';
-    document.getElementById('localizacao').value = bem.localizacao || '';
-    document.getElementById('responsavel').value = bem.responsavel || '';
-    document.getElementById('auditor').value = bem.auditor || '';
-    document.getElementById('observacoes').value = bem.observacoes || '';
+            document.getElementById('modalBemTitle').textContent = `Editar Bem: ${bem.nome || 'Sem nome'}`;
+            document.getElementById('bemId').value = bem.id || '';
+            document.getElementById('bemNumero').value = bem.numero || '';
+            document.getElementById('numeroDisplay').value = bem.numero || '';
+            document.getElementById('nome').value = bem.nome || '';
+            document.getElementById('situacao').value = bem.situacao || 'Pendente';
+            document.getElementById('localizacao').value = bem.localizacao || '';
+            document.getElementById('responsavel').value = bem.responsavel || '';
+            document.getElementById('auditor').value = bem.auditor || '';
+            document.getElementById('observacoes').value = bem.observacoes || '';
 
-    // Datas - tratamento seguro
-    if (bem.data_ultima_vistoria) {
-        const dataUltima = bem.data_ultima_vistoria.split('T')[0];
-        document.getElementById('data_ultima_vistoria').value = dataUltima;
-    } else {
-        document.getElementById('data_ultima_vistoria').value = '';
-    }
+            // Datas - tratamento seguro
+            if (bem.data_ultima_vistoria) {
+                const dataUltima = bem.data_ultima_vistoria.split('T')[0];
+                document.getElementById('data_ultima_vistoria').value = dataUltima;
+            } else {
+                document.getElementById('data_ultima_vistoria').value = '';
+            }
 
-    if (bem.data_vistoria_atual) {
-        const dataAtual = bem.data_vistoria_atual.split('T')[0];
-        document.getElementById('data_vistoria_atual').value = dataAtual;
-    } else {
-        document.getElementById('data_vistoria_atual').value = '';
-    }
+            if (bem.data_vistoria_atual) {
+                const dataAtual = bem.data_vistoria_atual.split('T')[0];
+                document.getElementById('data_vistoria_atual').value = dataAtual;
+            } else {
+                document.getElementById('data_vistoria_atual').value = '';
+            }
 
-    // REMOVA esta parte das observações
-        document.getElementById('observacoes').value = bem.observacoes || '';
+            // REMOVA esta parte das observações
+            // document.getElementById('observacoes').value = bem.observacoes || '';
 
-    // Habilitar campos para edição (exceto número)
-    const inputs = document.querySelectorAll('#formBem input, #formBem select, #formBem textarea');
-    inputs.forEach(input => {
-        if (input.id !== 'numeroDisplay') {
-            input.disabled = false;
+            // Habilitar campos para edição (exceto número)
+            const inputs = document.querySelectorAll('#formBem input, #formBem select, #formBem textarea');
+            inputs.forEach(input => {
+                if (input.id !== 'numeroDisplay') {
+                    input.disabled = false;
+                }
+            });
+            document.getElementById('btnSalvar').style.display = 'block';
+
+            // Abrir modal
+            const modal = new bootstrap.Modal(document.getElementById('modalBem'));
+            modal.show();
         }
-    });
-    document.getElementById('btnSalvar').style.display = 'block';
-
-    // Abrir modal
-    const modal = new bootstrap.Modal(document.getElementById('modalBem'));
-    modal.show();
-}
         // FUNÇÃO PARA NOVO BEM
         function abrirModalNovoBem() {
             document.getElementById('modalBemTitle').textContent = 'Novo Bem';
