@@ -16,48 +16,124 @@ if [[ $EUID -ne 0 ]]; then
    exit 1
 fi
 
+# Detectar distribuição Linux
+if [ -f /etc/os-release ]; then
+    . /etc/os-release
+    DISTRO=$ID
+else
+    DISTRO="unknown"
+fi
+
 # Variáveis de configuração
 APP_DIR="/var/www/controle_estoque_db"
-APP_USER="www-data"
 DOMAIN="seu-dominio.com.br"  # ALTERE AQUI
 PYTHON_VERSION="3.9"  # Ajuste conforme necessário
 
-echo -e "${YELLOW}Configurações:${NC}"
+# Configurar variáveis baseadas na distribuição
+case $DISTRO in
+    "ubuntu"|"debian")
+        PKG_MANAGER="apt"
+        APACHE_PKG="apache2"
+        APACHE_USER="www-data"
+        APACHE_SERVICE="apache2"
+        WSGI_PKG="libapache2-mod-wsgi-py3"
+        APACHE_ENABLE_CMD="a2enmod"
+        APACHE_SITE_CMD="a2ensite"
+        ;;
+    "centos"|"rhel"|"fedora")
+        PKG_MANAGER="yum"
+        APACHE_PKG="httpd"
+        APACHE_USER="apache"
+        APACHE_SERVICE="httpd"
+        WSGI_PKG="python3-mod_wsgi"
+        APACHE_ENABLE_CMD="httpd_enable_mod"
+        APACHE_SITE_CMD="httpd_enable_site"
+        ;;
+    *)
+        echo -e "${YELLOW}Distribuição desconhecida, usando padrões Ubuntu/Debian${NC}"
+        PKG_MANAGER="apt"
+        APACHE_PKG="apache2"
+        APACHE_USER="www-data"
+        APACHE_SERVICE="apache2"
+        WSGI_PKG="libapache2-mod-wsgi-py3"
+        APACHE_ENABLE_CMD="a2enmod"
+        APACHE_SITE_CMD="a2ensite"
+        ;;
+esac
+
+APP_USER=$APACHE_USER
+
+echo -e "${YELLOW}Configurações detectadas:${NC}"
+echo "Distribuição: $DISTRO"
 echo "Diretório da aplicação: $APP_DIR"
 echo "Usuário da aplicação: $APP_USER"
 echo "Domínio: $DOMAIN"
+echo "Serviço Apache: $APACHE_SERVICE"
 echo ""
 
 # 1. Atualizar sistema
 echo -e "${GREEN}1. Atualizando sistema...${NC}"
-apt update && apt upgrade -y
+if [ "$PKG_MANAGER" = "apt" ]; then
+    apt update && apt upgrade -y
+elif [ "$PKG_MANAGER" = "yum" ]; then
+    yum update -y
+fi
 
 # 2. Instalar dependências do sistema
 echo -e "${GREEN}2. Instalando dependências do sistema...${NC}"
-apt install -y \
-    apache2 \
-    libapache2-mod-wsgi-py3 \
-    python3 \
-    python3-pip \
-    python3-venv \
-    python3-dev \
-    build-essential \
-    git \
-    curl \
-    wget \
-    unzip \
-    sqlite3 \
-    libsqlite3-dev \
-    supervisor
+if [ "$PKG_MANAGER" = "apt" ]; then
+    apt install -y \
+        $APACHE_PKG \
+        $WSGI_PKG \
+        python3 \
+        python3-pip \
+        python3-venv \
+        python3-dev \
+        build-essential \
+        git \
+        curl \
+        wget \
+        unzip \
+        sqlite3 \
+        libsqlite3-dev \
+        supervisor
+elif [ "$PKG_MANAGER" = "yum" ]; then
+    yum install -y \
+        $APACHE_PKG \
+        $WSGI_PKG \
+        python3 \
+        python3-pip \
+        python3-devel \
+        gcc \
+        git \
+        curl \
+        wget \
+        unzip \
+        sqlite \
+        sqlite-devel \
+        supervisor
+fi
 
 # 3. Habilitar módulos do Apache
 echo -e "${GREEN}3. Habilitando módulos do Apache...${NC}"
-a2enmod wsgi
-a2enmod rewrite
-a2enmod headers
-a2enmod expires
-a2enmod deflate
-a2enmod ssl
+if [ "$PKG_MANAGER" = "apt" ]; then
+    # Ubuntu/Debian
+    a2enmod wsgi 2>/dev/null || echo "Módulo wsgi já habilitado ou não disponível"
+    a2enmod rewrite 2>/dev/null || echo "Módulo rewrite já habilitado ou não disponível"
+    a2enmod headers 2>/dev/null || echo "Módulo headers já habilitado ou não disponível"
+    a2enmod expires 2>/dev/null || echo "Módulo expires já habilitado ou não disponível"
+    a2enmod deflate 2>/dev/null || echo "Módulo deflate já habilitado ou não disponível"
+    a2enmod ssl 2>/dev/null || echo "Módulo ssl já habilitado ou não disponível"
+elif [ "$PKG_MANAGER" = "yum" ]; then
+    # CentOS/RHEL/Fedora - módulos já incluídos normalmente
+    echo "Módulos do Apache (CentOS/RHEL) - verificando configuração..."
+    if [ -f /etc/httpd/conf.modules.d/00-base.conf ]; then
+        echo "LoadModule rewrite_module modules/mod_rewrite.so" >> /etc/httpd/conf.modules.d/00-base.conf 2>/dev/null || true
+        echo "LoadModule headers_module modules/mod_headers.so" >> /etc/httpd/conf.modules.d/00-base.conf 2>/dev/null || true
+        echo "LoadModule expires_module modules/mod_expires.so" >> /etc/httpd/conf.modules.d/00-base.conf 2>/dev/null || true
+        echo "LoadModule deflate_module modules/mod_deflate.so" >> /etc/httpd/conf.modules.d/00-base.conf 2>/dev/null || true
+    fi
+fi
 
 # 4. Criar diretório da aplicação
 echo -e "${GREEN}4. Criando estrutura de diretórios...${NC}"
@@ -204,8 +280,14 @@ EOL
 
 # 12. Habilitar site e desabilitar default
 echo -e "${GREEN}12. Habilitando site...${NC}"
-a2dissite 000-default
-a2ensite controle-estoque
+if [ "$PKG_MANAGER" = "apt" ]; then
+    # Ubuntu/Debian
+    a2dissite 000-default 2>/dev/null || echo "Site default já desabilitado"
+    a2ensite controle-estoque
+elif [ "$PKG_MANAGER" = "yum" ]; then
+    # CentOS/RHEL - não usa a2ensite, arquivo já está no lugar certo
+    echo "Configuração do site (CentOS/RHEL) já aplicada"
+fi
 
 # 13. Configurar firewall básico
 echo -e "${GREEN}13. Configurando firewall...${NC}"

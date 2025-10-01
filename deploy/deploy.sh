@@ -72,21 +72,67 @@ chmod -R 775 $APP_DIR/logs $APP_DIR/relatorios $APP_DIR/temp
 chmod +x $APP_DIR/wsgi.py
 
 echo -e "${GREEN}6. Verificando configuração do Apache...${NC}"
-apache2ctl configtest
-if [ $? -ne 0 ]; then
-    echo -e "${RED}Erro na configuração do Apache!${NC}"
+
+# Tentar diferentes comandos para verificar configuração do servidor web
+if command -v httpd >/dev/null 2>&1; then
+    httpd -t
+    APACHE_TEST_RESULT=$?
+elif command -v apache2ctl >/dev/null 2>&1; then
+    apache2ctl configtest
+    APACHE_TEST_RESULT=$?
+elif command -v apachectl >/dev/null 2>&1; then
+    apachectl configtest
+    APACHE_TEST_RESULT=$?
+else
+    echo -e "${YELLOW}! Comando de teste do servidor web não encontrado, pulando verificação${NC}"
+    APACHE_TEST_RESULT=0
+fi
+
+if [ $APACHE_TEST_RESULT -ne 0 ]; then
+    echo -e "${RED}Erro na configuração do servidor web!${NC}"
+    echo "Verifique manualmente a configuração antes de continuar"
     exit 1
 fi
 
 echo -e "${GREEN}7. Reiniciando serviços...${NC}"
-systemctl start apache2
-supervisorctl start controle-estoque
+# Detectar qual servidor web usar
+if command -v httpd >/dev/null 2>&1 && systemctl is-active --quiet httpd; then
+    echo "Recarregando httpd (sem reiniciar para não afetar outras aplicações)..."
+    systemctl reload httpd
+elif command -v apache2 >/dev/null 2>&1 && systemctl is-active --quiet apache2; then
+    echo "Reiniciando apache2..."
+    systemctl start apache2
+else
+    echo -e "${YELLOW}! Servidor web não detectado ou não está rodando${NC}"
+fi
+
+# Supervisor (se existir)
+if command -v supervisorctl >/dev/null 2>&1; then
+    supervisorctl start controle-estoque 2>/dev/null || echo "Supervisor não configurado ou não encontrado"
+fi
 
 echo -e "${GREEN}8. Verificando status...${NC}"
 sleep 3
-systemctl status apache2 --no-pager -l
+
+# Verificar status do servidor web
+if systemctl is-active --quiet httpd; then
+    echo -e "${GREEN}✓ httpd está rodando${NC}"
+    systemctl status httpd --no-pager -l | head -10
+elif systemctl is-active --quiet apache2; then
+    echo -e "${GREEN}✓ apache2 está rodando${NC}"
+    systemctl status apache2 --no-pager -l | head -10
+else
+    echo -e "${YELLOW}! Servidor web não está rodando${NC}"
+fi
+
 echo ""
-supervisorctl status controle-estoque
+
+# Verificar supervisor se existir
+if command -v supervisorctl >/dev/null 2>&1; then
+    supervisorctl status controle-estoque 2>/dev/null || echo "Supervisor não configurado"
+else
+    echo "Supervisor não instalado"
+fi
 
 echo -e "${GREEN}=== DEPLOY CONCLUÍDO ===${NC}"
 echo -e "${YELLOW}Comandos para monitoramento:${NC}"
