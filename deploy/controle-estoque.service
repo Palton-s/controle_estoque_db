@@ -1,0 +1,52 @@
+# Configuração do systemd para Controle de Estoque
+# Arquivo: /etc/systemd/system/controle-estoque.service
+
+[Unit]
+Description=Controle de Estoque Flask Application
+After=network.target
+Wants=network.target
+
+[Service]
+Type=notify
+User=www-data
+Group=www-data
+WorkingDirectory=/var/www/controle_estoque_db
+Environment=PATH=/var/www/controle_estoque_db/venv/bin
+Environment=FLASK_APP=app.py
+Environment=FLASK_ENV=production
+Environment=PYTHONPATH=/var/www/controle_estoque_db
+
+# Comando para executar a aplicação
+ExecStart=/var/www/controle_estoque_db/venv/bin/gunicorn \
+    --bind 127.0.0.1:5000 \
+    --workers 3 \
+    --worker-class sync \
+    --timeout 120 \
+    --keep-alive 5 \
+    --max-requests 1000 \
+    --max-requests-jitter 100 \
+    --preload \
+    --access-logfile /var/www/controle_estoque_db/logs/gunicorn_access.log \
+    --error-logfile /var/www/controle_estoque_db/logs/gunicorn_error.log \
+    --log-level info \
+    --capture-output \
+    wsgi:application
+
+# Reinicialização automática
+Restart=always
+RestartSec=3
+
+# Configurações de segurança
+NoNewPrivileges=yes
+PrivateTmp=yes
+ProtectSystem=strict
+ReadWritePaths=/var/www/controle_estoque_db/logs
+ReadWritePaths=/var/www/controle_estoque_db/relatorios
+ReadWritePaths=/var/www/controle_estoque_db/temp
+
+# Limites de recursos
+LimitNOFILE=65535
+TimeoutStopSec=30
+
+[Install]
+WantedBy=multi-user.target

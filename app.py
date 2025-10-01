@@ -545,5 +545,17 @@ def sair():
 # Inicialização
 # ==============================
 if __name__ == '__main__':
-    logger.info("Iniciando aplicação Flask")
-    app.run(debug=True)
+    import os
+    
+    # Configuração para produção vs desenvolvimento
+    debug_mode = os.environ.get('FLASK_ENV') != 'production'
+    
+    logger.info(f"Iniciando aplicação Flask (debug={debug_mode})")
+    
+    # Em produção, deixar o WSGI servidor gerenciar
+    if os.environ.get('FLASK_ENV') == 'production':
+        # Em produção, o app será servido via WSGI
+        logger.info("Modo produção - aguardando requisições WSGI")
+    else:
+        # Em desenvolvimento, usar servidor interno
+        app.run(debug=debug_mode, host='127.0.0.1', port=5000)
