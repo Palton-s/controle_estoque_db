@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Detalhes do Bem - {{ bem.numero if bem else 'Não encontrado' }}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body class="bg-light">
+    <!-- Header -->
+    <header class="bg-primary text-white shadow-sm">
+        <div class="container py-3">
+            <div class="row align-items-center">
+                <div class="col-md-8">
+                    <h1 class="h4 mb-1 fw-bold">
+                        <i class="bi bi-eye me-2"></i>Detalhes do Bem Patrimonial
+                    </h1>
+                    <p class="mb-0 opacity-75">Visualização completa dos dados do item</p>
+                </div>
+                <div class="col-md-4 text-md-end">
+                    <a href="{{ url_for('sistema_crud') }}" class="btn btn-outline-light btn-sm">
+                        <i class="bi bi-arrow-left me-1"></i>Voltar à Lista
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="container py-4">
+        {% if mensagem %}
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <i class="bi bi-exclamation-triangle me-2"></i>
+            {{ mensagem }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+        {% endif %}
+
+        {% if bem %}
+        <div class="row">
+            <div class="col-lg-8 mx-auto">
+                <!-- Card Principal -->
+                <div class="card shadow-sm border-0">
+                    <div class="card-header bg-white border-0">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h4 class="mb-0 text-primary">
+                                <i class="bi bi-tag me-2"></i>{{ bem.numero }}
+                            </h4>
+                            {% if bem.situacao == 'OK' %}
+                            <span class="badge bg-success fs-6">Localizado</span>
+                            {% else %}
+                            <span class="badge bg-warning fs-6">{{ bem.situacao }}</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                    
+                    <div class="card-body">
+                        <!-- Informações Básicas -->
+                        <div class="row mb-4">
+                            <div class="col-12">
+                                <h5 class="border-bottom pb-2 mb-3">
+                                    <i class="bi bi-info-circle me-2"></i>Informações Básicas
+                                </h5>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold text-muted">Nome do Item</label>
+                                <p class="fs-5">{{ bem.nome }}</p>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold text-muted">Situação</label>
+                                <p class="fs-5">
+                                    {% if bem.situacao == 'OK' %}
+                                    <span class="badge bg-success">Localizado</span>
+                                    {% else %}
+                                    <span class="badge bg-warning">{{ bem.situacao }}</span>
+                                    {% endif %}
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Localização e Responsáveis -->
+                        <div class="row mb-4">
+                            <div class="col-12">
+                                <h5 class="border-bottom pb-2 mb-3">
+                                    <i class="bi bi-geo-alt me-2"></i>Localização e Responsáveis
+                                </h5>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold text-muted">Localização</label>
+                                <p class="fs-6">
+                                    {% if bem.localizacao %}
+                                    <i class="bi bi-check-circle text-success me-1"></i>{{ bem.localizacao }}
+                                    {% else %}
+                                    <span class="text-muted">Não informada</span>
+                                    {% endif %}
+                                </p>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold text-muted">Responsável</label>
+                                <p class="fs-6">
+                                    {% if bem.responsavel %}
+                                    <i class="bi bi-person me-1"></i>{{ bem.responsavel }}
+                                    {% else %}
+                                    <span class="text-muted">Não informado</span>
+                                    {% endif %}
+                                </p>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold text-muted">Auditor</label>
+                                <p class="fs-6">
+                                    {% if bem.auditor %}
+                                    <i class="bi bi-person-check me-1"></i>{{ bem.auditor }}
+                                    {% else %}
+                                    <span class="text-muted">Não informado</span>
+                                    {% endif %}
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Datas -->
+                        <div class="row mb-4">
+                            <div class="col-12">
+                                <h5 class="border-bottom pb-2 mb-3">
+                                    <i class="bi bi-calendar me-2"></i>Datas
+                                </h5>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold text-muted">Data Última Vistoria</label>
+                                <p class="fs-6">
+                                    {% if bem.data_ultima_vistoria %}
+                                    {{ bem.data_ultima_vistoria[:10] }}
+                                    {% else %}
+                                    <span class="text-muted">Não informada</span>
+                                    {% endif %}
+                                </p>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold text-muted">Data Vistoria Atual</label>
+                                <p class="fs-6">
+                                    {% if bem.data_vistoria_atual %}
+                                    {{ bem.data_vistoria_atual[:10] }}
+                                    {% else %}
+                                    <span class="text-muted">Não informada</span>
+                                    {% endif %}
+                                </p>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold text-muted">Data da Localização</label>
+                                <p class="fs-6">
+                                    {% if bem.data_localizacao %}
+                                    {{ bem.data_localizacao[:10] }}
+                                    {% else %}
+                                    <span class="text-muted">Nunca localizado</span>
+                                    {% endif %}
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Metadados -->
+                        <div class="row">
+                            <div class="col-12">
+                                <h5 class="border-bottom pb-2 mb-3">
+                                    <i class="bi bi-clock-history me-2"></i>Metadados
+                                </h5>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold text-muted">Data de Criação</label>
+                                <p class="fs-6">
+                                    {% if bem.data_criacao %}
+                                    {{ bem.data_criacao[:10] }}
+                                    {% else %}
+                                    <span class="text-muted">Não disponível</span>
+                                    {% endif %}
+                                </p>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold text-muted">Última Atualização</label>
+                                <p class="fs-6">
+                                    {% if bem.data_atualizacao %}
+                                    {{ bem.data_atualizacao[:10] }}
+                                    {% else %}
+                                    <span class="text-muted">Não disponível</span>
+                                    {% endif %}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="card-footer bg-white border-0 text-center">
+                        <div class="btn-group">
+                            <a href="{{ url_for('sistema_crud') }}" class="btn btn-secondary">
+                                <i class="bi bi-arrow-left me-1"></i>Voltar à Lista
+                            </a>
+                            <button onclick="editarBemNoCrud('{{ bem.numero }}')" class="btn btn-primary">
+                                <i class="bi bi-pencil me-1"></i>Editar Bem
+                            </button>
+                            <button onclick="imprimirPagina()" class="btn btn-outline-primary">
+                                <i class="bi bi-printer me-1"></i>Imprimir
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function editarBemNoCrud(numeroBem) {
+            // Fecha esta janela e abre a edição na janela principal
+            if (window.opener && !window.opener.closed) {
+                window.opener.location.href = "{{ url_for('sistema_crud') }}?q=" + encodeURIComponent(numeroBem);
+                window.close();
+            } else {
+                // Se a janela principal não está aberta, redireciona
+                window.location.href = "{{ url_for('sistema_crud') }}?q=" + encodeURIComponent(numeroBem);
+            }
+        }
+
+        function imprimirPagina() {
+            window.print();
+        }
+
+        // Focar na janela atual quando carregar
+        window.focus();
+    </script>
+</body>
+</html>

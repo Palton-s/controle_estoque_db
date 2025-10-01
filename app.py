@@ -26,7 +26,8 @@ from utils.db_handler import (
     obter_bens_por_localidade,
     obter_todos_bens_por_localidade,
     verificar_localidade_existe,
-    verificar_numero_existe
+    verificar_numero_existe,
+    obter_bem_por_id 
 )
 
 from utils.excel_importer import importar_excel_para_sqlite, verificar_estrutura_excel
@@ -419,6 +420,7 @@ def visualizar(tipo: str):
                              },
                              mensagem=f"Erro ao carregar dados: {str(e)}")
 
+
 @app.route('/exportar/<tipo>')
 def exportar(tipo: str):
     """Exporta relatórios para Excel"""
@@ -777,22 +779,9 @@ def sistema_crud():
 def api_obter_bem_por_id(bem_id):
     """API para obter dados de um bem pelo ID"""
     try:
-        conn = sqlite3.connect(DB_PATH)
-        cursor = conn.cursor()
+        bem = obter_bem_por_id(DB_PATH, bem_id)  # ← AGORA USA A FUNÇÃO DO db_handler
         
-        cursor.execute('''
-            SELECT id, numero, nome, situacao, localizacao, responsavel,
-                   data_ultima_vistoria, data_vistoria_atual, auditor,
-                   data_criacao, data_localizacao
-            FROM bens WHERE id = ?
-        ''', (bem_id,))
-        
-        row = cursor.fetchone()
-        conn.close()
-        
-        if row:
-            colunas = [desc[0] for desc in cursor.description]
-            bem = dict(zip(colunas, row))
+        if bem:
             return jsonify({'success': True, 'data': bem})
         else:
             return jsonify({'success': False, 'message': 'Bem não encontrado'})

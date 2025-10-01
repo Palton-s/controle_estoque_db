@@ -2,6 +2,8 @@ import sqlite3
 from typing import List, Dict, Tuple, Optional
 from contextlib import contextmanager
 from utils.logger import logger
+# NO INÍCIO DO db_handler.py - ADICIONE ESTA LINHA:
+from typing import Any, Dict, Tuple, Optional
 
 # Adicionar após as importações
 def criar_tabela_atualizada(db_path: str):
@@ -492,3 +494,159 @@ def diagnosticar_localidade(db_path: str, localidade: str):
     except Exception as e:
         logger.error(f"Erro no diagnóstico: {str(e)}")
         return {'error': str(e)}
+    
+# ==============================
+# FUNÇÕES CRUD ADICIONAIS - ADICIONE ESTE BLOCO NO FINAL DO db_handler.py
+# ==============================
+
+def atualizar_bem(db_path: str, bem_id: int, dados: Dict[str, Any]) -> Tuple[bool, str]:
+    """Atualiza um bem existente no banco de dados"""
+    try:
+        conn = sqlite3.connect(db_path)
+        cursor = conn.cursor()
+        
+        # Construir query dinamicamente baseada nos campos fornecidos
+        campos = []
+        valores = []
+        
+        campos_permitidos = [
+            'numero', 'nome', 'situacao', 'localizacao', 'responsavel',
+            'data_ultima_vistoria', 'data_vistoria_atual', 'auditor', 'observacoes'
+        ]
+        
+        for campo in campos_permitidos:
+            if campo in dados and dados[campo] is not None:
+                campos.append(f"{campo} = ?")
+                valores.append(dados[campo])
+        
+        if not campos:
+            return False, "Nenhum campo válido para atualização"
+        
+        # Adicionar data de modificação
+        campos.append("data_modificacao = ?")
+        valores.append(datetime.now().isoformat())
+        
+        # Adicionar ID no final
+        valores.append(bem_id)
+        
+        query = f"UPDATE bens SET {', '.join(campos)} WHERE id = ?"
+        
+        cursor.execute(query, valores)
+        conn.commit()
+        
+        if cursor.rowcount > 0:
+            return True, "Bem atualizado com sucesso"
+        else:
+            return False, "Bem não encontrado"
+            
+    except sqlite3.IntegrityError as e:
+        return False, f"Erro de integridade: {str(e)}"
+    except Exception as e:
+        return False, f"Erro ao atualizar bem: {str(e)}"
+    finally:
+        if conn:
+            conn.close()
+
+def obter_bem_por_id(db_path: str, bem_id: int) -> Dict[str, Any] | None:
+    """Obtém um bem pelo ID"""
+    try:
+        conn = sqlite3.connect(db_path)
+        cursor = conn.cursor()
+        
+        cursor.execute('''
+            SELECT id, numero, nome, situacao, localizacao, responsavel,
+                   data_ultima_vistoria, data_vistoria_atual, auditor,
+                   observacoes, data_criacao, data_localizacao
+            FROM bens WHERE id = ?
+        ''', (bem_id,))
+        
+        row = cursor.fetchone()
+        conn.close()
+        
+        if row:
+            colunas = [desc[0] for desc in cursor.description]
+            return dict(zip(colunas, row))
+        return None
+        
+    except Exception as e:
+        logger.error(f"Erro ao obter bem por ID {bem_id}: {str(e)}")
+        return None   
+    
+# ==============================
+# FUNÇÕES CRUD ADICIONAIS - VERSÃO SIMPLIFICADA
+# ==============================
+
+def atualizar_bem(db_path, bem_id, dados):
+    """Atualiza um bem existente no banco de dados - VERSÃO SIMPLIFICADA"""
+    conn = None
+    try:
+        conn = sqlite3.connect(db_path)
+        cursor = conn.cursor()
+        
+        # Construir query dinamicamente baseada nos campos fornecidos
+        campos = []
+        valores = []
+        
+        campos_permitidos = [
+            'numero', 'nome', 'situacao', 'localizacao', 'responsavel',
+            'data_ultima_vistoria', 'data_vistoria_atual', 'auditor', 'observacoes'
+        ]
+        
+        for campo in campos_permitidos:
+            if campo in dados and dados[campo] is not None:
+                campos.append(f"{campo} = ?")
+                valores.append(dados[campo])
+        
+        if not campos:
+            return False, "Nenhum campo válido para atualização"
+        
+        # Adicionar data de modificação
+        campos.append("data_modificacao = ?")
+        valores.append(datetime.now().isoformat())
+        
+        # Adicionar ID no final
+        valores.append(bem_id)
+        
+        query = f"UPDATE bens SET {', '.join(campos)} WHERE id = ?"
+        
+        cursor.execute(query, valores)
+        conn.commit()
+        
+        if cursor.rowcount > 0:
+            return True, "Bem atualizado com sucesso"
+        else:
+            return False, "Bem não encontrado"
+            
+    except sqlite3.IntegrityError as e:
+        return False, f"Erro de integridade: {str(e)}"
+    except Exception as e:
+        print(f"Erro ao atualizar bem: {str(e)}")
+        return False, f"Erro ao atualizar bem: {str(e)}"
+    finally:
+        if conn:
+            conn.close()
+
+def obter_bem_por_id(db_path, bem_id):
+    """Obtém um bem pelo ID - VERSÃO SIMPLIFICADA"""
+    try:
+        conn = sqlite3.connect(db_path)
+        cursor = conn.cursor()
+        
+        cursor.execute('''
+            SELECT id, numero, nome, situacao, localizacao, responsavel,
+                   data_ultima_vistoria, data_vistoria_atual, auditor,
+                   observacoes, data_criacao, data_localizacao
+            FROM bens WHERE id = ?
+        ''', (bem_id,))
+        
+        row = cursor.fetchone()
+        conn.close()
+        
+        if row:
+            colunas = [desc[0] for desc in cursor.description]
+            return dict(zip(colunas, row))
+        return None
+        
+    except Exception as e:
+        print(f"Erro ao obter bem por ID {bem_id}: {str(e)}")
+        return None
