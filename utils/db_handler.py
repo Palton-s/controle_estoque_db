@@ -650,3 +650,47 @@ def obter_bem_por_id(db_path, bem_id):
     except Exception as e:
         print(f"Erro ao obter bem por ID {bem_id}: {str(e)}")
         return None
+    
+def obter_bem_por_id_completo(db_path, bem_id):
+    """Obtém um bem pelo ID - VERSÃO COMPLETA E ROBUSTA"""
+    conn = None
+    try:
+        conn = sqlite3.connect(db_path)
+        cursor = conn.cursor()
+        
+        print(f"🔍 Buscando bem com ID: {bem_id}")  # Debug
+        
+        # Primeiro, vamos verificar se a tabela existe
+        cursor.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='bens'")
+        tabela_existe = cursor.fetchone()
+        
+        if not tabela_existe:
+            print("❌ Tabela 'bens' não existe!")
+            return None
+        
+        # Agora busca o bem
+        cursor.execute('''
+            SELECT id, numero, nome, situacao, localizacao, responsavel,
+                   data_ultima_vistoria, data_vistoria_atual, auditor,
+                   observacoes, data_criacao, data_localizacao
+            FROM bens WHERE id = ?
+        ''', (bem_id,))
+        
+        row = cursor.fetchone()
+        
+        if row:
+            print(f"✅ Bem encontrado: ID {row[0]}, Número {row[1]}, Nome {row[2]}")
+            colunas = [desc[0] for desc in cursor.description]
+            bem_dict = dict(zip(colunas, row))
+            print(f"📋 Dados do bem: {bem_dict}")
+            return bem_dict
+        else:
+            print(f"❌ Nenhum bem encontrado com ID {bem_id}")
+            return None
+        
+    except Exception as e:
+        print(f"💥 ERRO ao obter bem por ID {bem_id}: {str(e)}")
+        return None
+    finally:
+        if conn:
+            conn.close()

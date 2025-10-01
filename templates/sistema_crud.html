@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,15 +11,19 @@
         .table-hover tbody tr:hover {
             background-color: rgba(0, 0, 0, 0.075);
         }
+
         .badge-status {
             font-size: 0.8em;
         }
+
         .action-buttons {
             white-space: nowrap;
         }
+
         .search-box {
             max-width: 400px;
         }
+
         .pagination-container {
             display: flex;
             justify-content: space-between;
@@ -27,6 +32,7 @@
         }
     </style>
 </head>
+
 <body>
     <div class="container-fluid py-4">
         <!-- Cabeçalho -->
@@ -99,11 +105,8 @@
                 <!-- Busca -->
                 <form method="GET" class="d-flex">
                     <div class="input-group search-box">
-                        <input type="text" 
-                               name="q" 
-                               class="form-control" 
-                               placeholder="Buscar por nome ou número..." 
-                               value="{{ termo_busca }}">
+                        <input type="text" name="q" class="form-control" placeholder="Buscar por nome ou número..."
+                            value="{{ termo_busca }}">
                         <button class="btn btn-outline-secondary" type="submit">
                             <i class="fas fa-search"></i>
                         </button>
@@ -125,30 +128,30 @@
         <div class="row mb-3">
             <div class="col">
                 <div class="btn-group">
-                    <a href="{{ url_for('sistema_crud') }}" 
-                       class="btn btn-outline-secondary {{ 'active' if not request.args.get('situacao') }}">
-                       Todos
+                    <a href="{{ url_for('sistema_crud') }}"
+                        class="btn btn-outline-secondary {{ 'active' if not request.args.get('situacao') }}">
+                        Todos
                     </a>
-                    <a href="{{ url_for('sistema_crud', situacao='OK') }}" 
-                       class="btn btn-outline-success {{ 'active' if request.args.get('situacao') == 'OK' }}">
-                       Localizados
+                    <a href="{{ url_for('sistema_crud', situacao='OK') }}"
+                        class="btn btn-outline-success {{ 'active' if request.args.get('situacao') == 'OK' }}">
+                        Localizados
                     </a>
-                    <a href="{{ url_for('sistema_crud', situacao='Pendente') }}" 
-                       class="btn btn-outline-warning {{ 'active' if request.args.get('situacao') == 'Pendente' }}">
-                       Pendentes
+                    <a href="{{ url_for('sistema_crud', situacao='Pendente') }}"
+                        class="btn btn-outline-warning {{ 'active' if request.args.get('situacao') == 'Pendente' }}">
+                        Pendentes
                     </a>
                 </div>
             </div>
         </div>
 
-        <!-- Tabela de Bens -->
+        <!-- Tabela de Bens - VERSÃO CORRIGIDA -->
         <div class="card">
             <div class="card-header">
                 <h5 class="card-title mb-0">
                     <i class="fas fa-list me-1"></i>
                     Lista de Bens
                     {% if termo_busca %}
-                        <span class="badge bg-info">Filtrado: "{{ termo_busca }}"</span>
+                    <span class="badge bg-info">Filtrado: "{{ termo_busca }}"</span>
                     {% endif %}
                 </h5>
             </div>
@@ -177,48 +180,46 @@
                                 <td>{{ bem.nome }}</td>
                                 <td>
                                     {% if bem.situacao == 'OK' %}
-                                        <span class="badge bg-success badge-status">Localizado</span>
+                                    <span class="badge bg-success badge-status">Localizado</span>
                                     {% else %}
-                                        <span class="badge bg-warning badge-status">Pendente</span>
+                                    <span class="badge bg-warning badge-status">Pendente</span>
                                     {% endif %}
                                 </td>
                                 <td>
                                     {% if bem.localizacao %}
-                                        {{ bem.localizacao }}
+                                    {{ bem.localizacao }}
                                     {% else %}
-                                        <span class="text-muted">Não informada</span>
+                                    <span class="text-muted">Não informada</span>
                                     {% endif %}
                                 </td>
                                 <td>
                                     {% if bem.responsavel %}
-                                        {{ bem.responsavel }}
+                                    {{ bem.responsavel }}
                                     {% else %}
-                                        <span class="text-muted">Não informado</span>
+                                    <span class="text-muted">Não informado</span>
                                     {% endif %}
                                 </td>
                                 <td>
                                     {% if bem.data_ultima_vistoria %}
-                                        {{ bem.data_ultima_vistoria[:10] }}
+                                    {{ bem.data_ultima_vistoria[:10] }}
                                     {% else %}
-                                        <span class="text-muted">N/A</span>
+                                    <span class="text-muted">N/A</span>
                                     {% endif %}
                                 </td>
                                 <td class="action-buttons">
-                                    <button class="btn btn-sm btn-outline-primary" 
-                                            onclick="editarBem({{ bem.id }})"
-                                            title="Editar">
+                                    <button class="btn btn-sm btn-outline-primary" onclick="editarBem({{ bem.id }})"
+                                        title="Editar">
                                         <i class="fas fa-edit"></i>
                                     </button>
-                                    <button class="btn btn-sm btn-outline-info" 
-                                            onclick="visualizarBem({{ bem.id }})"
-                                            title="Visualizar">
+                                    <button class="btn btn-sm btn-outline-info" onclick="visualizarBem({{ bem.id }})"
+                                        title="Visualizar">
                                         <i class="fas fa-eye"></i>
                                     </button>
-                                    <button class="btn btn-sm btn-outline-danger" 
-                                            onclick="confirmarExclusao({{ bem.id }}, '{{ bem.nome }}')"
-                                            title="Excluir">
+                                    <button class="btn btn-sm btn-outline-danger"
+                                        onclick="confirmarExclusao({{ bem.id }}, '{{ bem.nome }}')" title="Excluir">
                                         <i class="fas fa-trash"></i>
                                     </button>
+                                </td>
                                 </td>
                             </tr>
                             {% else %}
@@ -228,9 +229,9 @@
                                         <i class="fas fa-inbox fa-2x mb-2"></i>
                                         <p>Nenhum bem encontrado</p>
                                         {% if termo_busca %}
-                                            <a href="{{ url_for('sistema_crud') }}" class="btn btn-sm btn-primary">
-                                                Limpar busca
-                                            </a>
+                                        <a href="{{ url_for('sistema_crud') }}" class="btn btn-sm btn-primary">
+                                            Limpar busca
+                                        </a>
                                         {% endif %}
                                     </div>
                                 </td>
@@ -241,7 +242,6 @@
                 </div>
             </div>
         </div>
-
         <!-- Paginação -->
         {% if paginacao.total_paginas > 1 %}
         <div class="row mt-3">
@@ -250,32 +250,31 @@
                     <ul class="pagination justify-content-center">
                         {% if paginacao.pagina_atual > 1 %}
                         <li class="page-item">
-                            <a class="page-link" 
-                               href="{{ url_for('sistema_crud', pagina=paginacao.pagina_atual-1, por_pagina=paginacao.por_pagina, q=termo_busca) }}">
+                            <a class="page-link"
+                                href="{{ url_for('sistema_crud', pagina=paginacao.pagina_atual-1, por_pagina=paginacao.por_pagina, q=termo_busca) }}">
                                 Anterior
                             </a>
                         </li>
                         {% endif %}
 
                         {% for pagina in range(1, paginacao.total_paginas + 1) %}
-                            {% if pagina >= paginacao.pagina_atual - 2 and pagina <= paginacao.pagina_atual + 2 %}
-                            <li class="page-item {{ 'active' if pagina == paginacao.pagina_atual }}">
-                                <a class="page-link" 
-                                   href="{{ url_for('sistema_crud', pagina=pagina, por_pagina=paginacao.por_pagina, q=termo_busca) }}">
-                                    {{ pagina }}
-                                </a>
+                        {% if pagina >= paginacao.pagina_atual - 2 and pagina <= paginacao.pagina_atual + 2 %} <li
+                            class="page-item {{ 'active' if pagina == paginacao.pagina_atual }}">
+                            <a class="page-link"
+                                href="{{ url_for('sistema_crud', pagina=pagina, por_pagina=paginacao.por_pagina, q=termo_busca) }}">
+                                {{ pagina }}
+                            </a>
                             </li>
                             {% endif %}
-                        {% endfor %}
+                            {% endfor %}
 
-                        {% if paginacao.pagina_atual < paginacao.total_paginas %}
-                        <li class="page-item">
-                            <a class="page-link" 
-                               href="{{ url_for('sistema_crud', pagina=paginacao.pagina_atual+1, por_pagina=paginacao.por_pagina, q=termo_busca) }}">
-                                Próxima
-                            </a>
-                        </li>
-                        {% endif %}
+                            {% if paginacao.pagina_atual < paginacao.total_paginas %} <li class="page-item">
+                                <a class="page-link"
+                                    href="{{ url_for('sistema_crud', pagina=paginacao.pagina_atual+1, por_pagina=paginacao.por_pagina, q=termo_busca) }}">
+                                    Próxima
+                                </a>
+                                </li>
+                                {% endif %}
                     </ul>
                 </nav>
             </div>
@@ -286,7 +285,7 @@
         <div class="row mt-2">
             <div class="col text-center text-muted">
                 <small>
-                    Mostrando {{ paginacao.dados|length }} de {{ paginacao.total_registros|number_format }} 
+                    Mostrando {{ paginacao.dados|length }} de {{ paginacao.total_registros|number_format }}
                     registro{{ paginacao.total_registros|pluralize('', 's') }}
                     {% if paginacao.total_paginas > 1 %}
                     - Página {{ paginacao.pagina_atual }} de {{ paginacao.total_paginas }}
@@ -307,7 +306,7 @@
                 <div class="modal-body">
                     <form id="formBem">
                         <input type="hidden" id="bemId" name="id">
-                        
+
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="mb-3">
@@ -360,13 +359,15 @@
                             <div class="col-md-6">
                                 <div class="mb-3">
                                     <label for="data_ultima_vistoria" class="form-label">Data Última Vistoria</label>
-                                    <input type="date" class="form-control" id="data_ultima_vistoria" name="data_ultima_vistoria">
+                                    <input type="date" class="form-control" id="data_ultima_vistoria"
+                                        name="data_ultima_vistoria">
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="mb-3">
                                     <label for="data_vistoria_atual" class="form-label">Data Vistoria Atual</label>
-                                    <input type="date" class="form-control" id="data_vistoria_atual" name="data_vistoria_atual">
+                                    <input type="date" class="form-control" id="data_vistoria_atual"
+                                        name="data_vistoria_atual">
                                 </div>
                             </div>
                         </div>
@@ -379,7 +380,8 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
-                    <button type="button" class="btn btn-primary" id="btnSalvar" onclick="salvarBem()">Salvar Alterações</button>
+                    <button type="button" class="btn btn-primary" id="btnSalvar" onclick="salvarBem()">Salvar
+                        Alterações</button>
                 </div>
             </div>
         </div>
@@ -407,125 +409,198 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
+        console.log("=== SISTEMA CRUD INICIADO ===");
+
+        // VARIÁVEIS GLOBAIS
         let bemIdParaExcluir = null;
 
-        // Função para abrir modal de novo bem
-        function abrirModalNovoBem() {
-            document.getElementById('modalBemTitle').textContent = 'Novo Bem';
-            document.getElementById('formBem').reset();
-            document.getElementById('bemId').value = '';
-            
+        // FUNÇÃO PRINCIPAL PARA EDITAR - VERSÃO SUPER SIMPLIFICADA
+        function editarBem(bemId) {
+            console.log("🎯 EDITAR BEM CHAMADO - ID:", bemId);
+
+            // Verificação EXTRA segura
+            if (bemId === undefined || bemId === null || bemId === "undefined") {
+                console.error("❌ ID É UNDEFINED!");
+                alert("ERRO: ID não recebido. Contate o suporte.");
+                return;
+            }
+
+            // Forçar conversão para número
+            const id = parseInt(bemId);
+            if (isNaN(id)) {
+                console.error("❌ ID NÃO É NÚMERO:", bemId);
+                alert("ERRO: ID inválido: " + bemId);
+                return;
+            }
+
+            console.log("🔍 Buscando bem ID:", id);
+
+            // Fazer requisição DIRETA
+            fetch(`/api/bens/id/${id}`)
+                .then(response => {
+                    console.log("📡 Status:", response.status);
+                    return response.json();
+                })
+                .then(data => {
+                    console.log("📊 Dados recebidos:", data);
+
+                    if (data.success) {
+                        preencherModalEdicao(data.data);
+                    } else {
+                        alert("Erro: " + data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error("💥 Erro:", error);
+                    alert("Erro de conexão: " + error.message);
+                });
+        }
+
+        // FUNÇÃO PARA PREENCHER MODAL
+        function preencherModalEdicao(bem) {
+            console.log("📝 Preenchendo modal com:", bem);
+
+            document.getElementById('modalBemTitle').textContent = `Editar Bem: ${bem.nome}`;
+            document.getElementById('bemId').value = bem.id;
+            document.getElementById('numero').value = bem.numero || '';
+            document.getElementById('nome').value = bem.nome || '';
+            document.getElementById('situacao').value = bem.situacao || 'Pendente';
+            document.getElementById('localizacao').value = bem.localizacao || '';
+            document.getElementById('responsavel').value = bem.responsavel || '';
+            document.getElementById('auditor').value = bem.auditor || '';
+
+            // Datas
+            if (bem.data_ultima_vistoria) {
+                document.getElementById('data_ultima_vistoria').value = bem.data_ultima_vistoria.split('T')[0];
+            }
+            if (bem.data_vistoria_atual) {
+                document.getElementById('data_vistoria_atual').value = bem.data_vistoria_atual.split('T')[0];
+            }
+
+            document.getElementById('observacoes').value = bem.observacoes || '';
+
+            // Abrir modal
             const modal = new bootstrap.Modal(document.getElementById('modalBem'));
             modal.show();
         }
 
-        // Função para visualizar/editar bem
-        async function editarBem(bemId) {
-            try {
-                const response = await fetch(`/api/bens/id/${bemId}`);
-                const data = await response.json();
-                
-                if (data.success) {
-                    const bem = data.data;
-                    
-                    // Preencher formulário
-                    document.getElementById('modalBemTitle').textContent = `Editar Bem: ${bem.nome}`;
-                    document.getElementById('bemId').value = bem.id;
-                    document.getElementById('numero').value = bem.numero || '';
-                    document.getElementById('nome').value = bem.nome || '';
-                    document.getElementById('situacao').value = bem.situacao || 'Pendente';
-                    document.getElementById('localizacao').value = bem.localizacao || '';
-                    document.getElementById('responsavel').value = bem.responsavel || '';
-                    document.getElementById('auditor').value = bem.auditor || '';
-                    document.getElementById('data_ultima_vistoria').value = bem.data_ultima_vistoria ? bem.data_ultima_vistoria.split('T')[0] : '';
-                    document.getElementById('data_vistoria_atual').value = bem.data_vistoria_atual ? bem.data_vistoria_atual.split('T')[0] : '';
-                    document.getElementById('observacoes').value = bem.observacoes || '';
-                    
-                    const modal = new bootstrap.Modal(document.getElementById('modalBem'));
-                    modal.show();
-                } else {
-                    alert('Erro ao carregar dados do bem: ' + data.message);
-                }
-            } catch (error) {
-                alert('Erro ao carregar bem: ' + error.message);
+        // FUNÇÃO PARA VISUALIZAR
+        function visualizarBem(bemId) {
+            console.log("👁️ VISUALIZAR BEM - ID:", bemId);
+
+            const id = parseInt(bemId);
+            if (isNaN(id)) {
+                alert("ID inválido");
+                return;
             }
+
+            fetch(`/api/bens/id/${id}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        preencherModalVisualizacao(data.data);
+                    } else {
+                        alert("Erro: " + data.message);
+                    }
+                })
+                .catch(error => {
+                    alert("Erro: " + error.message);
+                });
         }
 
-        // Função para visualizar bem (somente leitura)
-        async function visualizarBem(bemId) {
-            await editarBem(bemId);
-            // Tornar campos readonly para visualização
+        function preencherModalVisualizacao(bem) {
+            document.getElementById('modalBemTitle').textContent = `Visualizar Bem: ${bem.nome}`;
+            document.getElementById('bemId').value = bem.id;
+            document.getElementById('numero').value = bem.numero || '';
+            document.getElementById('nome').value = bem.nome || '';
+            document.getElementById('situacao').value = bem.situacao || 'Pendente';
+            document.getElementById('localizacao').value = bem.localizacao || '';
+            document.getElementById('responsavel').value = bem.responsavel || '';
+            document.getElementById('auditor').value = bem.auditor || '';
+
+            if (bem.data_ultima_vistoria) {
+                document.getElementById('data_ultima_vistoria').value = bem.data_ultima_vistoria.split('T')[0];
+            }
+            if (bem.data_vistoria_atual) {
+                document.getElementById('data_vistoria_atual').value = bem.data_vistoria_atual.split('T')[0];
+            }
+
+            document.getElementById('observacoes').value = bem.observacoes || '';
+
+            // Desabilitar campos para visualização
             const inputs = document.querySelectorAll('#formBem input, #formBem select, #formBem textarea');
             inputs.forEach(input => input.disabled = true);
             document.getElementById('btnSalvar').style.display = 'none';
+
+            const modal = new bootstrap.Modal(document.getElementById('modalBem'));
+            modal.show();
         }
 
-        // Função para salvar bem
+        // FUNÇÃO PARA NOVO BEM
+        function abrirModalNovoBem() {
+            document.getElementById('modalBemTitle').textContent = 'Novo Bem';
+            document.getElementById('formBem').reset();
+            document.getElementById('bemId').value = '';
+
+            const modal = new bootstrap.Modal(document.getElementById('modalBem'));
+            modal.show();
+        }
+
+        // FUNÇÃO PARA SALVAR
         async function salvarBem() {
             const formData = new FormData(document.getElementById('formBem'));
             const bemId = document.getElementById('bemId').value;
-            
+
             const dados = {};
             formData.forEach((value, key) => {
                 dados[key] = value;
             });
-            
+
             try {
                 let response;
                 if (bemId) {
-                    // Editar bem existente
                     response = await fetch(`/api/bens/${bemId}`, {
                         method: 'PUT',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
+                        headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify(dados)
                     });
                 } else {
-                    // Criar novo bem
                     response = await fetch('/api/bens', {
                         method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
+                        headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify(dados)
                     });
                 }
-                
+
                 const result = await response.json();
-                
+
                 if (result.success) {
                     alert(result.message);
                     bootstrap.Modal.getInstance(document.getElementById('modalBem')).hide();
-                    location.reload(); // Recarregar a página para ver as alterações
+                    location.reload();
                 } else {
                     alert('Erro: ' + result.message);
                 }
             } catch (error) {
-                alert('Erro ao salvar bem: ' + error.message);
+                alert('Erro: ' + error.message);
             }
         }
 
-        // Função para confirmar exclusão
+        // FUNÇÕES DE EXCLUSÃO
         function confirmarExclusao(bemId, nomeBem) {
+            console.log("🗑️ EXCLUIR BEM - ID:", bemId);
             bemIdParaExcluir = bemId;
             document.getElementById('nomeBemExcluir').textContent = nomeBem;
-            
-            const modal = new bootstrap.Modal(document.getElementById('modalConfirmacao'));
-            modal.show();
+            new bootstrap.Modal(document.getElementById('modalConfirmacao')).show();
         }
 
-        // Função para executar exclusão
-        document.getElementById('btnConfirmarExclusao').addEventListener('click', async function() {
+        document.getElementById('btnConfirmarExclusao').addEventListener('click', async function () {
             if (!bemIdParaExcluir) return;
-            
+
             try {
-                const response = await fetch(`/api/bens/${bemIdParaExcluir}`, {
-                    method: 'DELETE'
-                });
-                
+                const response = await fetch(`/api/bens/${bemIdParaExcluir}`, { method: 'DELETE' });
                 const result = await response.json();
-                
+
                 if (result.success) {
                     alert(result.message);
                     bootstrap.Modal.getInstance(document.getElementById('modalConfirmacao')).hide();
@@ -534,16 +609,19 @@
                     alert('Erro: ' + result.message);
                 }
             } catch (error) {
-                alert('Erro ao excluir bem: ' + error.message);
+                alert('Erro: ' + error.message);
             }
         });
 
         // Reativar campos quando modal fechar
-        document.getElementById('modalBem').addEventListener('hidden.bs.modal', function() {
+        document.getElementById('modalBem').addEventListener('hidden.bs.modal', function () {
             const inputs = document.querySelectorAll('#formBem input, #formBem select, #formBem textarea');
             inputs.forEach(input => input.disabled = false);
             document.getElementById('btnSalvar').style.display = 'block';
         });
+
+        console.log("✅ JavaScript carregado com sucesso!");
     </script>
 </body>
+
 </html>
