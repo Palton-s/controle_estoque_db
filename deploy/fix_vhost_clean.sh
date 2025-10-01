@@ -104,8 +104,6 @@ cat > "$VHOST_FILE" << 'EOL'
     <Directory /var/www/controle_estoque_db/static>
         Require all granted
         Options -Indexes
-        ExpiresActive On
-        ExpiresDefault "access plus 1 month"
     </Directory>
 
     # Relatórios do Controle de Estoque
