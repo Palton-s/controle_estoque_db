@@ -63,28 +63,6 @@
             </div>
         </div>
 
-        <!-- DEBUG PANEL - TEMPORÁRIO -->
-        <div class="debug-panel">
-            <h6><i class="fas fa-bug me-2"></i>🔍 DEBUG - Diagnóstico do Problema</h6>
-            <div class="mb-2">
-                <button class="btn btn-sm btn-info" onclick="investigarDados()">
-                    <i class="fas fa-search me-1"></i>Investigar Dados
-                </button>
-                <button class="btn btn-sm btn-warning" onclick="testarRotasAPI()">
-                    <i class="fas fa-plug me-1"></i>Testar Rotas API
-                </button>
-                <button class="btn btn-sm btn-success" onclick="criarBemTeste()">
-                    <i class="fas fa-plus me-1"></i>Criar Bem Teste
-                </button>
-            </div>
-            <div id="debugInfo">
-                <div class="alert alert-warning">
-                    <strong>Problema Identificado:</strong> Os IDs não estão sendo retornados corretamente da consulta
-                    SQL.
-                    <br><strong>Solução:</strong> Precisamos corrigir a rota <code>sistema_crud</code> no Flask.
-                </div>
-            </div>
-        </div>
 
         <!-- Estatísticas -->
         <div class="row mb-4">
@@ -704,7 +682,7 @@
             }
         }
 
-        // FUNÇÕES DE EXCLUSÃO
+
         // FUNÇÕES DE EXCLUSÃO
         function confirmarExclusao(bemId, nomeBem) {
             console.log("🗑️ EXCLUIR BEM - ID:", bemId, "Nome:", nomeBem);
@@ -754,6 +732,59 @@
             console.log("✅ Sistema CRUD carregado com sucesso!");
             // investigarDados(); // Descomente se quiser debug automático
         });
+
+
+        // FUNÇÃO PARA PREENCHER MODAL DE VISUALIZAÇÃO
+        function preencherModalVisualizacao(bem) {
+            console.log("👀 Preenchendo modal de VISUALIZAÇÃO com:", bem);
+
+            if (!bem) {
+                alert("Dados do bem não recebidos");
+                return;
+            }
+
+            document.getElementById('modalBemTitle').textContent = `Visualizar Bem: ${bem.nome || 'Sem nome'}`;
+            document.getElementById('bemId').value = bem.id || '';
+            document.getElementById('bemNumero').value = bem.numero || '';
+            document.getElementById('numeroDisplay').value = bem.numero || '';
+            document.getElementById('nome').value = bem.nome || '';
+            document.getElementById('situacao').value = bem.situacao || 'Pendente';
+            document.getElementById('localizacao').value = bem.localizacao || '';
+            document.getElementById('responsavel').value = bem.responsavel || '';
+            document.getElementById('auditor').value = bem.auditor || '';
+
+            // Datas
+            if (bem.data_ultima_vistoria) {
+                const dataUltima = bem.data_ultima_vistoria.split('T')[0];
+                document.getElementById('data_ultima_vistoria').value = dataUltima;
+            } else {
+                document.getElementById('data_ultima_vistoria').value = '';
+            }
+
+            if (bem.data_vistoria_atual) {
+                const dataAtual = bem.data_vistoria_atual.split('T')[0];
+                document.getElementById('data_vistoria_atual').value = dataAtual;
+            } else {
+                document.getElementById('data_vistoria_atual').value = '';
+            }
+
+            // Observações (se o campo existir)
+            const campoObservacoes = document.getElementById('observacoes');
+            if (campoObservacoes) {
+                campoObservacoes.value = bem.observacoes || '';
+            }
+
+            // Desabilitar campos para visualização
+            const inputs = document.querySelectorAll('#formBem input, #formBem select, #formBem textarea');
+            inputs.forEach(input => input.disabled = true);
+            document.getElementById('btnSalvar').style.display = 'none';
+
+            const modal = new bootstrap.Modal(document.getElementById('modalBem'));
+            modal.show();
+        }
+
+
+
     </script>
 </body>
 
