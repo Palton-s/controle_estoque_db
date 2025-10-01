@@ -19,12 +19,12 @@ fi
 # Variáveis de configuração
 APP_DIR="/var/www/controle_estoque_db"
 APP_USER="apache"  # Usuário padrão do httpd
-DOMAIN="seu-dominio.com.br"  # ALTERE AQUI
+BASE_URL="localhost/estoque"  # Rodará em localhost/estoque
 
 echo -e "${YELLOW}Configurações para httpd:${NC}"
 echo "Diretório da aplicação: $APP_DIR"
 echo "Usuário da aplicação: $APP_USER"
-echo "Domínio: $DOMAIN"
+echo "URL da aplicação: http://$BASE_URL"
 echo ""
 
 # 1. Verificar se httpd está rodando
@@ -110,88 +110,60 @@ else
 fi
 
 cat > $CONF_DIR/controle-estoque.conf << EOL
-# Configuração do Virtual Host para Controle de Estoque
+# Configuração para Controle de Estoque em localhost/estoque
 # Usando servidor httpd existente
 
-<VirtualHost *:80>
-    ServerName $DOMAIN
-    ServerAlias www.$DOMAIN
-    
-    DocumentRoot $APP_DIR
-    
-    # Configuração WSGI
-    WSGIDaemonProcess controle_estoque python-path=$APP_DIR python-home=$APP_DIR/venv
+# Configuração WSGI para aplicação em subdiretório
+WSGIDaemonProcess controle_estoque python-path=$APP_DIR python-home=$APP_DIR/venv
+WSGIScriptAlias /estoque $APP_DIR/wsgi.py
+# Configuração de diretórios para aplicação em subdiretório
+<Directory $APP_DIR>
     WSGIProcessGroup controle_estoque
-    WSGIScriptAlias / $APP_DIR/wsgi.py
     WSGIApplicationGroup %{GLOBAL}
-    
-    <Directory $APP_DIR>
-        WSGIApplicationGroup %{GLOBAL}
-        Require all granted
-        Options -Indexes
-    </Directory>
-    
-    # Arquivos estáticos
-    Alias /static $APP_DIR/static
-    <Directory $APP_DIR/static>
-        Require all granted
-        ExpiresActive On
-        ExpiresDefault "access plus 1 month"
-    </Directory>
-    
-    # Relatórios
-    Alias /relatorios $APP_DIR/relatorios
-    <Directory $APP_DIR/relatorios>
-        Require all granted
-        Options -Indexes
-    </Directory>
-    
-    # Logs específicos para esta aplicação
-    ErrorLog /var/log/httpd/controle_estoque_error.log
-    CustomLog /var/log/httpd/controle_estoque_access.log combined
-    LogLevel warn
-    
-    # Headers de segurança básicos
+    Require all granted
+    Options -Indexes
+</Directory>
+
+# Servir arquivos estáticos em /estoque/static
+Alias /estoque/static $APP_DIR/static
+<Directory $APP_DIR/static>
+    Require all granted
+    ExpiresActive On
+    ExpiresDefault "access plus 1 month"
+    Options -Indexes
+</Directory>
+
+# Alias para downloads de relatórios em /estoque/relatorios
+Alias /estoque/relatorios $APP_DIR/relatorios
+<Directory $APP_DIR/relatorios>
+    Require all granted
+    Options -Indexes
+</Directory>
+# Configurações específicas para a aplicação /estoque
+<Location /estoque>
+    # Headers de segurança
     Header always set X-Content-Type-Options nosniff
     Header always set X-Frame-Options SAMEORIGIN
     Header always set X-XSS-Protection "1; mode=block"
-    
-    # Compressão se disponível
-    <IfModule mod_deflate.c>
-        <Location />
-            SetOutputFilter DEFLATE
-            SetEnvIfNoCase Request_URI \.(?:gif|jpe?g|png)$ no-gzip dont-vary
-        </Location>
-    </IfModule>
-    
-</VirtualHost>
+</Location>
 
-# HTTPS (descomente e configure certificados se necessário)
-# <VirtualHost *:443>
-#     ServerName $DOMAIN
-#     DocumentRoot $APP_DIR
-#     
-#     SSLEngine on
-#     SSLCertificateFile /path/to/your/certificate.crt
-#     SSLCertificateKeyFile /path/to/your/private.key
-#     
-#     WSGIDaemonProcess controle_estoque_ssl python-path=$APP_DIR python-home=$APP_DIR/venv
-#     WSGIProcessGroup controle_estoque_ssl
-#     WSGIScriptAlias / $APP_DIR/wsgi.py
-#     
-#     <Directory $APP_DIR>
-#         WSGIApplicationGroup %{GLOBAL}
-#         Require all granted
-#     </Directory>
-#     
-#     Alias /static $APP_DIR/static
-#     <Directory $APP_DIR/static>
-#         Require all granted
-#     </Directory>
-#     
-#     ErrorLog /var/log/httpd/controle_estoque_ssl_error.log
-#     CustomLog /var/log/httpd/controle_estoque_ssl_access.log combined
-# </VirtualHost>
+# Compressão gzip para aplicação /estoque
+<Location /estoque>
+    SetOutputFilter DEFLATE
+    SetEnvIfNoCase Request_URI \.(?:gif|jpe?g|png)$ no-gzip dont-vary
+    SetEnvIfNoCase Request_URI \.(?:exe|t?gz|zip|bz2|sit|rar)$ no-gzip dont-vary
+</Location>
+
+# Cache para arquivos estáticos da aplicação
+<LocationMatch "^/estoque/static/.*\.(css|js|png|jpg|jpeg|gif|ico|svg)$">
+    ExpiresActive On
+    ExpiresDefault "access plus 1 month"
+    Header append Cache-Control "public"
+</LocationMatch>
+
+# Para HTTPS, a mesma configuração funciona automaticamente
+# pois usa caminhos relativos (WSGIScriptAlias /estoque)
+# Não precisa de configuração adicional para SSL
 EOL
 
 # 8. Configurar logrotate
@@ -248,8 +220,7 @@ echo -e "${GREEN}=== CONFIGURAÇÃO CONCLUÍDA ===${NC}"
 echo -e "${YELLOW}Próximos passos:${NC}"
 echo "1. Copie os arquivos da aplicação para $APP_DIR"
 echo "2. Crie o arquivo wsgi.py no diretório $APP_DIR"
-echo "3. Ajuste o domínio em $CONF_DIR/controle-estoque.conf"
-echo "4. Teste a aplicação em http://$DOMAIN"
+echo "3. Teste a aplicação em http://$BASE_URL"
 echo ""
 echo -e "${YELLOW}Arquivos de configuração criados:${NC}"
 echo "- Virtual Host: $CONF_DIR/controle-estoque.conf"

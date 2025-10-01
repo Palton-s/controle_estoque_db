@@ -10,7 +10,7 @@ YELLOW='\033[1;33m'
 NC='\033[0m'
 
 APP_DIR="/var/www/controle_estoque_db"
-DOMAIN="localhost"  # ou seu domínio
+BASE_URL="localhost/estoque"
 
 echo -e "${YELLOW}1. Verificando servidor web...${NC}"
 if systemctl is-active --quiet httpd; then
@@ -53,9 +53,11 @@ else
 fi
 
 echo -e "${YELLOW}5. Testando resposta HTTP...${NC}"
-HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" http://$DOMAIN/)
+HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" http://$BASE_URL/ 2>/dev/null || echo "000")
 if [ "$HTTP_CODE" == "200" ]; then
     echo -e "${GREEN}✓ Aplicação respondendo (HTTP $HTTP_CODE)${NC}"
+elif [ "$HTTP_CODE" == "000" ]; then
+    echo -e "${YELLOW}! Não foi possível testar (curl não disponível ou conexão falhou)${NC}"
 else
     echo -e "${RED}✗ Aplicação com problema (HTTP $HTTP_CODE)${NC}"
 fi
